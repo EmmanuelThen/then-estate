@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss'
+import { sky, slate, mint } from '@radix-ui/colors';
+
 
 const config: Config = {
   content: [
@@ -13,6 +15,11 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        ...sky,
+        ...slate,
+        ...mint
+      }
     },
   },
   plugins: [],
