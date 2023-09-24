@@ -5,6 +5,7 @@ import Heading from './Heading'
 import Button from '../ui/Button'
 import Image from 'next/image'
 import GradientBlur from './GradientBlur'
+import Stats from './Stats'
 
 type Props = {}
 
@@ -14,9 +15,9 @@ const TabsNav = (props: Props) => {
             className="rounded-lg flex flex-col w-full"
             defaultValue="tab1"
         >
-            <Tabs.List className="fixed w-full backdrop-blur-2xl items-center shrink-0 flex z-[999]" aria-label="Manage your account">
+            <Tabs.List className="max-h-[45px] fixed w-full backdrop-blur-2xl shadow-blackA9 shadow-[0px_4px_7px] items-center shrink-0 flex z-[999]" aria-label="Nav bar">
                 {/* Logo div */}
-                <div className='border'>
+                <div className=''>
                     <svg width="70" height="70" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink">
                         <rect width="500" height="500" fill="url(#pattern0)" />
                         <defs>
@@ -28,33 +29,33 @@ const TabsNav = (props: Props) => {
                     </svg>
                 </div>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     value="tab1"
                 >
                     Home
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     value="tab2"
                 >
                     Buy
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     value="tab3"
                 >
                     Rent
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     value="tab4"
                 >
-                    Mortgage & Finance Tools
+                    Tools & Calculators
                 </Tabs.Trigger>
 
             </Tabs.List>
             <Tabs.Content
-                className=""
+                className="transition duration-150 ease-in-out "
                 value="tab1"
             >
                 <div className='flex justify-center items-center mt-20'>
@@ -62,10 +63,10 @@ const TabsNav = (props: Props) => {
                     <div className='xl:px-[500px]'>
                         <h1 className='z-[999] flex justify-center py-2 font-bold mt-5 tracking-[-0.03em] md:leading-[1.10] md:text-[55px] bg-clip-text text-center text-4xl text-mint11'>
                             Home for all of your
-                            real estate needs.
+                            real <br /> estate needs.
                         </h1>
-                        <h2>
-                            
+                        <h2 className='flex justify-center items-center text-slate10 mt-10 md:text-xl font-light mx-10 text-center'>
+                            Experience Real Estate at its Best – Welcome to ThenEstate.
                         </h2>
                         <div className='flex flex-col justify-center md:flex-row gap-3 mt-5 md:mt-10 mx-20 md:mx-0'>
                             <Button
@@ -74,7 +75,7 @@ const TabsNav = (props: Props) => {
                             />
                             <Button
                                 text={`Pricing`}
-                                outline='border-[0.5px] border-mint9 bg-mint11/20'
+                                outline='border-[0.5px] border-mint9 bg-mint11/80'
                             />
                         </div>
                         <div className='flex isolate justify-center mt-10'>
@@ -82,9 +83,17 @@ const TabsNav = (props: Props) => {
                         </div>
                     </div>
                 </div>
+                <div className='flex justify-center'>
+                    <div className='bg-slate4 rounded flex justify-center items-center absolute top-[500px] md:top-[600px] border border-sky12 w-[400px] h-[300px] md:w-[800px] md:h-[500px]'>
+                        dahsboard image
+                    </div>
+                </div>
+                <div className='mt-[100px] md:mt-[300px]'>
+                    <Stats />
+                </div>
             </Tabs.Content>
             <Tabs.Content
-                className="flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
                 value="tab2"
             >
                 <Heading>
@@ -92,14 +101,14 @@ const TabsNav = (props: Props) => {
                 </Heading>
             </Tabs.Content>
             <Tabs.Content
-                className="flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
                 value="tab3"
             >
 
                 tabs3
             </Tabs.Content>
             <Tabs.Content
-                className="flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
                 value="tab4"
             >
 

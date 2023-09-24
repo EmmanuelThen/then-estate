@@ -7,7 +7,7 @@ type Props = {
 
 const Button = ({ text, outline }: Props) => {
   return (
-    <button className={`${outline} z-50 inline-flex font-medium items-center justify-center rounded-md bg-sky12 h-[35px] px-[15px] leading-none hover:opacity-80 transition duration-150 text-white text-sm`}>
+    <button className={`${outline} z-50 inline-flex font-medium items-center justify-center rounded-md bg-sky12 h-[35px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white text-sm`}>
         {text}
     </button>
   )

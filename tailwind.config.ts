@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import { sky, slate, mint } from '@radix-ui/colors';
+import { sky, slate, mint, blackA } from '@radix-ui/colors';
 
 
 const config: Config = {
@@ -18,7 +18,8 @@ const config: Config = {
       colors: {
         ...sky,
         ...slate,
-        ...mint
+        ...mint,
+        ...blackA
       }
     },
   },
