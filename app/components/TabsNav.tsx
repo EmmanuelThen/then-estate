@@ -6,6 +6,8 @@ import Button from '../ui/Button'
 import Image from 'next/image'
 import GradientBlur from './GradientBlur'
 import Stats from './Stats'
+import Checkmark from './svg/Checkmark'
+import ListItem from './ListItem'
 
 type Props = {}
 
@@ -83,13 +85,46 @@ const TabsNav = (props: Props) => {
                         </div>
                     </div>
                 </div>
+                {/* Dashboard Image */}
                 <div className='flex justify-center'>
                     <div className='bg-slate4 rounded flex justify-center items-center absolute top-[500px] md:top-[600px] border border-sky12 w-[400px] h-[300px] md:w-[800px] md:h-[500px]'>
                         dahsboard image
                     </div>
                 </div>
+                {/* Stats */}
                 <div className='mt-[100px] md:mt-[300px]'>
                     <Stats />
+                </div>
+                {/* Features */}
+                <div className='p-5 bg-sky12'>
+                    <div className='flex flex-col md:flex-row gap-5 w-full'>
+                        <div className='md:w-[50%]'>
+                            <h1 className='capitalize font-medium text-mint11 mb-5'>
+                                property search
+                            </h1>
+                            <p className=''>
+                                Welcome to our Property Search Feature – Your Gateway to the Perfect Home!
+
+                                Looking for your dream property has never been easier. Explore an extensive database of homes,
+
+                                apartments, and real estate listings, tailored to your preferences. Whether you're searching
+
+                                for a cozy family home, a trendy city apartment, or an investment opportunity, our Property Search Feature
+
+                                is your one-stop solution.
+                            </p>
+                        </div>
+                        {/* Features list */}
+                        <div className='w-[50%]'>
+                            <div className='flex flex-col gap-3'>
+                                <ListItem text={'Personalized search'} />
+                                <ListItem text={'Real time updates'} />
+                                <ListItem text={'Interactive maps'} />
+                                <ListItem text={'Comprehensive information'} />
+                                <ListItem text={'Investment information and ratings'} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </Tabs.Content>
             <Tabs.Content
