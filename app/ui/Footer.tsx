@@ -10,7 +10,7 @@ export default function Footer() {
             href="/"
             className="flex items-center flex-initial font-bold md:mr-24"
           >
-            <span className="mr-2 border rounded-full shadow-blackA9 shadow-[0px_4px_7px]">
+            <span className="mr-2">
               <svg width="70" height="70" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink">
                 <rect width="500" height="500" fill="url(#pattern0)" />
                 <defs>

@@ -4,13 +4,19 @@ import Button from '../ui/Button'
 
 type Props = {
     description: any
-    title: any
+    title: string
 }
 
-const LandingPageSection = ({ description, title }: Props) => {
+const OppositeLandingPageSection = ({ description, title }: Props) => {
     return (
         <div className='p-5'>
             <div className='flex flex-col justify-between md:flex-row gap-5 w-full'>
+                {/* Feature Image */}
+                <div className='md:w-[60%] px-20 flex justify-center'>
+                    <div className='bg-slate4 rounded flex justify-center items-center w-full h-full shadow-sky12 shadow-[0px_8px_15px]'>
+                        Feature Image
+                    </div>
+                </div>
                 <div className='flex flex-col gap-5 md:w-[40%]'>
                     <h1 className='capitalize text-mint11 md:text-2xl font-bold'>
                         {title}
@@ -19,11 +25,11 @@ const LandingPageSection = ({ description, title }: Props) => {
                         {description}
                     </p>
                     <div className='flex flex-col gap-5'>
-                        <ListItem text={'Personalized search'} />
-                        <ListItem text={'Real time updates'} />
-                        <ListItem text={'Interactive maps'} />
-                        <ListItem text={'Comprehensive information'} />
-                        <ListItem text={'Investment information and ratings'} />
+                        <ListItem text={'Comprehensive data'} />
+                        <ListItem text={'Risk assessment'} />
+                        <ListItem text={'Portfolio management'} />
+                        <ListItem text={'Real-time updates'} />
+                        <ListItem text={'User friendly interface'} />
                     </div>
                     <div className='w-[50%] mt-5'>
                         <Button
@@ -32,15 +38,10 @@ const LandingPageSection = ({ description, title }: Props) => {
                         />
                     </div>
                 </div>
-                {/* Feature Image */}
-                <div className='md:w-[60%] px-20 flex justify-center'>
-                    <div className='bg-slate4 rounded flex justify-center items-center  w-full h-full shadow-mint11 shadow-[0px_8px_15px]'>
-                        Feature Image
-                    </div>
-                </div>
+
             </div>
         </div>
     )
 }
 
-export default LandingPageSection
+export default OppositeLandingPageSection

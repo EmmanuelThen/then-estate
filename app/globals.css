@@ -4,15 +4,13 @@
 
 :root {
   --text-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --text-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-rgb: #262626
   }
 }
 
@@ -22,10 +20,44 @@ html {
 
 body {
   color: rgb(var(--text-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: var(--background-rgb)
+}
+
+#scroll-container, #mtg-container {
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+/*to hide scrollbar in firefox*/
+#mtg-container {
+  scrollbar-width: none; /* Hide scrollbar */
+  -ms-overflow-style: none; /* Hide scrollbar in IE10+ */
+}
+
+/* to hide scrollbar in chrome/safari*/
+#mtg-container::-webkit-scrollbar {
+  display: none;
+}
+
+#mtg-wrapper {
+  animation: scroll 20s linear infinite;
+}
+
+#mtg-wrapper:hover {
+  animation-play-state: paused
+}
+
+#mtg-heading {
+  white-space: nowrap;
+}
+
+
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-220px * 4));
+  }
 }

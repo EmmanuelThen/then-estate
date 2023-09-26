@@ -9,7 +9,7 @@ const ListItem = ({ text }: Props) => {
     return (
         <div className='flex items-center gap-2'>
             <Checkmark />
-            <span className='text-mint11 font-medium'>
+            <span className='text-mint11 font-medium text-sm md:text-base'>
                 {text}
             </span>
         </div>
