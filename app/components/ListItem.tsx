@@ -7,9 +7,9 @@ type Props = {
 
 const ListItem = ({ text }: Props) => {
     return (
-        <div className='flex items-center gap-3'>
+        <div className='flex items-center gap-2'>
             <Checkmark />
-            <span className='font-medium'>
+            <span className='text-mint11 font-medium'>
                 {text}
             </span>
         </div>

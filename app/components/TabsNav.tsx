@@ -8,6 +8,7 @@ import GradientBlur from './GradientBlur'
 import Stats from './Stats'
 import Checkmark from './svg/Checkmark'
 import ListItem from './ListItem'
+import LandingPageSection from './LandingPageSection'
 
 type Props = {}
 
@@ -77,7 +78,7 @@ const TabsNav = (props: Props) => {
                             />
                             <Button
                                 text={`Pricing`}
-                                outline='border-[0.5px] border-mint9 bg-mint11/80'
+                                outline='bg-mint11/80'
                             />
                         </div>
                         <div className='flex isolate justify-center mt-10'>
@@ -92,40 +93,21 @@ const TabsNav = (props: Props) => {
                     </div>
                 </div>
                 {/* Stats */}
-                <div className='mt-[100px] md:mt-[300px]'>
+                <div className='mt-[100px] md:mt-[300px] mb-[100px]'>
                     <Stats />
                 </div>
                 {/* Features */}
-                <div className='p-5 bg-sky12'>
-                    <div className='flex flex-col md:flex-row gap-5 w-full'>
-                        <div className='md:w-[50%]'>
-                            <h1 className='capitalize font-medium text-mint11 mb-5'>
-                                property search
-                            </h1>
-                            <p className=''>
-                                Welcome to our Property Search Feature – Your Gateway to the Perfect Home!
+                <LandingPageSection
+                    description={`Welcome to our Property Search Feature – Your Gateway to the Perfect Home!
 
-                                Looking for your dream property has never been easier. Explore an extensive database of homes,
+                Looking for your dream property has never been easier. Explore an extensive database of homes,
 
-                                apartments, and real estate listings, tailored to your preferences. Whether you're searching
+                apartments, and real estate listings, tailored to your preferences. Whether you're searching
 
-                                for a cozy family home, a trendy city apartment, or an investment opportunity, our Property Search Feature
+                for a cozy family home, a trendy city apartment, or an investment opportunity, our Property Search Feature
 
-                                is your one-stop solution.
-                            </p>
-                        </div>
-                        {/* Features list */}
-                        <div className='w-[50%]'>
-                            <div className='flex flex-col gap-3'>
-                                <ListItem text={'Personalized search'} />
-                                <ListItem text={'Real time updates'} />
-                                <ListItem text={'Interactive maps'} />
-                                <ListItem text={'Comprehensive information'} />
-                                <ListItem text={'Investment information and ratings'} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                is your one-stop solution.`}
+                />
             </Tabs.Content>
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
