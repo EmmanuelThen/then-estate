@@ -11,6 +11,7 @@ import ListItem from './ListItem'
 import LandingPageSection from './LandingPageSection'
 import OppositeLandingPageSection from './OppositeLandingPageSection'
 import MortgageRates from '../ui/MortgageRates'
+import Dashboard from '../ui/Dashboard'
 
 type Props = {}
 
@@ -20,6 +21,7 @@ const TabsNav = (props: Props) => {
             className="rounded-lg flex flex-col w-full"
             defaultValue="tab1"
         >
+            {/* Navbar */}
             <Tabs.List className="max-h-[45px] fixed w-full backdrop-blur-2xl shadow-blackA9 shadow-[0px_4px_7px] items-center shrink-0 flex z-[999]" aria-label="Nav bar">
                 {/* Logo div */}
                 <div className=''>
@@ -34,31 +36,60 @@ const TabsNav = (props: Props) => {
                     </svg>
                 </div>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
                     value="tab1"
                 >
-                    Home
+                    <span className='hidden md:block'>
+                        Home
+                    </span>
+                    <span className='md:hidden'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+
+                    </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
                     value="tab2"
                 >
-                    Buy
+                    <span className='hidden md:block'>
+                        Dashboard
+                    </span>
+                    <span className='md:hidden'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                        </svg>
+                    </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
                     value="tab3"
                 >
-                    Rent
+                    <span className='hidden md:block'>
+                        Portfolio
+                    </span>
+                    <span className='md:hidden'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                        </svg>
+                    </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
                     value="tab4"
                 >
-                    Tools & Calculators
+                    <span className='hidden md:block'>
+                        Tools & Calculators
+                    </span>
+                    <span className='md:hidden'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
+                        </svg>
+                    </span>
                 </Tabs.Trigger>
-
             </Tabs.List>
+            {/* Home Content */}
             <Tabs.Content
                 className="transition duration-150 ease-in-out "
                 value="tab1"
@@ -149,13 +180,12 @@ const TabsNav = (props: Props) => {
                     />
                 </div>
             </Tabs.Content>
+            {/* Dashboard Content */}
             <Tabs.Content
-                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow py-5 rounded-b-md outline-none "
                 value="tab2"
             >
-                <Heading>
-                    Buy
-                </Heading>
+                <Dashboard />
             </Tabs.Content>
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
