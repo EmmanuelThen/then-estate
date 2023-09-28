@@ -11,7 +11,8 @@ import ListItem from './ListItem'
 import LandingPageSection from './LandingPageSection'
 import OppositeLandingPageSection from './OppositeLandingPageSection'
 import MortgageRates from '../ui/MortgageRates'
-import Dashboard from '../ui/Dashboard'
+import SearchBar from '../ui/SearchBar'
+import PropertyCard from '../ui/PropertyCard'
 
 type Props = {}
 
@@ -185,7 +186,41 @@ const TabsNav = (props: Props) => {
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow py-5 rounded-b-md outline-none "
                 value="tab2"
             >
-                <Dashboard />
+                <SearchBar />
+                <div className='grid grid-cols-3 gap-5 w-full mt-20 p-5'>
+                    <PropertyCard
+                        imageSrc={undefined}
+                        beds={undefined}
+                        baths={undefined}
+                        squareFeet={undefined}
+                        streetAddress={undefined}
+                        cityStateZip={undefined}
+                    />
+                    <PropertyCard
+                        imageSrc={undefined}
+                        beds={undefined}
+                        baths={undefined}
+                        squareFeet={undefined}
+                        streetAddress={undefined}
+                        cityStateZip={undefined}
+                    />
+                    <PropertyCard
+                        imageSrc={undefined}
+                        beds={undefined}
+                        baths={undefined}
+                        squareFeet={undefined}
+                        streetAddress={undefined}
+                        cityStateZip={undefined}
+                    />
+                    <PropertyCard
+                        imageSrc={undefined}
+                        beds={undefined}
+                        baths={undefined}
+                        squareFeet={undefined}
+                        streetAddress={undefined}
+                        cityStateZip={undefined}
+                    />
+                </div>
             </Tabs.Content>
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "

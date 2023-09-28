@@ -18,7 +18,7 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+body, #dark-mode {
   color: rgb(var(--text-rgb));
   background: var(--background-rgb)
 }
