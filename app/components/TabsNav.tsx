@@ -13,6 +13,7 @@ import OppositeLandingPageSection from './OppositeLandingPageSection'
 import MortgageRates from '../ui/MortgageRates'
 import SearchBar from '../ui/SearchBar'
 import PropertyCard from '../ui/PropertyCard'
+import SelectDropdown from '../ui/SelectDropdown'
 
 type Props = {}
 
@@ -23,7 +24,7 @@ const TabsNav = (props: Props) => {
             defaultValue="tab1"
         >
             {/* Navbar */}
-            <Tabs.List className="max-h-[45px] fixed w-full backdrop-blur-2xl shadow-blackA9 shadow-[0px_4px_7px] items-center shrink-0 flex z-[999]" aria-label="Nav bar">
+            <Tabs.List className="max-h-[45px] fixed w-full backdrop-blur-2xl border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
                 {/* Logo div */}
                 <div className=''>
                     <svg width="70" height="70" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink">
@@ -37,7 +38,7 @@ const TabsNav = (props: Props) => {
                     </svg>
                 </div>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-medium"
                     value="tab1"
                 >
                     <span className='hidden md:block'>
@@ -51,7 +52,7 @@ const TabsNav = (props: Props) => {
                     </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-medium"
                     value="tab2"
                 >
                     <span className='hidden md:block'>
@@ -64,7 +65,7 @@ const TabsNav = (props: Props) => {
                     </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-medium"
                     value="tab3"
                 >
                     <span className='hidden md:block'>
@@ -77,7 +78,7 @@ const TabsNav = (props: Props) => {
                     </span>
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-semibold"
+                    className="hover:cursor-pointer px-5 h-[45px] flex-1 flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default font-medium"
                     value="tab4"
                 >
                     <span className='hidden md:block'>
@@ -187,40 +188,7 @@ const TabsNav = (props: Props) => {
                 value="tab2"
             >
                 <SearchBar />
-                <div className='grid grid-cols-3 gap-5 w-full mt-20 p-5'>
-                    <PropertyCard
-                        imageSrc={undefined}
-                        beds={undefined}
-                        baths={undefined}
-                        squareFeet={undefined}
-                        streetAddress={undefined}
-                        cityStateZip={undefined}
-                    />
-                    <PropertyCard
-                        imageSrc={undefined}
-                        beds={undefined}
-                        baths={undefined}
-                        squareFeet={undefined}
-                        streetAddress={undefined}
-                        cityStateZip={undefined}
-                    />
-                    <PropertyCard
-                        imageSrc={undefined}
-                        beds={undefined}
-                        baths={undefined}
-                        squareFeet={undefined}
-                        streetAddress={undefined}
-                        cityStateZip={undefined}
-                    />
-                    <PropertyCard
-                        imageSrc={undefined}
-                        beds={undefined}
-                        baths={undefined}
-                        squareFeet={undefined}
-                        streetAddress={undefined}
-                        cityStateZip={undefined}
-                    />
-                </div>
+                
             </Tabs.Content>
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "

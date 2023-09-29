@@ -1,36 +1,119 @@
 import React, { useEffect, useState } from 'react';
+import Button from './Button';
+import ActionButton from './ActionButton';
+import PropertyCard from './PropertyCard';
+import SelectDropdown from './SelectDropdown';
 
 const SearchBar = () => {
     const [search, setSearch] = useState<any>('');
     const [autoCompleteResults, setAutoCompleteResults] = useState<any>([])
+    const [searchMetric, setSearchMetric] = useState<any>('')
+    const [searchMetricValue, setSearchMetricValue] = useState<any>('')
+    const [isloading, setIsLoading] = useState<any>(false)
+    const [propertiesList, setPropertiesList] = useState<any>([])
+
+    // regex patterns
+    const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
+    const zipCodeRegex = /^[0-9]+$/;
+    const stateCodeRegex = /^[A-Z]{2}$/;
+    const cityRegex = /^[A-Za-z\s'-]+$/;
+
+    // search metrics
+    const postalCode = 'postal_code';
+    const fullAddress = 'address';
+    const state = 'state_code';
+    const city = 'city';
+
+    // minimum search character limit
+    const minimumCharacterLimit = 500;
+
+    const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
 
     const getAutoComplete = async (e: any) => {
-        const url = `https://realty-in-us.p.rapidapi.com/locations/v2/auto-complete?input=${encodeURIComponent(search)}&limit=10`;
         setSearch(e.target.value)
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': '5510b530b3mshfee80ac9ad31df0p1f3566jsn18e8846960e7',
-                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+
+        if (search.length >= minimumCharacterLimit) {
+            const url = `https://realty-in-us.p.rapidapi.com/locations/v2/auto-complete?input=${encodeURIComponent(search)}&limit=10`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                if (result.autocomplete.length > 0) {
+                    setAutoCompleteResults(result.autocomplete)
+                } else {
+                    console.log('No results returned')
+                }
+                console.log(result.autocomplete);
+                console.log(autoCompleteResults)
+            } catch (error) {
+                console.error(error);
             }
+        } else {
+
+        }
+    }
+
+    useEffect(() => {
+        if (usAddressRegex.test(search)) {
+            setSearchMetric(fullAddress);
+        } else if (zipCodeRegex.test(search)) {
+            setSearchMetric(postalCode);
+        } else if (stateCodeRegex.test(search)) {
+            setSearchMetric(state);
+        } else if (cityRegex.test(search)) {
+            setSearchMetric(city);
+        } else {
+            // Handle the case where none of the regex patterns match
+            setSearchMetric('defaultMetric');
+        }
+    }, [search]);
+
+
+    const getPropertiesList = async () => {
+        setIsLoading(true);
+
+
+        console.log(searchMetric)
+
+        const url = 'https://realty-in-us.p.rapidapi.com/properties/v3/list';
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
+            },
+            body: JSON.stringify({
+                limit: 200,
+                offset: 0,
+                [searchMetric]: search,
+                status: ['for_sale', 'ready_to_build'],
+                sort: {
+                    direction: 'desc',
+                    field: 'list_date',
+                },
+            }),
         };
 
         try {
             const response = await fetch(url, options);
             const result = await response.json();
-            if (result.autocomplete.length > 0) {
-                setAutoCompleteResults(result.autocomplete)
-            } else {
-                console.log('No results returned')
-            }
-            console.log(result.autocomplete);
-            console.log(autoCompleteResults)
+            console.log(result);
+            setPropertiesList(result.data['home_search'].results);
+            console.log(propertiesList);
+            setIsLoading(false);
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
-    
 
     return (
         <div className='mt-7 w-full h-full'>
@@ -54,15 +137,16 @@ const SearchBar = () => {
                         className="box-border w-full bg-blackA5 shadow-mint11 inline-flex h-[35px] appearance-none items-center justify-center font-light rounded-md px-[40px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black] selection:color-white selection:bg-blackA9"
                         type="text"
                         required
-                        placeholder='Enter address, ZIP, or city'
-                        id='autocomplete'
+                        placeholder='Enter address, city, or ZIP code'
+                        id='dark-mode'
                         value={search}
                         onChange={getAutoComplete}
                     />
                 </div>
-                <div className={`${search.length > 0 ? '' : 'hidden'} flex flex-col border-t-0 rounded-t-md rounded-b bg-blackA5 h-fit shadow-md p-2 w-full`}>
+
+                <ul className={`${search.length > 0 ? '' : 'hidden'} flex flex-col border-t-0 rounded-t-md rounded-b bg-blackA5 h-fit shadow-md p-2 w-full`}>
                     {autoCompleteResults.map((results: any, i: any) => (
-                        <div
+                        <li
                             className='transition duration-0 rounded ease-in-out hover:bg-mint11 hover:cursor-pointer text-[15px]'
                             key={i}
                         // onClick={setSearch(search)}
@@ -70,9 +154,9 @@ const SearchBar = () => {
                             {(() => {
                                 if (results['full_address']) {
                                     return (
-                                        <div className='flex flex-col'>
+                                        <span className='flex flex-col'>
                                             {results['full_address'][0]}
-                                        </div>
+                                        </span>
                                     );
                                 }
                                 else if (results['postal_code']) {
@@ -85,12 +169,38 @@ const SearchBar = () => {
                                         </span>
                                     );
                                 } else {
-                                    return <div>Default Content</div>;
+                                    return <span>Default Content</span>;
                                 }
                             })()}
-                        </div>
+                        </li>
                     ))}
+                </ul>
+                {/* Search button */}
+                <div className='mt-10'>
+                    <ActionButton
+                        text={`Search properties`}
+                        bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
+                        onClick={getPropertiesList}
+                    />
                 </div>
+            </div>
+            {/* Dropdown */}
+            <div className='p-20'>
+                <SelectDropdown />
+            </div>
+            <div className='grid grid-cols-3 gap-5 w-full mt-20 p-5'>
+                {propertiesList.map((properties: any, i: any) => (
+                    <div className='' key={i}>
+                        <PropertyCard
+                            imageSrc={undefined}
+                            beds={`${properties.description.beds} beds`}
+                            baths={`${properties.description.baths} baths`}
+                            squareFeet={`${properties.description.sqft} sqft.`}
+                            streetAddress={properties.location.address.line}
+                            cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code']} ${properties.location.address['postal_code']}`}
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     );
