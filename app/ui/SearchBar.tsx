@@ -24,6 +24,14 @@ const SearchBar = () => {
     const state = 'state_code';
     const city = 'city';
 
+    // USD formatter
+    const usdFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
+
+
     // minimum search character limit
     const minimumCharacterLimit = 500;
 
@@ -78,7 +86,6 @@ const SearchBar = () => {
 
     const getPropertiesList = async () => {
         setIsLoading(true);
-
 
         console.log(searchMetric)
 
@@ -188,19 +195,27 @@ const SearchBar = () => {
             <div className='p-20'>
                 <SelectDropdown />
             </div>
-            <div className='grid grid-cols-3 gap-5 w-full mt-20 p-5'>
+            <div className='grid-container w-full mt-20 p-5'>
                 {propertiesList.map((properties: any, i: any) => (
-                    <div className='' key={i}>
-                        <PropertyCard
-                            imageSrc={undefined}
-                            beds={`${properties.description.beds} beds`}
-                            baths={`${properties.description.baths} baths`}
-                            squareFeet={`${properties.description.sqft} sqft.`}
-                            streetAddress={properties.location.address.line}
-                            cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code']} ${properties.location.address['postal_code']}`}
-                        />
-                    </div>
+                    <PropertyCard
+                        key={i}
+                        width={350}
+                        height={350}
+                        imageSrc={properties['primary_photo'] === null ? '/public/fallback-img.svg' : properties['primary_photo'].href}
+                        beds={`${properties.description.beds} beds`}
+                        baths={`${properties.description.baths} baths`}
+                        squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft} sqft.`}
+                        streetAddress={properties.location.address.line}
+                        cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code']} ${properties.location.address['postal_code']}`}
+                        price={usdFormatter.format(properties['list_price'])}
+                    />
                 ))}
+            </div>
+            <div className='flex justify-center w-full'>
+                <Button
+                    text={`Load more`}
+                    bgColor={'bg-slate10/50'}
+                />
             </div>
         </div>
     );

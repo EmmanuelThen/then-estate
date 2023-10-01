@@ -61,3 +61,13 @@ body, #dark-mode {
     transform: translateX(calc(-220px * 4));
   }
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns:  repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.grid-container > div {
+  min-height: 100px;
+}

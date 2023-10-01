@@ -15,44 +15,80 @@ type Props = {
     squareFeet: any
     streetAddress: any
     cityStateZip: any
+    price: any
+    key: any
+    width: any
+    height: any
 }
 
-const PropertyCard = ({ imageSrc, beds, baths, squareFeet, streetAddress, cityStateZip }: Props) => {
+const PropertyCard = ({ imageSrc, beds, baths, squareFeet, streetAddress, cityStateZip, price, key, width, height }: Props) => {
+    // For high quality images, jpg were giving low quality
+    const customLoader = () => {
+        return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
+    };
+
     return (
-        <Dialog.Root>
-            <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]'>
-                <div className="rounded-t border-b border-slate10 h-[200px] text-blue9 transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none">
-                    <div className=''>
-                        <Image alt='property-image' src={imageSrc} />
+        <Dialog.Root >
+            <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]' key={key}>
+                <div className={` rounded-t border-b border-slate10 text-blue9 transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
+                    <div className={`h-[${height}px] w-[${width}px] object-cover`}>
+                        <Image
+                            className={`h-[${height}px] w-[${width}px] object-cover`}
+                            alt='property-image'
+                            loader={customLoader}
+                            src={imageSrc}
+                            width={width}
+                            height={height}
+                        />
+                        {/* Price */}
                     </div>
                 </div>
                 {/* Property info and button div */}
-                <div className='flex justify-between p-2'>
+                <div className='flex justify-between p-4'>
                     <div>
-                        <div className="w-full max-w-[300px] mx-[15px]">
-                            <div className=" text-xl leading-5 font-medium">{streetAddress}</div>
-                            <div className=" text-[15px] leading-5 text-slate10">{cityStateZip}</div>
+                        <div className="flex flex-col gap-2 w-full ">
+                            <div className="text-xl leading-5 font-medium">
+                                {streetAddress}
+                            </div>
+                            <div className="text-[15px] leading-5 text-slate10">
+                                {cityStateZip}
+                            </div>
+
+                            <div className='text-3xl font-bold text-mint11'>
+                                {price}
+                            </div>
                             <Separator.Root className="bg-violet6 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px my-[15px]" />
                             <div className="flex h-5 items-center">
-                                <div className=" text-[15px] leading-5">{beds}</div>
+                                <div className=" text-sm leading-5">{beds}</div>
                                 <Separator.Root
                                     className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
                                     decorative
                                     orientation="vertical"
                                 />
-                                <div className=" text-[15px] leading-5">{baths}</div>
+                                <div className=" text-sm leading-5">{baths}</div>
                                 <Separator.Root
                                     className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
                                     decorative
                                     orientation="vertical"
                                 />
-                                <div className=" text-[15px] leading-5">{squareFeet}</div>
+                                <div className=" text-sm leading-5">{squareFeet}</div>
+
                             </div>
                         </div>
                     </div>
                     {/* Add to portfolio button and more info button */}
-                    <div className='flex flex-col gap-5'>
-                        <div className='flex justify-end w-full'>
+                    <div className='flex flex-col gap-[88px]'>
+                        <div className='flex justify-between w-full'>
+                            <Tooltips
+                                button={
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+
+                                }
+                                tooltipContent={`Add to watchlist`}
+                            />
                             <Tooltips
                                 button={
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
@@ -77,7 +113,12 @@ const PropertyCard = ({ imageSrc, beds, baths, squareFeet, streetAddress, citySt
                 <Dialog.Content id='dark-mode' className=" z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[90vh] w-[95vw] max-w-[950px] translate-x-[-50%] translate-y-[-50%] rounded-md p-10 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     {/* Property image */}
                     <div>
-                        <Image alt='property-image' src={imageSrc} />
+                        <Image
+                            alt='property-image'
+                            src={imageSrc}
+                            width={width}
+                            height={height}
+                        />
                     </div>
                     <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">
                         dialogTitle
@@ -109,4 +150,4 @@ const PropertyCard = ({ imageSrc, beds, baths, squareFeet, streetAddress, citySt
     )
 }
 
-export default PropertyCard
+export default PropertyCard;
