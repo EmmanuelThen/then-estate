@@ -68,6 +68,4 @@ body, #dark-mode {
   gap: 20px;
 }
 
-.grid-container > div {
-  min-height: 100px;
-}
+

@@ -3,13 +3,17 @@ import * as Select from '@radix-ui/react-select';
 import classnames from 'classnames';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 
-const SelectDropdown = () => (
+type Props = {
+  searchStatus: any
+}
+
+const SelectDropdown = ( { searchStatus}: Props) => (
   <Select.Root>
     <Select.Trigger
       className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-mint11 shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none"
       aria-label="Food"
     >
-      <Select.Value placeholder="Filter search by..." />
+      <Select.Value placeholder="Filter search by status..." />
       <Select.Icon className="text-mint11">
         <ChevronDownIcon />
       </Select.Icon>
@@ -22,13 +26,44 @@ const SelectDropdown = () => (
         <Select.Viewport className="p-[5px]">
           <Select.Group>
             <Select.Label className="px-[25px] text-xs leading-[25px] text-slate10">
-              Fruits
+              Status
             </Select.Label>
-            <SelectItem value="apple">Apple</SelectItem>
-            <SelectItem value="banana">Banana</SelectItem>
-            <SelectItem value="blueberry">Blueberry</SelectItem>
-            <SelectItem value="grapes">Grapes</SelectItem>
-            <SelectItem value="pineapple">Pineapple</SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-green-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>For sale</p>
+              </div>
+            </SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-yellow-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>Ready to build</p>
+              </div>
+            </SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-purple-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>For rent</p>
+              </div>
+            </SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-red-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>Sold</p>
+              </div>
+            </SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-gray-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>Off market</p>
+              </div>
+            </SelectItem>
+            <SelectItem value={searchStatus}>
+              <div className='flex items-center gap-2'>
+                <div className='rounded-full bg-sky-500 w-2.5 h-2.5' />
+                <p className='text-sm md:text-md'>New community</p>
+              </div>
+            </SelectItem>
           </Select.Group>
 
           <Select.Separator className="h-[1px] bg-sky12 m-[5px]" />

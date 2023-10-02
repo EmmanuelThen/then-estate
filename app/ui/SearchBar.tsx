@@ -3,6 +3,8 @@ import Button from './Button';
 import ActionButton from './ActionButton';
 import PropertyCard from './PropertyCard';
 import SelectDropdown from './SelectDropdown';
+import CheckBox from './CheckBox';
+import LoaderRing from './LoaderRing';
 
 const SearchBar = () => {
     const [search, setSearch] = useState<any>('');
@@ -11,6 +13,9 @@ const SearchBar = () => {
     const [searchMetricValue, setSearchMetricValue] = useState<any>('')
     const [isloading, setIsLoading] = useState<any>(false)
     const [propertiesList, setPropertiesList] = useState<any>([])
+    const [searchStatus, setSearchStatus] = useState<any>([
+        'for_sale', 'ready_to_build', 'for_rent', 'sold', 'off_market', 'other', 'new_community'
+    ])
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -101,7 +106,15 @@ const SearchBar = () => {
                 limit: 200,
                 offset: 0,
                 [searchMetric]: search,
-                status: ['for_sale', 'ready_to_build'],
+                status: [
+                    'for_sale',
+                    'ready_to_build',
+                    'for_rent',
+                    'sold',
+                    'off_market',
+                    'other',
+                    'new_community'
+                ],
                 sort: {
                     direction: 'desc',
                     field: 'list_date',
@@ -120,6 +133,48 @@ const SearchBar = () => {
             console.error(error);
         }
     };
+
+    // useEffect(() => {
+    //     const getPropertiesList = async () => {
+    //         setIsLoading(true);
+
+    //         console.log(searchMetric)
+
+    //         const url = 'https://realty-in-us.p.rapidapi.com/properties/v3/list';
+    //         const options = {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-RapidAPI-Key': apiKey,
+    //                 'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
+    //             },
+    //             body: JSON.stringify({
+    //                 limit: 200,
+    //                 offset: 0,
+    //                 [searchMetric]: search,
+    //                 status: [
+    //                     searchStatus
+    //                 ],
+    //                 sort: {
+    //                     direction: 'desc',
+    //                     field: 'list_date',
+    //                 },
+    //             }),
+    //         };
+
+    //         try {
+    //             const response = await fetch(url, options);
+    //             const result = await response.json();
+    //             console.log(result);
+    //             setPropertiesList(result.data['home_search'].results);
+    //             console.log(propertiesList);
+    //             setIsLoading(false);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     getPropertiesList();
+    // }, [search, searchStatus])
 
 
     return (
@@ -185,7 +240,7 @@ const SearchBar = () => {
                 {/* Search button */}
                 <div className='mt-10'>
                     <ActionButton
-                        text={`Search properties`}
+                        text={isloading ? <LoaderRing /> : 'Search properties'}
                         bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
                         onClick={getPropertiesList}
                     />
@@ -193,21 +248,46 @@ const SearchBar = () => {
             </div>
             {/* Dropdown */}
             <div className='p-20'>
-                <SelectDropdown />
+                <SelectDropdown
+                    searchStatus={searchStatus}
+                />
+                {/* <CheckBox /> */}
             </div>
             <div className='grid-container w-full mt-20 p-5'>
                 {propertiesList.map((properties: any, i: any) => (
                     <PropertyCard
                         key={i}
-                        width={350}
-                        height={350}
-                        imageSrc={properties['primary_photo'] === null ? '/public/fallback-img.svg' : properties['primary_photo'].href}
+                        width={800}
+                        height={300}
+                        imageSrc={properties['primary_photo'] === null ? '/fallback-img.svg' : properties['primary_photo'].href}
                         beds={`${properties.description.beds} beds`}
                         baths={`${properties.description.baths} baths`}
                         squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft} sqft.`}
                         streetAddress={properties.location.address.line}
-                        cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code']} ${properties.location.address['postal_code']}`}
+                        cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
                         price={usdFormatter.format(properties['list_price'])}
+                        status={
+                            (() => {
+                                switch (properties.status) {
+                                    case 'for_sale':
+                                        return 'For sale';
+                                    case 'ready_to_build':
+                                        return 'Ready to build';
+                                    case 'for_rent':
+                                        return 'For rent';
+                                    case 'sold':
+                                        return 'Sold';
+                                    case 'off_market':
+                                        return 'Off market';
+                                    case 'other':
+                                        return 'N/A';
+                                    case 'new_community':
+                                        return 'New community';
+                                    default:
+                                        return '--';
+                                }
+                            })()
+                        }
                     />
                 ))}
             </div>
