@@ -13,9 +13,8 @@ const SearchBar = () => {
     const [searchMetricValue, setSearchMetricValue] = useState<any>('')
     const [isloading, setIsLoading] = useState<any>(false)
     const [propertiesList, setPropertiesList] = useState<any>([])
-    const [searchStatus, setSearchStatus] = useState<any>([
-        'for_sale', 'ready_to_build', 'for_rent', 'sold', 'off_market', 'other', 'new_community'
-    ])
+    const [searchStatus, setSearchStatus] = useState<any>([])
+    const [checked, setChecked] = useState<any>(false)
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -34,6 +33,15 @@ const SearchBar = () => {
         style: 'currency',
         currency: 'USD',
     });
+
+    const handleCheckboxChange = (newStatus: any) => {
+            setChecked(!checked);
+            if (checked) {
+                setSearchStatus(newStatus);
+            } else {
+                setSearchStatus([]);
+            }
+    }
 
 
 
@@ -106,15 +114,7 @@ const SearchBar = () => {
                 limit: 200,
                 offset: 0,
                 [searchMetric]: search,
-                status: [
-                    'for_sale',
-                    'ready_to_build',
-                    'for_rent',
-                    'sold',
-                    'off_market',
-                    'other',
-                    'new_community'
-                ],
+                status: searchStatus,
                 sort: {
                     direction: 'desc',
                     field: 'list_date',
@@ -133,49 +133,6 @@ const SearchBar = () => {
             console.error(error);
         }
     };
-
-    // useEffect(() => {
-    //     const getPropertiesList = async () => {
-    //         setIsLoading(true);
-
-    //         console.log(searchMetric)
-
-    //         const url = 'https://realty-in-us.p.rapidapi.com/properties/v3/list';
-    //         const options = {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'X-RapidAPI-Key': apiKey,
-    //                 'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
-    //             },
-    //             body: JSON.stringify({
-    //                 limit: 200,
-    //                 offset: 0,
-    //                 [searchMetric]: search,
-    //                 status: [
-    //                     searchStatus
-    //                 ],
-    //                 sort: {
-    //                     direction: 'desc',
-    //                     field: 'list_date',
-    //                 },
-    //             }),
-    //         };
-
-    //         try {
-    //             const response = await fetch(url, options);
-    //             const result = await response.json();
-    //             console.log(result);
-    //             setPropertiesList(result.data['home_search'].results);
-    //             console.log(propertiesList);
-    //             setIsLoading(false);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     getPropertiesList();
-    // }, [search, searchStatus])
-
 
     return (
         <div className='mt-7 w-full h-full'>
@@ -239,19 +196,52 @@ const SearchBar = () => {
                 </ul>
                 {/* Search button */}
                 <div className='mt-10'>
-                    <ActionButton
-                        text={isloading ? <LoaderRing /> : 'Search properties'}
-                        bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
-                        onClick={getPropertiesList}
-                    />
+                    <div className='flex justify-evenly gap-5  w-full'>
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('for_sale')}
+                            status={`For sale`}
+                        />
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('ready_to_build')}
+                            status={`Ready to build`}
+                        />
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('for_rent')}
+                            status={`For rent`}
+                        />
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('sold')}
+                            status={`Sold`}
+                        />
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('off_market')}
+                            status={`Off market`}
+                        />
+                        <CheckBox
+                            checked={checked}
+                            handleChange={handleCheckboxChange('active')}
+                            status={`Active`}
+                        />
+                    </div>
+                    <div className='flex justify-center mt-10'>
+                        <ActionButton
+                            text={isloading ? <LoaderRing /> : 'Search properties'}
+                            bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
+                            onClick={getPropertiesList}
+                        />
+                    </div>
                 </div>
             </div>
             {/* Dropdown */}
-            <div className='p-20'>
+            <div className='flex justify-end w-full p-20'>
                 <SelectDropdown
                     searchStatus={searchStatus}
                 />
-                {/* <CheckBox /> */}
             </div>
             <div className='grid-container w-full mt-20 p-5'>
                 {propertiesList.map((properties: any, i: any) => (
@@ -281,8 +271,8 @@ const SearchBar = () => {
                                         return 'Off market';
                                     case 'other':
                                         return 'N/A';
-                                    case 'new_community':
-                                        return 'New community';
+                                    case 'active':
+                                        return 'Active';
                                     default:
                                         return '--';
                                 }

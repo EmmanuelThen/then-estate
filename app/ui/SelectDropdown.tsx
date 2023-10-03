@@ -61,37 +61,12 @@ const SelectDropdown = ( { searchStatus}: Props) => (
             <SelectItem value={searchStatus}>
               <div className='flex items-center gap-2'>
                 <div className='rounded-full bg-sky-500 w-2.5 h-2.5' />
-                <p className='text-sm md:text-md'>New community</p>
+                <p className='text-sm md:text-md'>Active</p>
               </div>
             </SelectItem>
           </Select.Group>
 
-          <Select.Separator className="h-[1px] bg-sky12 m-[5px]" />
-
-          <Select.Group>
-            <Select.Label className="px-[25px] text-xs leading-[25px] text-slate10">
-              Vegetables
-            </Select.Label>
-            <SelectItem value="aubergine">Aubergine</SelectItem>
-            <SelectItem value="broccoli">Broccoli</SelectItem>
-            <SelectItem value="carrot" disabled>
-              Carrot
-            </SelectItem>
-            <SelectItem value="courgette">Courgette</SelectItem>
-            <SelectItem value="leek">Leek</SelectItem>
-          </Select.Group>
-
-          <Select.Separator className="h-[1px] bg-sky12 m-[5px]" />
-
-          <Select.Group>
-            <Select.Label className="px-[25px] text-xs leading-[25px] text-slate10">
-              Meat
-            </Select.Label>
-            <SelectItem value="beef">Beef</SelectItem>
-            <SelectItem value="chicken">Chicken</SelectItem>
-            <SelectItem value="lamb">Lamb</SelectItem>
-            <SelectItem value="pork">Pork</SelectItem>
-          </Select.Group>
+          
         </Select.Viewport>
         <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-mint11 cursor-default">
           <ChevronDownIcon />

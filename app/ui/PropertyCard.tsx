@@ -95,19 +95,19 @@ const PropertyCard = ({
                             <div className={
                                 (() => {
                                     switch (status) {
-                                        case 'for_sale':
+                                        case 'For sale':
                                             return 'rounded-full bg-green-500 w-2.5 h-2.5';
-                                        case 'ready_to_build':
+                                        case 'Ready to build':
                                             return 'rounded-full bg-yellow-500 w-2.5 h-2.5';
-                                        case 'for_rent':
+                                        case 'For rent':
                                             return 'rounded-full bg-purple-500 w-2.5 h-2.5';
-                                        case 'sold':
+                                        case 'Sold':
                                             return 'rounded-full bg-red-500 w-2.5 h-2.5';
-                                        case 'off_market':
+                                        case 'Off market':
                                             return 'rounded-full bg-gray-500 w-2.5 h-2.5';
-                                        case 'other':
+                                        case 'N/A':
                                             return 'rounded-full bg-black w-2.5 h-2.5';
-                                        case 'new_community':
+                                        case 'New community':
                                             return 'rounded-full bg-sky-500 w-2.5 h-2.5';
                                         default:
                                             return '';
