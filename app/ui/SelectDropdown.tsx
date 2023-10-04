@@ -60,7 +60,7 @@ const SelectDropdown = ( { searchStatus}: Props) => (
             </SelectItem>
             <SelectItem value={searchStatus}>
               <div className='flex items-center gap-2'>
-                <div className='rounded-full bg-sky-500 w-2.5 h-2.5' />
+                <div className='rounded-full bg-blue-500 w-2.5 h-2.5' />
                 <p className='text-sm md:text-md'>Active</p>
               </div>
             </SelectItem>

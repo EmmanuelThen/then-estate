@@ -5,6 +5,7 @@ import PropertyCard from './PropertyCard';
 import SelectDropdown from './SelectDropdown';
 import CheckBox from './CheckBox';
 import LoaderRing from './LoaderRing';
+import Toggle from './Toggle';
 
 const SearchBar = () => {
     const [search, setSearch] = useState<any>('');
@@ -14,6 +15,7 @@ const SearchBar = () => {
     const [isloading, setIsLoading] = useState<any>(false)
     const [propertiesList, setPropertiesList] = useState<any>([])
     const [searchStatus, setSearchStatus] = useState<any>([])
+    const [selectedStatus, setSelectedStatus] = useState([]);
     const [checked, setChecked] = useState<any>(false)
 
     // regex patterns
@@ -34,14 +36,17 @@ const SearchBar = () => {
         currency: 'USD',
     });
 
-    const handleCheckboxChange = (newStatus: any) => {
-            setChecked(!checked);
-            if (checked) {
-                setSearchStatus(newStatus);
-            } else {
-                setSearchStatus([]);
-            }
-    }
+    const handleToggleStatus = (status: any) => {
+        if (searchStatus.includes(status)) {
+          // If the status is already in the searchStatus array, remove it
+          setSearchStatus(searchStatus.filter((s: any) => s !== status));
+        } else {
+          // If the status is not in the searchStatus array, add it
+          setSearchStatus([...searchStatus, status]);
+        }
+        console.log(searchStatus);
+        // console.log(status);
+      };
 
 
 
@@ -125,9 +130,10 @@ const SearchBar = () => {
         try {
             const response = await fetch(url, options);
             const result = await response.json();
-            console.log(result);
+            // console.log(result);
             setPropertiesList(result.data['home_search'].results);
-            console.log(propertiesList);
+            // console.log(propertiesList);
+            console.log(searchStatus);
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -196,7 +202,7 @@ const SearchBar = () => {
                 </ul>
                 {/* Search button */}
                 <div className='mt-10'>
-                    <div className='flex justify-evenly gap-5  w-full'>
+                    {/* <div className='flex justify-evenly gap-5  w-full'>
                         <CheckBox
                             checked={checked}
                             handleChange={handleCheckboxChange('for_sale')}
@@ -226,6 +232,49 @@ const SearchBar = () => {
                             checked={checked}
                             handleChange={handleCheckboxChange('active')}
                             status={`Active`}
+                        />
+                    </div> */}
+                    <div className='grid grid-cols-2 gap-5'>
+                        <Toggle
+                            label={`For sale`}
+                            onCheckedChange={() => handleToggleStatus('for_sale')}
+                            checked={searchStatus.includes('for_sale')}
+                            value={`for_sale`}
+                        />
+                        <Toggle
+                            label={`Ready to build`}
+                            onCheckedChange={() => handleToggleStatus('ready_to_build')}
+                            checked={searchStatus.includes('ready_to_build')}
+                            value={`ready_to_build`}
+
+                        />
+                        <Toggle
+                            label={`For rent`}
+                            onCheckedChange={() => handleToggleStatus('for_rent')}
+                            checked={searchStatus.includes('for_rent')}
+                            value={`for_rent`}
+
+                        />
+                        <Toggle
+                            label={`Sold`}
+                            onCheckedChange={() => handleToggleStatus('sold')}
+                            checked={searchStatus.includes('sold')}
+                            value={`sold`}
+
+                        />
+                        <Toggle
+                            label={`Off market`}
+                            onCheckedChange={() => handleToggleStatus('off_market')}
+                            checked={searchStatus.includes('off_market')}
+                            value={`off_market`}
+
+                        />
+                        <Toggle
+                            label={`Active`}
+                            onCheckedChange={() => handleToggleStatus('active')}
+                            checked={searchStatus.includes('active')}
+                            value={'active'}
+
                         />
                     </div>
                     <div className='flex justify-center mt-10'>
