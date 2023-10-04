@@ -36,17 +36,29 @@ const SearchBar = () => {
         currency: 'USD',
     });
 
-    const handleToggleStatus = (status: any) => {
-        if (searchStatus.includes(status)) {
-          // If the status is already in the searchStatus array, remove it
-          setSearchStatus(searchStatus.filter((s: any) => s !== status));
-        } else {
-          // If the status is not in the searchStatus array, add it
-          setSearchStatus([...searchStatus, status]);
-        }
-        console.log(searchStatus);
-        // console.log(status);
-      };
+    const [uniqueSearchStatus, setUniqueSearchStatus] = useState(new Set());
+
+    const handleToggleStatus = (status) => {
+        setUniqueSearchStatus((prevStatusSet) => {
+            const newStatusSet = new Set(prevStatusSet);
+
+            if (newStatusSet.has(status)) {
+                // If the status is already in the set, remove it
+                newStatusSet.delete(status);
+            } else {
+                // If the status is not in the set, add it
+                newStatusSet.add(status);
+            }
+
+            return newStatusSet;
+        });
+    };
+
+    useEffect(() => {
+        // Convert the set back to an array when needed (e.g., for API request)
+        const statusArray = Array.from(uniqueSearchStatus);
+        console.log(statusArray);
+    }, [uniqueSearchStatus]);
 
 
 
@@ -200,83 +212,52 @@ const SearchBar = () => {
                         </li>
                     ))}
                 </ul>
-                {/* Search button */}
+                {/* Toggles to filter property search */}
                 <div className='mt-10'>
-                    {/* <div className='flex justify-evenly gap-5  w-full'>
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('for_sale')}
-                            status={`For sale`}
-                        />
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('ready_to_build')}
-                            status={`Ready to build`}
-                        />
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('for_rent')}
-                            status={`For rent`}
-                        />
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('sold')}
-                            status={`Sold`}
-                        />
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('off_market')}
-                            status={`Off market`}
-                        />
-                        <CheckBox
-                            checked={checked}
-                            handleChange={handleCheckboxChange('active')}
-                            status={`Active`}
-                        />
-                    </div> */}
                     <div className='grid grid-cols-2 gap-5'>
                         <Toggle
                             label={`For sale`}
                             onCheckedChange={() => handleToggleStatus('for_sale')}
-                            checked={searchStatus.includes('for_sale')}
+                            // checked={searchStatus.includes('for_sale')}
                             value={`for_sale`}
                         />
                         <Toggle
                             label={`Ready to build`}
                             onCheckedChange={() => handleToggleStatus('ready_to_build')}
-                            checked={searchStatus.includes('ready_to_build')}
+                            // checked={searchStatus.includes('ready_to_build')}
                             value={`ready_to_build`}
 
                         />
                         <Toggle
                             label={`For rent`}
                             onCheckedChange={() => handleToggleStatus('for_rent')}
-                            checked={searchStatus.includes('for_rent')}
+                            // checked={searchStatus.includes('for_rent')}
                             value={`for_rent`}
 
                         />
                         <Toggle
                             label={`Sold`}
                             onCheckedChange={() => handleToggleStatus('sold')}
-                            checked={searchStatus.includes('sold')}
+                            // checked={searchStatus.includes('sold')}
                             value={`sold`}
 
                         />
                         <Toggle
                             label={`Off market`}
                             onCheckedChange={() => handleToggleStatus('off_market')}
-                            checked={searchStatus.includes('off_market')}
+                            // checked={searchStatus.includes('off_market')}
                             value={`off_market`}
 
                         />
                         <Toggle
                             label={`Active`}
                             onCheckedChange={() => handleToggleStatus('active')}
-                            checked={searchStatus.includes('active')}
+                            // checked={searchStatus.includes('active')}
                             value={'active'}
 
                         />
                     </div>
+                    {/* Search button */}
                     <div className='flex justify-center mt-10'>
                         <ActionButton
                             text={isloading ? <LoaderRing /> : 'Search properties'}
