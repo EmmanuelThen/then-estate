@@ -23,6 +23,10 @@ body, #dark-mode {
   background: var(--background-rgb)
 }
 
+.stroke-color {
+  fill: rgb(var(--text-rgb));
+}
+
 #scroll-container, #mtg-container {
   overflow-x: scroll;
   white-space: nowrap;

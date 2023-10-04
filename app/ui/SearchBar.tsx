@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import Button from './Button';
 import ActionButton from './ActionButton';
 import PropertyCard from './PropertyCard';
@@ -15,8 +15,7 @@ const SearchBar = () => {
     const [isloading, setIsLoading] = useState<any>(false)
     const [propertiesList, setPropertiesList] = useState<any>([])
     const [searchStatus, setSearchStatus] = useState<any>([])
-    const [selectedStatus, setSelectedStatus] = useState([]);
-    const [checked, setChecked] = useState<any>(false)
+    const [searchCount, setSearchCount] = useState<any>('')
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -38,7 +37,7 @@ const SearchBar = () => {
 
     const [uniqueSearchStatus, setUniqueSearchStatus] = useState(new Set());
 
-    const handleToggleStatus = (status) => {
+    const handleToggleStatus = (status: any) => {
         setUniqueSearchStatus((prevStatusSet) => {
             const newStatusSet = new Set(prevStatusSet);
 
@@ -55,7 +54,7 @@ const SearchBar = () => {
     };
 
     useEffect(() => {
-        // Convert the set back to an array when needed (e.g., for API request)
+        // Convert the set back to an array when needed (for API request)
         const statusArray = Array.from(uniqueSearchStatus);
         console.log(statusArray);
     }, [uniqueSearchStatus]);
@@ -131,7 +130,7 @@ const SearchBar = () => {
                 limit: 200,
                 offset: 0,
                 [searchMetric]: search,
-                status: searchStatus,
+                status: Array.from(uniqueSearchStatus),
                 sort: {
                     direction: 'desc',
                     field: 'list_date',
@@ -144,8 +143,7 @@ const SearchBar = () => {
             const result = await response.json();
             // console.log(result);
             setPropertiesList(result.data['home_search'].results);
-            // console.log(propertiesList);
-            console.log(searchStatus);
+            setSearchCount(result.data['home_search'])
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -267,21 +265,33 @@ const SearchBar = () => {
                     </div>
                 </div>
             </div>
-            {/* Dropdown */}
-            <div className='flex justify-end w-full p-20'>
-                <SelectDropdown
-                    searchStatus={searchStatus}
-                />
+
+            {/* Search count & dropdown filters */}
+            <div className={`${propertiesList.length > 0 ? '' : 'hidden'} flex justify-between items-center p-5`}>
+                <div>
+                    <h1 className='font-2xl text-slate10'>
+                        <span className='font-medium'>Showing on page:</span> {searchCount.count}
+                    </h1>
+                    <h1 className='font-2xl text-slate10'>
+                        <span className='font-medium'>Results:</span> {searchCount.total}
+                    </h1>
+                </div>
+                <div>
+                    <SelectDropdown
+                        searchStatus={searchStatus}
+                    />
+                </div>
             </div>
-            <div className='grid-container w-full mt-20 p-5'>
+            {/* Properties grid */}
+            <div className='grid-container w-full p-5'>
                 {propertiesList.map((properties: any, i: any) => (
                     <PropertyCard
                         key={i}
                         width={800}
                         height={300}
                         imageSrc={properties['primary_photo'] === null ? '/fallback-img.svg' : properties['primary_photo'].href}
-                        beds={`${properties.description.beds} beds`}
-                        baths={`${properties.description.baths} baths`}
+                        beds={properties.description.beds === null ? '-- beds' : `${properties.description.beds} beds`}
+                        baths={properties.description.baths === null ? '-- baths' : `${properties.description.baths} baths`}
                         squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft} sqft.`}
                         streetAddress={properties.location.address.line}
                         cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
@@ -308,13 +318,14 @@ const SearchBar = () => {
                                 }
                             })()
                         }
+                        branding={properties.branding[0].name}
                     />
                 ))}
             </div>
             <div className='flex justify-center w-full'>
                 <Button
                     text={`Load more`}
-                    bgColor={'bg-slate10/50'}
+                    bgColor={'bg-mint9/50 border border-mint7 text-mint9'}
                 />
             </div>
         </div>

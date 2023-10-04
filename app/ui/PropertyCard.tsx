@@ -6,6 +6,7 @@ import * as Separator from '@radix-ui/react-separator';
 
 import Button from './Button';
 import Tooltips from './Tooltips';
+import Xmark from '../components/svg/Xmark';
 
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
     width: any
     height: any
     status: any
+    branding: any
 }
 
 const PropertyCard = ({
@@ -33,7 +35,8 @@ const PropertyCard = ({
     key,
     width,
     height,
-    status }: Props) => {
+    status,
+    branding, }: Props) => {
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
         return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
@@ -89,33 +92,33 @@ const PropertyCard = ({
                             </div>
                         </div>
                     </div>
-                    <div>
-                        {/* Property status */}
-                        <div className='flex items-center gap-2'>
+                    <div className=''>
+                        {/* Status badge */}
+                        <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
                             <div className={
                                 (() => {
                                     switch (status) {
                                         case 'For sale':
-                                            return 'rounded-full bg-green-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-green-500 w-2 h-2';
                                         case 'Ready to build':
-                                            return 'rounded-full bg-yellow-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-yellow-500 w-2 h-2';
                                         case 'For rent':
-                                            return 'rounded-full bg-purple-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-purple-500 w-2 h-2';
                                         case 'Sold':
-                                            return 'rounded-full bg-red-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-red-500 w-2 h-2';
                                         case 'Off market':
-                                            return 'rounded-full bg-gray-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-gray-500 w-2 h-2';
                                         case 'N/A':
-                                            return 'rounded-full bg-black w-2.5 h-2.5';
+                                            return 'rounded-full bg-black w-2 h-2';
                                         case 'New community':
-                                            return 'rounded-full bg-sky-500 w-2.5 h-2.5';
+                                            return 'rounded-full bg-sky-500 w-2 h-2';
                                         default:
                                             return '';
                                     }
                                 })()
                             }
                             />
-                            <p className='text-sm md:text-md'>{status}</p>
+                            <p className='text-xs'>{status}</p>
                         </div>
                     </div>
 
@@ -142,7 +145,7 @@ const PropertyCard = ({
                             tooltipContent={`Add to portfolio`}
                         />
                     </div>
-                    <Dialog.Trigger className='w-[30%] mr-4' >
+                    <Dialog.Trigger className='w-[30%] ' >
                         <Button
                             text={`More info`}
                             bgColor={'bg-mint11 w-full'}
@@ -152,16 +155,91 @@ const PropertyCard = ({
             </div>
             {/* Popup content */}
             <Dialog.Portal>
-                <Dialog.Overlay className="z-[9999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className=" z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[90vh] w-[95vw] max-w-[950px] translate-x-[-50%] translate-y-[-50%] rounded-md p-10 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                    {/* Property image */}
-                    <div>
-                        <Image
-                            alt='property-image'
-                            src={imageSrc}
-                            width={width}
-                            height={height}
-                        />
+                <Dialog.Overlay className="z-[9999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0"/>
+                <Dialog.Content id='dark-mode' className="z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[90vh] w-[95vw] max-w-[950px] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                    <Dialog.Close asChild>
+                        <button
+                            className="text-slate10 hover:bg-slate2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+                            aria-label="Close"
+                        >
+                            <Xmark />
+                        </button>
+                    </Dialog.Close>
+                    {/* Full container */}
+                    <div className='flex w-full'>
+                        {/* Property image */}
+                        <div className='w-[50%]'>
+                            <Image
+                                className={`h-[${height}px] w-[${width}px] object-cover`}
+                                alt='property-image'
+                                loader={customLoader}
+                                src={imageSrc}
+                                width={width}
+                                height={height}
+                            />
+                        </div>
+                        <div className='ml-10 w-[50%]'>
+                            <div className="flex flex-col gap-2 w-full ">
+                                <div className="text-sm md:text-md font-medium whitespace-nowrap">
+                                    {streetAddress}
+                                </div>
+                                <div className="text-sm md:text-md text-slate10">
+                                    {cityStateZip}
+                                </div>
+
+                                <div className='text-lg md:text-xl font-bold text-mint11'>
+                                    {price}
+                                </div>
+                                {/* Status badge */}
+                                <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
+                                    <div className={
+                                        (() => {
+                                            switch (status) {
+                                                case 'For sale':
+                                                    return 'rounded-full bg-green-500 w-2 h-2';
+                                                case 'Ready to build':
+                                                    return 'rounded-full bg-yellow-500 w-2 h-2';
+                                                case 'For rent':
+                                                    return 'rounded-full bg-purple-500 w-2 h-2';
+                                                case 'Sold':
+                                                    return 'rounded-full bg-red-500 w-2 h-2';
+                                                case 'Off market':
+                                                    return 'rounded-full bg-gray-500 w-2 h-2';
+                                                case 'N/A':
+                                                    return 'rounded-full bg-black w-2 h-2';
+                                                case 'New community':
+                                                    return 'rounded-full bg-sky-500 w-2 h-2';
+                                                default:
+                                                    return '';
+                                            }
+                                        })()
+                                    }
+                                    />
+                                    <p className='text-xs'>{status}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs font-medium text-slate10'>{branding}</p>
+                                </div>
+                                <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[10px]" />
+                                <div className="flex h-5 items-center">
+                                    <div className="text-sm md:text-md leading-5">{beds}</div>
+                                    <Separator.Root
+                                        className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+                                        decorative
+                                        orientation="vertical"
+                                    />
+                                    <div className="text-sm md:text-md leading-5">{baths}</div>
+                                    <Separator.Root
+                                        className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+                                        decorative
+                                        orientation="vertical"
+                                    />
+                                    <div className="text-sm md:text-md leading-5">{squareFeet}</div>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">
                         dialogTitle
@@ -172,21 +250,8 @@ const PropertyCard = ({
                     <div className='flex justify-center'>
                         content
                     </div>
-                    <div className="lg:mt-[35px] flex items-center  justify-end">
-                        <Dialog.Close asChild>
-                            <button className={` transition duration-150 ease-in-out text-white inline-flex items-center justify-center rounded-[4px] gap-1 lg:gap-2 py-2 px-2 text-xs lg:text-base lg:py-0 lg:px-[10px] lg:h-[35px] font-medium leading-none focus:outline-none`}>
-                                saveButton
-                            </button>
-                        </Dialog.Close>
-                    </div>
-                    <Dialog.Close asChild>
-                        <button
-                            className="text-slate10 hover:bg-slate2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-                            aria-label="Close"
-                        >
-                            close button
-                        </button>
-                    </Dialog.Close>
+
+
                 </Dialog.Content>
             </Dialog.Portal>
         </Dialog.Root>

@@ -4,7 +4,7 @@ import * as Switch from '@radix-ui/react-switch';
 const Toggle = ({ label, onCheckedChange, checked }: any) => (
   <form>
     <div className="flex items-center justify-between">
-      <label className=" text-xs leading-none pr-[15px]" htmlFor="airplane-mode">
+      <label className="font-medium text-xs leading-none pr-[15px]" htmlFor="airplane-mode">
         {label}
       </label>
       <Switch.Root
