@@ -16,6 +16,7 @@ const SearchBar = () => {
     const [propertiesList, setPropertiesList] = useState<any>([])
     const [searchStatus, setSearchStatus] = useState<any>([])
     const [searchCount, setSearchCount] = useState<any>('')
+    const [propertyID, setPropertyID] = useState<any>('')
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -144,11 +145,32 @@ const SearchBar = () => {
             // console.log(result);
             setPropertiesList(result.data['home_search'].results);
             setSearchCount(result.data['home_search'])
+            setPropertyID(result.data['home_search'].results['property_id'])
             setIsLoading(false);
         } catch (error) {
             console.error(error);
         }
     };
+
+    // Get property images api call
+    const getPropertyImages = async () => {
+        const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.text();
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className='mt-7 w-full h-full'>
@@ -319,6 +341,9 @@ const SearchBar = () => {
                             })()
                         }
                         branding={properties.branding[0].name}
+                        type={properties.description.type === null ? '-- type' : (properties.description.type).replace(/_/g, ' ')}
+                        propertyID={properties['property_id']}
+                        photoCount={properties['photo_count']}
                     />
                 ))}
             </div>

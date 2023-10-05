@@ -7,6 +7,8 @@ import * as Separator from '@radix-ui/react-separator';
 import Button from './Button';
 import Tooltips from './Tooltips';
 import Xmark from '../components/svg/Xmark';
+import ChevronLeft from '../components/svg/ChevronLeft';
+import ChevronRight from '../components/svg/ChevronRight';
 
 
 type Props = {
@@ -22,6 +24,9 @@ type Props = {
     height: any
     status: any
     branding: any
+    type: any
+    propertyID: any
+    photoCount: any
 }
 
 const PropertyCard = ({
@@ -36,7 +41,10 @@ const PropertyCard = ({
     width,
     height,
     status,
-    branding, }: Props) => {
+    branding,
+    type,
+    propertyID,
+    photoCount }: Props) => {
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
         return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
@@ -155,7 +163,7 @@ const PropertyCard = ({
             </div>
             {/* Popup content */}
             <Dialog.Portal>
-                <Dialog.Overlay className="z-[9999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0"/>
+                <Dialog.Overlay className="z-[9999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
                 <Dialog.Content id='dark-mode' className="z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[90vh] w-[95vw] max-w-[950px] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
@@ -166,9 +174,9 @@ const PropertyCard = ({
                         </button>
                     </Dialog.Close>
                     {/* Full container */}
-                    <div className='flex w-full'>
+                    <div className='md:flex w-full'>
                         {/* Property image */}
-                        <div className='w-[50%]'>
+                        <div className='relative md:w-[50%]'>
                             <Image
                                 className={`h-[${height}px] w-[${width}px] object-cover`}
                                 alt='property-image'
@@ -177,8 +185,24 @@ const PropertyCard = ({
                                 width={width}
                                 height={height}
                             />
+                            <div className='absolute top-[50%] flex justify-between w-full px-2'>
+                                <div className='rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'>
+                                    <ChevronLeft />
+                                </div>
+                                <div className='rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'>
+                                    <ChevronRight />
+                                </div>
+                            </div>
+                            {/* Photo count */}
+                            <div>
+                                Photo count: {photoCount}
+                            </div>
+                            {/* Seller info */}
+                            <div>
+                                Property ID: {propertyID}
+                            </div>
                         </div>
-                        <div className='ml-10 w-[50%]'>
+                        <div className='md:ml-5 md:w-[50%]'>
                             <div className="flex flex-col gap-2 w-full ">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
@@ -218,7 +242,10 @@ const PropertyCard = ({
                                     <p className='text-xs'>{status}</p>
                                 </div>
                                 <div>
-                                    <p className='text-xs font-medium text-slate10'>{branding}</p>
+                                    <p className='text-xs text-mint11 capitalize'>{type}</p>
+                                </div>
+                                <div>
+                                    <p className='text-sm font-medium text-slate10'>{branding}</p>
                                 </div>
                                 <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[10px]" />
                                 <div className="flex h-5 items-center">
