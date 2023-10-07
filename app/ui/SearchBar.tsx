@@ -344,6 +344,9 @@ const SearchBar = () => {
                         type={properties.description.type === null ? '-- type' : (properties.description.type).replace(/_/g, ' ')}
                         propertyID={properties['property_id']}
                         photoCount={properties['photo_count']}
+                        agent={properties.advertisers[0].name}
+                        agentEmail={properties.advertisers[0].email === null ? 'N/A' : properties.advertisers[0].email}
+                        advertiserType={properties.advertisers[0].type}
                     />
                 ))}
             </div>

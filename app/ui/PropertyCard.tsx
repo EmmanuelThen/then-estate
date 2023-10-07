@@ -27,6 +27,9 @@ type Props = {
     type: any
     propertyID: any
     photoCount: any
+    agent: any
+    agentEmail: any
+    advertiserType: any
 }
 
 const PropertyCard = ({
@@ -44,7 +47,10 @@ const PropertyCard = ({
     branding,
     type,
     propertyID,
-    photoCount }: Props) => {
+    photoCount,
+    agent,
+    agentEmail,
+    advertiserType }: Props) => {
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
         return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
@@ -185,7 +191,7 @@ const PropertyCard = ({
                                 width={width}
                                 height={height}
                             />
-                            <div className='absolute top-[50%] flex justify-between w-full px-2'>
+                            <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-between w-full px-2'>
                                 <div className='rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'>
                                     <ChevronLeft />
                                 </div>
@@ -193,15 +199,31 @@ const PropertyCard = ({
                                     <ChevronRight />
                                 </div>
                             </div>
-                            {/* Photo count */}
-                            <div>
-                                Photo count: {photoCount}
-                            </div>
-                            {/* Seller info */}
-                            <div>
-                                Property ID: {propertyID}
+                            {/* Under photo section */}
+                            <div className='flex flex-col gap-5'>
+                                {/* Photo count */}
+                                <div>
+                                    Photo count: {photoCount}
+                                </div>
+                                {/* Seller info */}
+                                <div className='text-sm'>
+                                    <p>Property ID: {propertyID}</p>
+                                    <p className='capitalize'>
+                                        <span className='text-medium text-slate10'>{advertiserType}:</span> {agent}
+                                    </p>
+                                    <p className=''>
+                                        <span className='text-medium text-slate10'>Email:</span> {agentEmail}
+                                    </p>
+                                </div>
+                                {/* Contact button */}
+                                <div>
+                                    <button className='bg-blue9/30 border border-blue9 text-blue8 hover:bg-blue9/50 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm'>
+                                        Contact {agent}
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
                         <div className='md:ml-5 md:w-[50%]'>
                             <div className="flex flex-col gap-2 w-full ">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
@@ -266,19 +288,7 @@ const PropertyCard = ({
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">
-                        dialogTitle
-                    </Dialog.Title>
-                    <Dialog.Description className="text-mauve11 mt-[10px] mb-5 text-sm lg:text-2xl font-semibold leading-normal">
-                        dialogDesc
-                    </Dialog.Description>
-                    <div className='flex justify-center'>
-                        content
-                    </div>
-
-
                 </Dialog.Content>
             </Dialog.Portal>
         </Dialog.Root>
