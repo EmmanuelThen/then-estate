@@ -2,14 +2,12 @@ import Image from 'next/image'
 import React from 'react'
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Separator from '@radix-ui/react-separator';
-
-
 import Button from './Button';
 import Tooltips from './Tooltips';
 import Xmark from '../components/svg/Xmark';
 import ChevronLeft from '../components/svg/ChevronLeft';
 import ChevronRight from '../components/svg/ChevronRight';
-
+import { useForm, SubmitHandler } from "react-hook-form";
 
 type Props = {
     imageSrc: any
@@ -32,6 +30,13 @@ type Props = {
     advertiserType: any
 }
 
+type Inputs = { 
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+};
+
 const PropertyCard = ({
     imageSrc,
     beds,
@@ -51,9 +56,17 @@ const PropertyCard = ({
     agent,
     agentEmail,
     advertiserType }: Props) => {
+
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
         return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
+    };
+
+    // For contact agent button on property card modal
+    const handleContactAgent = (e: any) => {
+        e.preventDefault();
+        const subject = encodeURIComponent('I am interested in your listing on ThenEstate')
+        window.location.href = `mailto:${agentEmail}?subject=${subject}`;
     };
 
     return (
@@ -216,11 +229,11 @@ const PropertyCard = ({
                                     </p>
                                 </div>
                                 {/* Contact button */}
-                                <div>
+                                <form onSubmit={handleContactAgent}>
                                     <button className='bg-blue9/30 border border-blue9 text-blue8 hover:bg-blue9/50 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm'>
                                         Contact {agent}
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
 

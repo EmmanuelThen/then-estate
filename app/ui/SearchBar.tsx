@@ -6,6 +6,8 @@ import SelectDropdown from './SelectDropdown';
 import CheckBox from './CheckBox';
 import LoaderRing from './LoaderRing';
 import Toggle from './Toggle';
+import SearchIcon from '../components/svg/SearchIcon';
+import List from '../components/svg/List';
 
 const SearchBar = () => {
     const [search, setSearch] = useState<any>('');
@@ -17,6 +19,8 @@ const SearchBar = () => {
     const [searchStatus, setSearchStatus] = useState<any>([])
     const [searchCount, setSearchCount] = useState<any>('')
     const [propertyID, setPropertyID] = useState<any>('')
+    // For amount of properties listed
+    const [limit, setLimit] = useState<any>(50);
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -128,7 +132,7 @@ const SearchBar = () => {
                 'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
             },
             body: JSON.stringify({
-                limit: 200,
+                limit: limit,
                 offset: 0,
                 [searchMetric]: search,
                 status: Array.from(uniqueSearchStatus),
@@ -152,6 +156,12 @@ const SearchBar = () => {
         }
     };
 
+    // Load more button functionality to add 50 more than previous amount
+    const handleLoadMoreButton = () => {
+        setLimit((prevLimit: number) => prevLimit + 50);
+        getPropertiesList();
+    };
+
     // Get property images api call
     const getPropertyImages = async () => {
         const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
@@ -165,7 +175,7 @@ const SearchBar = () => {
 
         try {
             const response = await fetch(url, options);
-            const result = await response.text();
+            const result = await response.json();
             console.log(result);
         } catch (error) {
             console.error(error);
@@ -280,7 +290,11 @@ const SearchBar = () => {
                     {/* Search button */}
                     <div className='flex justify-center mt-10'>
                         <ActionButton
-                            text={isloading ? <LoaderRing /> : 'Search properties'}
+                            text={isloading ?
+                                (<span className='flex items-center gap-2'> <LoaderRing /> Search properties</span>)
+                                :
+                                (<span className='flex items-center gap-2'> <SearchIcon /> Search properties</span>)
+                            }
                             bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
                             onClick={getPropertiesList}
                         />
@@ -350,10 +364,15 @@ const SearchBar = () => {
                     />
                 ))}
             </div>
-            <div className='flex justify-center w-full'>
-                <Button
-                    text={`Load more`}
-                    bgColor={'bg-mint9/50 border border-mint7 text-mint9'}
+            <div className={propertiesList.length > 0 ? `flex justify-center w-full` : `hidden`}>
+                <ActionButton
+                    text={isloading ?
+                        (<span className='flex items-center gap-2'> <LoaderRing /> Load more</span>)
+                        :
+                        (<span className='flex items-center gap-2'> <List /> Load more</span>)
+                    }
+                    bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-blue9/30 border border-blue9 text-blue8 hover:bg-blue9/50'}`}
+                    onClick={handleLoadMoreButton}
                 />
             </div>
         </div>
@@ -361,3 +380,5 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+
+
