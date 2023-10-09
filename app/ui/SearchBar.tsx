@@ -361,10 +361,14 @@ const SearchBar = () => {
                         agent={properties.advertisers[0].name}
                         agentEmail={properties.advertisers[0].email === null ? 'N/A' : properties.advertisers[0].email}
                         advertiserType={properties.advertisers[0].type}
+                        newListing={properties.flags['is_new_listing']}
+                        listDate={new Date(properties['list_date'])}
+                        priceReduction={properties['price_reduced_amount']}
+                        newConstruction={properties.flags['is_new_construction']}
                     />
                 ))}
             </div>
-            <div className={propertiesList.length > 0 ? `flex justify-center w-full` : `hidden`}>
+            <div className={propertiesList.length > 0 ? `flex justify-center w-full mt-20` : `hidden`}>
                 <ActionButton
                     text={isloading ?
                         (<span className='flex items-center gap-2'> <LoaderRing /> Load more</span>)

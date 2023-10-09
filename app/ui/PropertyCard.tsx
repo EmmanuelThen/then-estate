@@ -8,6 +8,9 @@ import Xmark from '../components/svg/Xmark';
 import ChevronLeft from '../components/svg/ChevronLeft';
 import ChevronRight from '../components/svg/ChevronRight';
 import { useForm, SubmitHandler } from "react-hook-form";
+import Sparkles from '../components/svg/Sparkles';
+import List from '../components/svg/List';
+import Warning from '../components/svg/Warning';
 
 type Props = {
     imageSrc: any
@@ -28,9 +31,13 @@ type Props = {
     agent: any
     agentEmail: any
     advertiserType: any
+    newListing: boolean
+    listDate: any
+    priceReduction: any
+    newConstruction: boolean
 }
 
-type Inputs = { 
+type Inputs = {
     name: string;
     email: string;
     subject: string;
@@ -55,7 +62,11 @@ const PropertyCard = ({
     photoCount,
     agent,
     agentEmail,
-    advertiserType }: Props) => {
+    advertiserType,
+    newListing,
+    listDate,
+    priceReduction,
+    newConstruction }: Props) => {
 
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
@@ -69,12 +80,31 @@ const PropertyCard = ({
         window.location.href = `mailto:${agentEmail}?subject=${subject}`;
     };
 
+    // Date formatter
+    const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+
+    // USD formatter
+    const usdFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
     return (
         <Dialog.Root >
             <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]' key={key}>
-                <div className={`h-[${height}px] w-[${width}px] rounded-t border-b border-slate10 text-blue9 transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
+                <div className={`h-[${height}px] w-[${width}px] rounded-t border-b border-slate10 transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
                     {/* Property cover image */}
-                    <div className={`h-[${height}px] w-[${width}px]`}>
+                    <div className={`h-[${height}px] w-[${width}px] relative`}>
+                        <div>
+                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
+                                <Sparkles />
+                                <p className='text-xs font-semibold text-white'>New listing</p>
+                            </div>
+                        </div>
                         <Image
                             className={`h-[${height}px] w-[${width}px] object-cover`}
                             alt='property-image'
@@ -97,8 +127,12 @@ const PropertyCard = ({
                                 {cityStateZip}
                             </div>
 
-                            <div className='text-lg md:text-xl font-bold text-mint11'>
-                                {price}
+                            <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
+                                <p>{price}</p>
+                                <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
+                                    <Warning />
+                                    <p className='text-xs text-red9 font-light'>Price reduction</p>
+                                </div>
                             </div>
                             <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[15px]" />
                             <div className="flex h-5 items-center">
@@ -196,6 +230,10 @@ const PropertyCard = ({
                     <div className='md:flex w-full'>
                         {/* Property image */}
                         <div className='relative md:w-[50%]'>
+                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
+                                <Sparkles />
+                                <p className='text-xs font-semibold text-white'>New listing</p>
+                            </div>
                             <Image
                                 className={`h-[${height}px] w-[${width}px] object-cover`}
                                 alt='property-image'
@@ -229,7 +267,7 @@ const PropertyCard = ({
                                     </p>
                                 </div>
                                 {/* Contact button */}
-                                <form onSubmit={handleContactAgent}>
+                                <form onSubmit={handleContactAgent} className={agentEmail === 'N/A' ? 'hidden' : ''}>
                                     <button className='bg-blue9/30 border border-blue9 text-blue8 hover:bg-blue9/50 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm'>
                                         Contact {agent}
                                     </button>
@@ -246,8 +284,12 @@ const PropertyCard = ({
                                     {cityStateZip}
                                 </div>
 
-                                <div className='text-lg md:text-xl font-bold text-mint11'>
-                                    {price}
+                                <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
+                                    <p>{price}</p>
+                                    <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
+                                        <Warning />
+                                        <p className='text-xs text-red9 font-light'>- {usdFormatter.format(priceReduction)}</p>
+                                    </div>
                                 </div>
                                 {/* Status badge */}
                                 <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
@@ -299,6 +341,27 @@ const PropertyCard = ({
                                     <div className="text-sm md:text-md leading-5">{squareFeet}</div>
 
                                 </div>
+                                {/* Seperator */}
+                                <div className='flex justify-center w-full mt-5'>
+                                    <div className='flex items-center justify-center gap-8 w-full'>
+                                        <hr className='block w-full h-[1px] border-0 bg-[#e8e8e8]' />
+                                        <span className='text-xs text-blue9'>Details</span>
+                                        <hr className='block w-full h-[1px] border-0 bg-[#e8e8e8]' />
+                                    </div>
+                                </div>
+                                {/* Details */}
+                                <ul className='flex flex-col gap-1 text-sm'>
+                                    <li className={newConstruction ? 'block' : 'hidden'}>
+                                        <p className='font-medium text-yellow-500'>
+                                            New construction
+                                        </p>
+                                    </li>
+                                    <li className=''>
+                                        <p className=''>
+                                            <span className='text-medium text-slate10'>Date listed:</span> {listDate.toLocaleDateString("en-US", options)}
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

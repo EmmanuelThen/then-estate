@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import { sky, slate, mint, blackA, blue } from '@radix-ui/colors';
+import { sky, slate, mint, blackA, blue, blueA, red, } from '@radix-ui/colors';
 
 
 const config: Config = {
@@ -20,7 +20,9 @@ const config: Config = {
         ...slate,
         ...mint,
         ...blackA,
-        ...blue
+        ...blue,
+        ...blueA,
+        ...red,
       },
       keyframes: {
         backgroundShine: {
