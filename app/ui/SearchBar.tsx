@@ -19,6 +19,7 @@ const SearchBar = () => {
     const [searchStatus, setSearchStatus] = useState<any>([])
     const [searchCount, setSearchCount] = useState<any>('')
     const [propertyID, setPropertyID] = useState<any>('')
+    const [propertyImages, setPropertyImages] = useState<any>([])
     // For amount of properties listed
     const [limit, setLimit] = useState<any>(50);
 
@@ -163,24 +164,29 @@ const SearchBar = () => {
     };
 
     // Get property images api call
-    const getPropertyImages = async () => {
-        const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': apiKey,
-                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
-            }
-        };
+    // useEffect(() => {
+    //     const getPropertyImages = async () => {
+    //         const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
+    //         const options = {
+    //             method: 'GET',
+    //             headers: {
+    //                 'X-RapidAPI-Key': apiKey,
+    //                 'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+    //             }
+    //         };
 
-        try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    //         try {
+    //             const response = await fetch(url, options);
+    //             const result = await response.json();
+    //             console.log(result);
+    //             // This sets propertyImges to an array with all the photo's href
+    //             setPropertyImages(result.data['home_search'].results[0].photos)
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     }
+    //     getPropertyImages();
+    // },[propertyID])
 
     return (
         <div className='mt-7 w-full h-full'>
@@ -326,6 +332,7 @@ const SearchBar = () => {
                         width={800}
                         height={300}
                         imageSrc={properties['primary_photo'] === null ? '/fallback-img.svg' : properties['primary_photo'].href}
+                        // propertyImages={propertyImages}
                         beds={properties.description.beds === null ? '-- beds' : `${properties.description.beds} beds`}
                         baths={properties.description.baths === null ? '-- baths' : `${properties.description.baths} baths`}
                         squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft} sqft.`}
@@ -365,6 +372,10 @@ const SearchBar = () => {
                         listDate={new Date(properties['list_date'])}
                         priceReduction={properties['price_reduced_amount']}
                         newConstruction={properties.flags['is_new_construction']}
+                        fullBaths={properties.description['baths_full'] === null ? 0 : properties.description['baths_full']}
+                        halfBaths={properties.description['baths_half'] === null ? 0 : properties.description['baths_half']}
+                        lastSoldDate={properties['last_sold_date'] === null ? 'N/A' : properties['last_sold_date']}
+                        lastSoldPrice={properties['last_sold_price'] === null ? 'N/A' : usdFormatter.format(properties['last_sold_price'])}
                     />
                 ))}
             </div>

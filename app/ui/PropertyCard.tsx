@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Separator from '@radix-ui/react-separator';
 import Button from './Button';
@@ -11,6 +11,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Sparkles from '../components/svg/Sparkles';
 import List from '../components/svg/List';
 import Warning from '../components/svg/Warning';
+import ActionButton from './ActionButton';
 
 type Props = {
     imageSrc: any
@@ -35,14 +36,12 @@ type Props = {
     listDate: any
     priceReduction: any
     newConstruction: boolean
-}
+    fullBaths: number
+    halfBaths: number
+    lastSoldDate: any
+    lastSoldPrice: string
 
-type Inputs = {
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-};
+}
 
 const PropertyCard = ({
     imageSrc,
@@ -66,7 +65,70 @@ const PropertyCard = ({
     newListing,
     listDate,
     priceReduction,
-    newConstruction }: Props) => {
+    newConstruction,
+    fullBaths,
+    halfBaths,
+    lastSoldDate,
+    lastSoldPrice,
+}: Props) => {
+
+    const [imageIndex, setImageIndex] = useState<any>(0);
+    // const [imageList, setImageList] = useState<any>([]);
+    const [propertyImages, setPropertyImages] = useState<any>([])
+
+    // Too keep imageIndex within range
+    // useEffect(() => {
+    //     if (imageIndex < 0) {
+    //         setImageIndex(0);
+    //     } else if (imageIndex >= propertyImages.length) {
+    //         setImageIndex(propertyImages.length - 1);
+    //     }
+    // }, [imageIndex, propertyImages]);
+
+    const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
+    // Get property images 
+    const getPropertyImages = async () => {
+        const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            console.log(result);
+            console.log(result.data['home_search'].results[0].photos)
+            // This sets propertyImges to an array with all the photo's href
+            if (result.data['home_search'].results[0].photos.length > 0) {
+                setPropertyImages(result.data['home_search'].results[0].photos)
+                console.log(propertyImages)
+                console.log(propertyID)
+            } else {
+                console.log('No property image list')
+            }
+            // setImageList(propertyImages)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const showPreviousImage = () => {
+        setImageIndex((prevIndex) => {
+            const newIndex = prevIndex - 1;
+            return newIndex 
+        });
+    };
+
+    const showNextImage = () => {
+        setImageIndex((prevIndex) => {
+            const newIndex = prevIndex + 1;
+            return newIndex
+        });
+    };
 
     // For high quality images, jpg were giving low quality
     const customLoader = () => {
@@ -207,9 +269,10 @@ const PropertyCard = ({
                         />
                     </div>
                     <Dialog.Trigger className='w-[30%] ' >
-                        <Button
+                        <ActionButton
                             text={`More info`}
                             bgColor={'bg-mint11 w-full'}
+                            onClick={getPropertyImages}
                         />
                     </Dialog.Trigger>
                 </div>
@@ -234,21 +297,35 @@ const PropertyCard = ({
                                 <Sparkles />
                                 <p className='text-xs font-semibold text-white'>New listing</p>
                             </div>
-                            <Image
-                                className={`h-[${height}px] w-[${width}px] object-cover`}
-                                alt='property-image'
-                                loader={customLoader}
-                                src={imageSrc}
-                                width={width}
-                                height={height}
-                            />
-                            <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-between w-full px-2'>
-                                <div className='rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'>
+                            {/* All property images */}
+                            {propertyImages.length > 0 && (
+
+                                <Image
+                                    key={propertyID}
+                                    className={`h-[${height}px] w-[${width}px] object-cover`}
+                                    alt={`Image ${imageIndex + 1}`}
+                                    loader={customLoader}
+                                    src={propertyImages[imageIndex].href}
+                                    width={width}
+                                    height={height}
+                                />
+                            )}
+                            {/* Prev image and next image buttons */}
+                            <div className='z-[9999] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-between w-full px-2'>
+                                <button
+                                    onClick={showPreviousImage}
+                                    disabled={imageIndex === 0}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                >
                                     <ChevronLeft />
-                                </div>
-                                <div className='rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'>
+                                </button>
+                                <button
+                                    onClick={showNextImage}
+                                    disabled={imageIndex === propertyImages.length - 1}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                >
                                     <ChevronRight />
-                                </div>
+                                </button>
                             </div>
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5'>
@@ -357,8 +434,33 @@ const PropertyCard = ({
                                         </p>
                                     </li>
                                     <li className=''>
-                                        <p className=''>
-                                            <span className='text-medium text-slate10'>Date listed:</span> {listDate.toLocaleDateString("en-US", options)}
+                                        <p className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Date listed:</span>
+                                            {listDate.toLocaleDateString("en-US", options)}
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Full baths:</span>
+                                            {fullBaths}
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Half baths:</span>
+                                            {halfBaths}
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Last sold date:</span>
+                                            {lastSoldDate}
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Last sold price:</span>
+                                            {lastSoldPrice}
                                         </p>
                                     </li>
                                 </ul>
