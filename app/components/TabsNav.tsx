@@ -14,6 +14,7 @@ import MortgageRates from '../ui/MortgageRates'
 import SearchBar from '../ui/SearchBar'
 import PropertyCard from '../ui/PropertyCard'
 import SelectDropdown from '../ui/SelectDropdown'
+import Portfolio from './Portfolio'
 
 type Props = {}
 
@@ -190,12 +191,13 @@ const TabsNav = (props: Props) => {
                 <SearchBar />
                 
             </Tabs.Content>
+            {/* Portfolio */}
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
                 value="tab3"
             >
 
-                tabs3
+                <Portfolio />
             </Tabs.Content>
             <Tabs.Content
                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "

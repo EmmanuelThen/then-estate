@@ -116,17 +116,18 @@ const PropertyCard = ({
         }
     }
 
+    // need to fix button logic, everything else is working to show all property images
     const showPreviousImage = () => {
         setImageIndex((prevIndex) => {
             const newIndex = prevIndex - 1;
-            return newIndex 
+            return newIndex >= 0 ? newIndex : prevIndex;
         });
     };
 
     const showNextImage = () => {
         setImageIndex((prevIndex) => {
             const newIndex = prevIndex + 1;
-            return newIndex
+            return newIndex < propertyImages.length ? newIndex : prevIndex;
         });
     };
 
