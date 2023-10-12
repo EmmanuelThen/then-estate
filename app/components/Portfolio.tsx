@@ -63,7 +63,7 @@ const Portfolio = (props: Props) => {
     return (
         <div className='flex justify-between w-full'>
             {/* Heading */}
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 w-full'>
                 <h1 className='flex justify-start font-medium mt-5 tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
                     Holdings
                 </h1>
@@ -87,14 +87,19 @@ const Portfolio = (props: Props) => {
                             Today
                         </p>
                     </div>
-                    <div className='w-full'>
-                        <AccordionDemo />
+                    <div className='w-full mt-10'>
+                        {states.map((states, i) => (
+                            <AccordionDemo
+                                key={i}
+                                accordionTrigger={`${states.name}, ${states.abbreviation}`}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
-        
-        
+
+
     )
 }
 

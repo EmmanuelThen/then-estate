@@ -2,31 +2,28 @@ import React from 'react';
 import classNames from 'classnames';
 import * as Accordion from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import TickerBadge from './TickerBadge';
 
-const AccordionDemo = () => (
+
+
+const AccordionDemo = ({ accordionTrigger }: any) => (
   <Accordion.Root
-    className="bg-mint6 w-full rounded-md shadow-[0_2px_10px] shadow-black/5"
+    className="my-5 w-full rounded-md shadow-[0_2px_10px] shadow-black/5"
     type="single"
-    defaultValue="item-1"
+    defaultValue="item-2"
     collapsible
   >
     <AccordionItem value="item-1">
-      <AccordionTrigger>Is it accessible?</AccordionTrigger>
-      <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
-    </AccordionItem>
 
-    <AccordionItem value="item-2">
-      <AccordionTrigger>Is it unstyled?</AccordionTrigger>
-      <AccordionContent>
-        Yes. It's unstyled by default, giving you freedom over the look and feel.
-      </AccordionContent>
-    </AccordionItem>
+      <AccordionTrigger>
+        {accordionTrigger}
+        <TickerBadge />
+      </AccordionTrigger>
 
-    <AccordionItem value="item-3">
-      <AccordionTrigger>Can it be animated?</AccordionTrigger>
       <AccordionContent>
-        Yes! You can animate the Accordion with CSS or JavaScript.
+        Property cards
       </AccordionContent>
+
     </AccordionItem>
   </Accordion.Root>
 );
@@ -34,7 +31,7 @@ const AccordionDemo = () => (
 const AccordionItem = React.forwardRef(({ children, className, ...props }: any, forwardedRef) => (
   <Accordion.Item
     className={classNames(
-      'transition duration-150 ease-in-out focus-within:shadow-mauve12 mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px]',
+      'hover:cursor-pointer transition duration-150 ease-in-out focus-within:shadow-mauve12 mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b ',
       className
     )}
     {...props}
@@ -48,7 +45,7 @@ const AccordionTrigger = React.forwardRef(({ children, className, ...props }: an
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={classNames(
-        'transition duration-150 ease-in-out text-violet11 shadow-mauve6 hover:bg-mauve2 group flex h-[45px] flex-1 cursor-default items-center justify-between bg-white px-5 text-[15px] leading-none shadow-[0_1px_0] outline-none',
+        'hover:cursor-pointer transition duration-150 ease-in-out  shadow-mauve6 hover:bg-blackA3 group flex h-[45px] flex-1 cursor-default items-center justify-between  px-5 text-[15px] leading-none shadow-blackA9 shadow-[0_4px_7px] outline-none',
         className
       )}
       {...props}
@@ -56,7 +53,7 @@ const AccordionTrigger = React.forwardRef(({ children, className, ...props }: an
     >
       {children}
       <ChevronDownIcon
-        className="text-violet10 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
+        className="text-mint11 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
         aria-hidden
       />
     </Accordion.Trigger>

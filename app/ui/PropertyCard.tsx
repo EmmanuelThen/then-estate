@@ -40,6 +40,7 @@ type Props = {
     halfBaths: number
     lastSoldDate: any
     lastSoldPrice: string
+    openHouse: any
 
 }
 
@@ -70,6 +71,7 @@ const PropertyCard = ({
     halfBaths,
     lastSoldDate,
     lastSoldPrice,
+    openHouse
 }: Props) => {
 
     const [imageIndex, setImageIndex] = useState<any>(0);
@@ -85,6 +87,172 @@ const PropertyCard = ({
     //     }
     // }, [imageIndex, propertyImages]);
 
+    // Test for getPropertyImages api call
+    let imagez: any = {
+        "data": {
+            "home_search": {
+                "__typename": "SearchHomeResult",
+                "results": [
+                    {
+                        "__typename": "SearchHome",
+                        "property_id": "3011800592",
+                        "listing_id": "2960390430",
+                        "photos": [
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m23193573s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "porch",
+                                        "probability": 0.9816616177558899
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2451827029s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "living_room",
+                                        "probability": 0.8160191774368286
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2935197212s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "bedroom",
+                                        "probability": 0.9994590878486633
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m563880541s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "kitchen",
+                                        "probability": 0.9999990463256836
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m3511243318s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "bathroom",
+                                        "probability": 0.9999939203262329
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2161617325s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "bedroom",
+                                        "probability": 0.9824330806732178
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m720758189s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "bedroom",
+                                        "probability": 0.9842005372047424
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2141557463s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "kitchen",
+                                        "probability": 0.9956231713294983
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2484862310s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "unknown",
+                                        "probability": 0.9416227340698242
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m1110797416s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "unknown",
+                                        "probability": 0.5906724333763123
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m2315086288s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "house_view",
+                                        "probability": 0.4700235426425934
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m173266234s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "unknown",
+                                        "probability": 0.9308441281318665
+                                    }
+                                ]
+                            },
+                            {
+                                "__typename": "HomePhoto",
+                                "href": "https://ap.rdcpix.com/7fec61b626056814d4d12a198d6224f5l-m4277145279s.jpg",
+                                "tags": [
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "house_view",
+                                        "probability": 0.746044397354126
+                                    },
+                                    {
+                                        "__typename": "Tag",
+                                        "label": "road_view",
+                                        "probability": 0.9278570413589478
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+
     const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
     // Get property images 
     const getPropertyImages = async () => {
@@ -98,15 +266,16 @@ const PropertyCard = ({
         };
 
         try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            console.log(result);
-            console.log(result.data['home_search'].results[0].photos)
+            // const response = await fetch(url, options);
+            // const result = await response.json();
+            // console.log(result);
+            // console.log(result.data['home_search'].results[0].photos)
             // This sets propertyImges to an array with all the photo's href
-            if (result.data['home_search'].results[0].photos.length > 0) {
-                setPropertyImages(result.data['home_search'].results[0].photos)
+            //change back to results instead of imagez after testing
+            if (imagez.data['home_search'].results[0].photos.length > 0) {
+                setPropertyImages(imagez.data['home_search'].results[0].photos)
                 console.log(propertyImages)
-                console.log(propertyID)
+                // console.log(propertyID)
             } else {
                 console.log('No property image list')
             }
@@ -116,16 +285,18 @@ const PropertyCard = ({
         }
     }
 
+
+
     // need to fix button logic, everything else is working to show all property images
     const showPreviousImage = () => {
-        setImageIndex((prevIndex) => {
+        setImageIndex((prevIndex: any) => {
             const newIndex = prevIndex - 1;
             return newIndex >= 0 ? newIndex : prevIndex;
         });
     };
 
     const showNextImage = () => {
-        setImageIndex((prevIndex) => {
+        setImageIndex((prevIndex: any) => {
             const newIndex = prevIndex + 1;
             return newIndex < propertyImages.length ? newIndex : prevIndex;
         });
@@ -159,9 +330,9 @@ const PropertyCard = ({
     return (
         <Dialog.Root >
             <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]' key={key}>
-                <div className={`h-[${height}px] w-[${width}px] rounded-t border-b border-slate10 transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
+                <div className={`h-[${height}px] w-[${width}px] transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
                     {/* Property cover image */}
-                    <div className={`h-[${height}px] w-[${width}px] relative`}>
+                    <div className={`h-[${height}px] w-[${width}px] relative `}>
                         <div>
                             <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
                                 <Sparkles />
@@ -169,7 +340,7 @@ const PropertyCard = ({
                             </div>
                         </div>
                         <Image
-                            className={`h-[${height}px] w-[${width}px] object-cover`}
+                            className={`h-[${height}px] w-[${width}px] object-cover rounded-t border-b border-slate10`}
                             alt='property-image'
                             loader={customLoader}
                             src={imageSrc}
@@ -417,7 +588,18 @@ const PropertyCard = ({
                                         orientation="vertical"
                                     />
                                     <div className="text-sm md:text-md leading-5">{squareFeet}</div>
+                                </div>
 
+                                <div className={openHouse === null ? 'hidden' : 'block'}>
+                                    <div className='flex gap-2 text-xs'>
+                                        <span className='text-xs font-medium text-green-500'>Open house:</span>
+                                        {openHouse === null ? '' :
+                                            openHouse.map((dates: any, i: any) => (
+                                                <p key={i}>
+                                                    {dates['start_date']} - {dates['end_date']} {dates['time_zone']}
+                                                </p>
+                                            ))}
+                                    </div>
                                 </div>
                                 {/* Seperator */}
                                 <div className='flex justify-center w-full mt-5'>
@@ -463,6 +645,17 @@ const PropertyCard = ({
                                             <span className='text-medium text-slate10'>Last sold price:</span>
                                             {lastSoldPrice}
                                         </p>
+                                    </li>
+                                    <li className={openHouse === null ? 'hidden' : 'block'}>
+                                        <div className='flex gap-2'>
+                                            <span className='text-medium text-slate10'>Open house:</span>
+                                            {openHouse === null ? '' :
+                                                openHouse.map((dates: any, i: any) => (
+                                                    <p key={i}>
+                                                        {dates['start_date']} - {dates['end_date']} {dates['time_zone']}
+                                                    </p>
+                                                ))}
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
