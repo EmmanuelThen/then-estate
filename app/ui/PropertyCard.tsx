@@ -12,6 +12,7 @@ import Sparkles from '../components/svg/Sparkles';
 import List from '../components/svg/List';
 import Warning from '../components/svg/Warning';
 import ActionButton from './ActionButton';
+import Cancel from '../components/svg/Cancel';
 
 type Props = {
     imageSrc: any
@@ -41,6 +42,7 @@ type Props = {
     lastSoldDate: any
     lastSoldPrice: string
     openHouse: any
+    foreclosure: any
 
 }
 
@@ -71,7 +73,8 @@ const PropertyCard = ({
     halfBaths,
     lastSoldDate,
     lastSoldPrice,
-    openHouse
+    openHouse,
+    foreclosure
 }: Props) => {
 
     const [imageIndex, setImageIndex] = useState<any>(0);
@@ -271,6 +274,7 @@ const PropertyCard = ({
             // console.log(result);
             // console.log(result.data['home_search'].results[0].photos)
             // This sets propertyImges to an array with all the photo's href
+
             //change back to results instead of imagez after testing
             if (imagez.data['home_search'].results[0].photos.length > 0) {
                 setPropertyImages(imagez.data['home_search'].results[0].photos)
@@ -327,20 +331,42 @@ const PropertyCard = ({
         currency: 'USD',
     });
 
+    // Date formnatter
+    function formatOpenHouseDate(dateString: any) {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            // weekday: 'long',
+            // year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            // second: 'numeric',
+            // timeZoneName: 'short',
+        });
+    }
+
     return (
         <Dialog.Root >
             <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]' key={key}>
                 <div className={`h-[${height}px] w-[${width}px] transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
                     {/* Property cover image */}
                     <div className={`h-[${height}px] w-[${width}px] relative `}>
+                        {/* New listing badge */}
                         <div>
                             <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
                                 <Sparkles />
                                 <p className='text-xs font-semibold text-white'>New listing</p>
                             </div>
                         </div>
+                        <div>
+                            <div className={foreclosure ? 'absolute flex gap-1 rounded-full bg-red9/80 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
+                                <Cancel />
+                                <p className='text-xs font-semibold text-white'>Foreclosure</p>
+                            </div>
+                        </div>
                         <Image
-                            className={`h-[${height}px] w-[${width}px] object-cover rounded-t border-b border-slate10`}
+                            className={`h-[${height}px] w-[${width}px] object-cover rounded-t `}
                             alt='property-image'
                             loader={customLoader}
                             src={imageSrc}
@@ -573,7 +599,7 @@ const PropertyCard = ({
                                 <div>
                                     <p className='text-sm font-medium text-slate10'>{branding}</p>
                                 </div>
-                                <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[10px]" />
+                                <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px " />
                                 <div className="flex h-5 items-center">
                                     <div className="text-sm md:text-md leading-5">{beds}</div>
                                     <Separator.Root
@@ -590,13 +616,13 @@ const PropertyCard = ({
                                     <div className="text-sm md:text-md leading-5">{squareFeet}</div>
                                 </div>
 
-                                <div className={openHouse === null ? 'hidden' : 'block'}>
+                                <div className={openHouse === null ? 'hidden' : 'block mt-2'}>
                                     <div className='flex gap-2 text-xs'>
                                         <span className='text-xs font-medium text-green-500'>Open house:</span>
                                         {openHouse === null ? '' :
                                             openHouse.map((dates: any, i: any) => (
                                                 <p key={i}>
-                                                    {dates['start_date']} - {dates['end_date']} {dates['time_zone']}
+                                                    {formatOpenHouseDate(dates['start_date'])} {dates['time_zone']} - {formatOpenHouseDate(dates['end_date'])} {dates['time_zone']}
                                                 </p>
                                             ))}
                                     </div>
@@ -646,7 +672,7 @@ const PropertyCard = ({
                                             {lastSoldPrice}
                                         </p>
                                     </li>
-                                    <li className={openHouse === null ? 'hidden' : 'block'}>
+                                    {/* <li className={openHouse === null ? 'hidden' : 'block'}>
                                         <div className='flex gap-2'>
                                             <span className='text-medium text-slate10'>Open house:</span>
                                             {openHouse === null ? '' :
@@ -656,7 +682,7 @@ const PropertyCard = ({
                                                     </p>
                                                 ))}
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>

@@ -28114,6 +28114,7 @@ const SearchBar = () => {
                         lastSoldDate={properties['last_sold_date'] === null ? 'N/A' : properties['last_sold_date']}
                         lastSoldPrice={properties['last_sold_price'] === null ? 'N/A' : usdFormatter.format(properties['last_sold_price'])}
                         openHouse={properties['open_houses']}
+                        foreclosure={properties.flags['is_foreclosure']}
                     />
                 ))}
             </div>
