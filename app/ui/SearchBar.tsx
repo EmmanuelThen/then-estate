@@ -28090,7 +28090,7 @@ const SearchBar = () => {
                                     case 'off_market':
                                         return 'Off market';
                                     case 'other':
-                                        return 'N/A';
+                                        return 'No data available';
                                     case 'active':
                                         return 'Active';
                                     default:
@@ -28101,9 +28101,10 @@ const SearchBar = () => {
                         branding={properties.branding[0].name}
                         type={properties.description.type === null ? '-- type' : (properties.description.type).replace(/_/g, ' ')}
                         propertyID={properties['property_id']}
+                        listingID={properties['listing_id']}
                         photoCount={properties['photo_count']}
                         agent={properties.advertisers[0].name}
-                        agentEmail={properties.advertisers[0].email === null ? 'N/A' : properties.advertisers[0].email}
+                        agentEmail={properties.advertisers[0].email === null ? 'No data available' : properties.advertisers[0].email}
                         advertiserType={properties.advertisers[0].type}
                         newListing={properties.flags['is_new_listing']}
                         listDate={new Date(properties['list_date'])}
@@ -28111,10 +28112,11 @@ const SearchBar = () => {
                         newConstruction={properties.flags['is_new_construction']}
                         fullBaths={properties.description['baths_full'] === null ? 0 : properties.description['baths_full']}
                         halfBaths={properties.description['baths_half'] === null ? 0 : properties.description['baths_half']}
-                        lastSoldDate={properties['last_sold_date'] === null ? 'N/A' : properties['last_sold_date']}
-                        lastSoldPrice={properties['last_sold_price'] === null ? 'N/A' : usdFormatter.format(properties['last_sold_price'])}
+                        lastSoldDate={properties['last_sold_date'] === null ? 'No data available' : properties['last_sold_date']}
+                        lastSoldPrice={properties['last_sold_price'] === null ? 'No data available' : usdFormatter.format(properties['last_sold_price'])}
                         openHouse={properties['open_houses']}
                         foreclosure={properties.flags['is_foreclosure']}
+                        // Tab data section
                     />
                 ))}
             </div>

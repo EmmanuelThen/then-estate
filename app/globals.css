@@ -4,7 +4,7 @@
 
 :root {
   --text-rgb: 0, 0, 0;
-  --background-rgb: 0, 0, 0
+  --background-rgb: #fff
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +20,7 @@ html {
 
 body, #dark-mode {
   color: rgb(var(--text-rgb));
-  background: var(--background-rgb)
+  background: var(--background-rgb);
 }
 
 .stroke-color {
