@@ -17,6 +17,10 @@ import ActionButton from './ActionButton';
 import Cancel from '../components/svg/Cancel';
 import Seperator from './Seperator';
 import TabSwitcher from './TabSwitcher';
+import Calendar from '../components/svg/Calendar';
+import Bed from '../components/svg/Bed';
+import Dollar from '../components/svg/Dollar';
+import Bath from '../components/svg/Bath';
 
 type Props = {
     imageSrc: any
@@ -3261,9 +3265,14 @@ const PropertyCard = ({
 
     // For contact agent button on property card modal
     const handleContactAgent = (e: any) => {
-        e.preventDefault();
-        const subject = encodeURIComponent('I am interested in your listing on ThenEstate')
-        window.location.href = `mailto:${agentEmail}?subject=${subject}`;
+        if (agentEmail !== 'No data available') {
+            e.preventDefault();
+            const subject = encodeURIComponent('I am interested in your listing on ThenEstate')
+            window.location.href = `mailto:${agentEmail}?subject=${subject}`;
+        } else {
+            e.preventDefault();
+            return null;
+        }
     };
 
     // Date formatter
@@ -3495,35 +3504,40 @@ const PropertyCard = ({
                                                 New construction
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Year built:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bed />
+                                                <span className='font-medium'>Year built:</span>
                                                 {propertyDetails.description && (
                                                     propertyDetails.description['year_built']
                                                 )}
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Date listed:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Calendar />
+                                                <span className='font-medium'>Date listed:</span>
                                                 {listDate.toLocaleDateString("en-US", options)}
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Full baths:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bath />
+                                                <span className='font-medium'>Full baths:</span>
                                                 {fullBaths}
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Half baths:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bath />
+                                                <span className='font-medium'>Half baths:</span>
                                                 {halfBaths}
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Last sold date:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Calendar />
+                                                <span className='font-medium'>Last sold date:</span>
                                                 {lastSoldDate === 'No data available' ? 'No data available'
                                                     :
                                                     new Date(lastSoldDate).toLocaleString('en-US', {
@@ -3534,9 +3548,10 @@ const PropertyCard = ({
                                                 }
                                             </p>
                                         </li>
-                                        <li className='rounded bg-blackA2'>
-                                            <p className='flex gap-2'>
-                                                <span className='font-medium text-sky12'>Last sold price:</span>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Dollar />
+                                                <span className='font-medium'>Last sold price:</span>
                                                 {lastSoldPrice}
                                             </p>
                                         </li>
@@ -3544,7 +3559,7 @@ const PropertyCard = ({
                                     {/* Seller info */}
                                     <div>
                                         <p className='capitalize'>
-                                            <span className='text-medium text-slate10'>{advertiserType}:</span> {agent}
+                                            <span className='text-medium text-slate10'>{advertiserType}:</span> {agent === null ? 'No data available' : agent}
                                         </p>
                                         <p className=''>
                                             <span className='text-medium text-slate10'>Email:</span> {agentEmail}
@@ -3552,9 +3567,15 @@ const PropertyCard = ({
                                     </div>
                                 </div>
                                 {/* Contact button */}
-                                <form onSubmit={handleContactAgent} className={agentEmail === 'N/A' ? 'hidden' : ''}>
-                                    <button className='bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm'>
-                                        Contact {agent}
+                                <form onSubmit={handleContactAgent} >
+                                    <button className={
+                                        agentEmail === 'No data available' ?
+                                            'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
+                                            :
+                                            `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
+                                    }
+                                    >
+                                        {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
                                     </button>
                                 </form>
                             </div>
@@ -3675,38 +3696,67 @@ const PropertyCard = ({
                                             </Tabs.List>
                                             {/* Home Content */}
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out max-h-[430px] overflow-y-scroll"
+                                                className="flex flex-col gap-5 transition duration-150 ease-in-out max-h-[430px] overflow-y-scroll p-2"
                                                 value="tab1"
                                             >
-                                                <p>Property tax rate: {(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%</p>
-                                                <p>Insurance rate: {(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%</p>
-                                                {/* Mortgage payment  */}
-                                                <p>Loan amount: {usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}</p>
-                                                <p>Monthly payment: {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}</p>
-                                                <p>Total cost of mortgage: {usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}</p>
-                                                <p>Down payment: {usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}</p>
-                                                {/* Rates for estimate  */}
-                                                <p>Average rate: {(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%</p>
-                                                <p>Loan term: {propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years</p>
-                                                {/* Monthly payment details  */}
+                                                <div className='flex flex-col gap-2'>
+                                                    <h1 className='font-bold text-mint11'>Mortgage</h1>
+                                                    <p className='rounded bg-blackA2 px-2'>Property tax rate: {(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Insurance rate: {(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%</p>
+                                                    {/* Mortgage payment  */}
+                                                    <p className='rounded bg-blackA2 px-2'>Loan amount: {usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Monthly payment: {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Total cost of mortgage: {usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Down payment: {usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}</p>
+                                                    {/* Rates for estimate  */}
+                                                    <p className='rounded bg-blackA2 px-2'>Average rate: {(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Loan term: {propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years</p>
+                                                    {/* Monthly payment details  */}
+                                                </div>
 
                                                 {/* Monthly ownership expense */}
-                                                <div className='border border-red-500'>
-                                                    <h1 className='font-bold text-mint11 '>Monthly ownership expense</h1>
+                                                <div className='flex flex-col gap-2'>
+                                                    <h1 className='font-bold text-mint11 '>Monthly ownership expenses</h1>
                                                     {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
-                                                        <p>
-                                                            <span className='mr-2'>{details['display_name']}:</span> 
+                                                        <p className='rounded bg-blackA2 px-2'>
+                                                            <span className='mr-2'>{details['display_name']}:</span>
                                                             {usdFormatter.format(details.amount)}
                                                         </p>
                                                     ))}
+                                                    <p className='rounded bg-blackA2 px-2'>
+                                                        <span className='text-blue9'>Total:</span> {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                    </p>
                                                 </div>
 
                                                 {/* Average rates for different mortgage products in general */}
-                                                <div>
-                                                    <h1 className='font-bold text-mint11'>Rate</h1>
+                                                <div className='flex flex-col gap-2'>
+                                                    <h1 className='font-bold text-mint11'>
+                                                        Average Mortgage rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
+                                                    </h1>
                                                     {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
-                                                        <div className='flex gap-2'>
-                                                            <p className='capitalize'>{rates['loan_type']['loan_id']}:</p>
+                                                        <div className='flex rounded gap-2 bg-blackA2 px-2'>
+                                                            <p className=''>
+                                                                {(() => {
+                                                                    if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
+                                                                        return '30yr. fixed:';
+                                                                    } else if (rates['loan_type']['loan_id'] === 'twenty_year_fix') {
+                                                                        return '20yr. fixed:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'fifteen_year_fix') {
+                                                                        return '15yr. fixed:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'ten_year_fix') {
+                                                                        return '10yr. fixed:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'thirty_year_fha') {
+                                                                        return '30yr. FHA:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'thirty_year_va') {
+                                                                        return '30yr. VA:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'five_one_arm') {
+                                                                        return '5/1 ARM:'
+                                                                    } else if (rates['loan_type']['loan_id'] === 'seven_one_arm') {
+                                                                        return '7/1 ARM:'
+                                                                    }
+
+                                                                })()}
+                                                            </p>
                                                             <p>{(rates.rate * 100).toFixed(2)}%</p>
                                                         </div>
                                                     ))}
@@ -3714,7 +3764,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow py-5 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none max-h-[430px] overflow-y-scroll"
                                                 value="tab2"
                                             >
                                                 {/* HOA */}
@@ -3724,24 +3774,28 @@ const PropertyCard = ({
                                                 </div>
 
                                                 {/* Descriptions */}
-                                                <div>
-                                                    <h1>Home description</h1>
-                                                    <p>Baths: {propertyDetails.description.baths}</p>
-                                                    <p>Heating: {propertyDetails.description.heating}</p>
-                                                    <p>Cooling: {propertyDetails.description.cooling}</p>
-                                                    <p>Beds: {propertyDetails.description.beds}</p>
-                                                    <p>Garage: {propertyDetails.description.garage}</p>
-                                                    <p>
+                                                <div className='flex flex-col gap-2'>
+                                                    <h1 className='font-bold text-mint11'>Home description</h1>
+                                                    <p className='rounded bg-blackA2 px-2'>Baths: {propertyDetails.description.baths}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>
+                                                        Heating: {propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
+                                                    </p>
+                                                    <p className='rounded bg-blackA2 px-2'>
+                                                        Cooling: {propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
+                                                    </p>
+                                                    <p className='rounded bg-blackA2 px-2'>Beds: {propertyDetails.description.beds}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Garage: {propertyDetails.description.garage}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>
                                                         Pool: {propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
                                                     </p>
-                                                    <p>
+                                                    <p className='rounded bg-blackA2 px-2'>
                                                         Lot sqft.: {propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft']}
                                                     </p>
-                                                    <p>
+                                                    <p className='rounded bg-blackA2 px-2'>
                                                         Stories: {propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
                                                     </p>
                                                     {/* Descriptive text */}
-                                                    <p>Text: {propertyDetails.description.text}</p>
+                                                    <p className='rounded bg-blackA2 px-2'>Text: {propertyDetails.description.text}</p>
                                                 </div>
 
                                                 {/* Pet policy */}
@@ -3780,7 +3834,7 @@ const PropertyCard = ({
                                                                 ))}
                                                             </p>
                                                             <div>{school.grades.map((grade: any, l: any) => (
-                                                                <div>
+                                                                <div className='flex'>
                                                                     <p>Grades:</p>
                                                                     <div>
                                                                         {grade}
@@ -3824,14 +3878,14 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none "
                                                 value="tab3"
                                             >
 
                                                 tab 3 content
                                             </Tabs.Content>
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
 
