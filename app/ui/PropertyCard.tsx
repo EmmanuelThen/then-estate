@@ -91,15 +91,6 @@ const PropertyCard = ({
     const [propertyImages, setPropertyImages] = useState<any>([])
     const [propertyDetails, setPropertyDetails] = useState<any>({})
 
-    // Too keep imageIndex within range
-    // useEffect(() => {
-    //     if (imageIndex < 0) {
-    //         setImageIndex(0);
-    //     } else if (imageIndex >= propertyImages.length) {
-    //         setImageIndex(propertyImages.length - 1);
-    //     }
-    // }, [imageIndex, propertyImages]);
-
     // Test for getPropertyImages api call
     let imagez: any = {
         "data": {
@@ -266,7 +257,7 @@ const PropertyCard = ({
         }
     }
 
-    // Test for getPropertyDetails api call
+    // Test for getpropertyDetails api call
     let propertyDetailz: any = {
         "data": {
             "home": {
@@ -3190,7 +3181,7 @@ const PropertyCard = ({
     const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
 
     useEffect(() => {
-        const getPropertyDetails = async () => {
+        const getpropertyDetails = () => {
             const url = `https://realty-in-us.p.rapidapi.com/properties/v3/detail?property_id=${propertyID}`;
             const options = {
                 method: 'GET',
@@ -3210,8 +3201,10 @@ const PropertyCard = ({
                 console.error(error);
             }
         }
-        getPropertyDetails();
+        getpropertyDetails();
     }, [])
+
+
 
     // Get property images 
     const getPropertyImages = async () => {
@@ -3303,7 +3296,7 @@ const PropertyCard = ({
 
     return (
         <Dialog.Root >
-            <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]' key={key}>
+            <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]'>
                 <div className={`h-[${height}px] w-[${width}px] transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
                     {/* Property cover image */}
                     <div className={`h-[${height}px] w-[${width}px] relative `}>
@@ -3505,7 +3498,9 @@ const PropertyCard = ({
                                         <li className='rounded bg-blackA2'>
                                             <p className='flex gap-2'>
                                                 <span className='font-medium text-sky12'>Year built:</span>
-                                                {propertyDetails.description['year_built']}
+                                                {propertyDetails.description && (
+                                                    propertyDetails.description['year_built']
+                                                )}
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2'>
@@ -3644,205 +3639,207 @@ const PropertyCard = ({
                                 </div>
 
                                 {/* In depth details */}
-                                <div className='relative'>
-                                    <Tabs.Root
-                                        className="border rounded border-slate4"
-                                        defaultValue="tab1"
-                                    >
-                                        {/* Navbar */}
-                                        <Tabs.List className="max-h-[25px] border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                <div className=''>
+
+                                    {propertyDetails.mortgage && (
+                                        <Tabs.Root
+                                            className="border rounded border-slate4"
+                                            defaultValue="tab1"
+                                        >
+                                            {/* Navbar */}
+                                            <Tabs.List className="max-h-[25px] border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
+                                                <Tabs.Trigger
+                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    value="tab1"
+                                                >
+                                                    Mortgage
+                                                </Tabs.Trigger>
+                                                <Tabs.Trigger
+                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    value="tab2"
+                                                >
+                                                    Details
+                                                </Tabs.Trigger>
+                                                <Tabs.Trigger
+                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    value="tab3"
+                                                >
+                                                    Rates
+                                                </Tabs.Trigger>
+                                                <Tabs.Trigger
+                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    value="tab4"
+                                                >
+                                                    Investment analysis
+                                                </Tabs.Trigger>
+                                            </Tabs.List>
+                                            {/* Home Content */}
+                                            <Tabs.Content
+                                                className="transition duration-150 ease-in-out max-h-[430px] overflow-y-scroll"
                                                 value="tab1"
                                             >
-                                                Mortgage
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                <p>Property tax rate: {(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%</p>
+                                                <p>Insurance rate: {(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%</p>
+                                                {/* Mortgage payment  */}
+                                                <p>Loan amount: {usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}</p>
+                                                <p>Monthly payment: {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}</p>
+                                                <p>Total cost of mortgage: {usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}</p>
+                                                <p>Down payment: {usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}</p>
+                                                {/* Rates for estimate  */}
+                                                <p>Average rate: {(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%</p>
+                                                <p>Loan term: {propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years</p>
+                                                {/* Monthly payment details  */}
+
+                                                {/* Monthly ownership expense */}
+                                                <div className='border border-red-500'>
+                                                    <h1 className='font-bold text-mint11 '>Monthly ownership expense</h1>
+                                                    {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
+                                                        <p>
+                                                            <span className='mr-2'>{details['display_name']}:</span> 
+                                                            {usdFormatter.format(details.amount)}
+                                                        </p>
+                                                    ))}
+                                                </div>
+
+                                                {/* Average rates for different mortgage products in general */}
+                                                <div>
+                                                    <h1 className='font-bold text-mint11'>Rate</h1>
+                                                    {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
+                                                        <div className='flex gap-2'>
+                                                            <p className='capitalize'>{rates['loan_type']['loan_id']}:</p>
+                                                            <p>{(rates.rate * 100).toFixed(2)}%</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </Tabs.Content>
+
+                                            <Tabs.Content
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow py-5 rounded-b-md outline-none "
                                                 value="tab2"
                                             >
-                                                Details
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab3"
-                                            >
-                                                Rates
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab4"
-                                            >
-                                                Investment analysis
-                                            </Tabs.Trigger>
-                                        </Tabs.List>
-                                        {/* Home Content */}
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out "
-                                            value="tab1"
-                                        >
-                                            <p>Property tax rate: {(propertyDetails.mortgage['property_tax_rate']) * 100}%</p>
-                                            <p>Insurance rate: {(propertyDetails.mortgage['insurance_rate']) * 100}%</p>
-                                            {/* Mortgage payment  */}
-                                            <p>{propertyDetails.mortgage.estimate['loan_amount']}</p>
-                                            <p>{propertyDetails.mortgage.estimate['monthly_payment']}</p>
-                                            <p>{propertyDetails.mortgage.estimate['total_payment']}</p>
-                                            <p>{propertyDetails.mortgage.estimate['down_payment']}</p>
-                                            {/* Rates for estimate  */}
-                                            <p>Average rate: {(propertyDetails.mortgage.estimate['average_rate'].rate) * 100}%</p>
-                                            <p>Loan term: {propertyDetails.mortgage.estimate['average_rate']['loan_type'].term}</p>
-                                            {/* Monthly payment details  */}
+                                                {/* HOA */}
+                                                <div>
+                                                    <h1>HOA fee</h1>
+                                                    <p>Fee: {propertyDetails.hoa.fee}</p>
+                                                </div>
 
-                                            {/* Monthly ownership expense */}
-                                            <div>
-                                                <h1>Monthly ownership expense</h1>
-                                                {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details, i) => (
+                                                {/* Descriptions */}
+                                                <div>
+                                                    <h1>Home description</h1>
+                                                    <p>Baths: {propertyDetails.description.baths}</p>
+                                                    <p>Heating: {propertyDetails.description.heating}</p>
+                                                    <p>Cooling: {propertyDetails.description.cooling}</p>
+                                                    <p>Beds: {propertyDetails.description.beds}</p>
+                                                    <p>Garage: {propertyDetails.description.garage}</p>
                                                     <p>
-                                                        {details.type}
-                                                        {details['display_name']}
-                                                        {details.amount}
-                                                        {details['principal_and_interest']}
+                                                        Pool: {propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
                                                     </p>
-                                                ))}
-                                            </div>
+                                                    <p>
+                                                        Lot sqft.: {propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft']}
+                                                    </p>
+                                                    <p>
+                                                        Stories: {propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                    </p>
+                                                    {/* Descriptive text */}
+                                                    <p>Text: {propertyDetails.description.text}</p>
+                                                </div>
 
-                                            {/* Average rates for different mortgage products in general */}
-                                            <div>
-                                                <h1>Rate</h1>
-                                                {propertyDetails.mortgage['average_rates'].map((rates, j) => (
-                                                    <div>
-                                                        <p>{rates['loan_type']['loan_id']}</p>
-                                                        <p>{(rates.rate) * 100}%</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </Tabs.Content>
+                                                {/* Pet policy */}
+                                                <div>
+                                                    <p>Pet policy: {propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}</p>
+                                                </div>
 
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow py-5 rounded-b-md outline-none "
-                                            value="tab2"
-                                        >
-                                            {/* HOA */}
-                                            <div>
-                                                <h1>HOA fee</h1>
-                                                <p>Fee: {propertyDetails.mortgage.hoa.fee}</p>
-                                            </div>
+                                                {/* Assigned schools */}
+                                                <div>
+                                                    <h1>School list</h1>
+                                                    {propertyDetails['assigned_schools'].schools.map((school: any, k: any) => (
+                                                        <div>
+                                                            <h1>School:</h1>
+                                                            <p>{school.district.name}</p>
+                                                            <p>{school.district.id}</p>
+                                                            <p>{school.district.phone === null ? 'No data available' : school.district.phone}</p>
+                                                            <p>{school.district['student_count'] === null ? 'No data available' : school.district['student_count']}</p>
+                                                            <p>{school.district.grades === null ? 'No data available' : school.district.grades}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
 
-                                            {/* Descriptions */}
-                                            <div>
-                                                <h1>Home description</h1>
-                                                <p>Baths: {propertyDetails.description.baths}</p>
-                                                <p>Heating: {propertyDetails.description.heating}</p>
-                                                <p>Cooling: {propertyDetails.description.cooling}</p>
-                                                <p>Beds: {propertyDetails.description.beds}</p>
-                                                <p>Garage: {propertyDetails.description.garage}</p>
-                                                <p>
-                                                    Pool: {propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
-                                                </p>
-                                                <p>
-                                                    Lot sqft.: {propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft']}
-                                                </p>
-                                                <p>
-                                                    Stories: {propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
-                                                </p>
-                                                {/* Descriptive text */}
-                                                <p>Text: {propertyDetails.description.text}</p>
-                                            </div>
-
-                                            {/* Pet policy */}
-                                            <div>
-                                                <p>Pet policy: {propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}</p>
-                                            </div>
-
-                                            {/* Assigned schools */}
-                                            <div>
-                                                <h1>School list</h1>
-                                                {propertyDetails['assigned_schools'].schools.map((school, k) => (
-                                                    <div>
-                                                        <h1>School:</h1>
-                                                        <p>{school.district.name}</p>
-                                                        <p>{school.district.id}</p>
-                                                        <p>{school.district.phone === null ? 'No data available' : school.district.phone}</p>
-                                                        <p>{school.district['student_count'] === null ? 'No data available' : school.district['student_count']}</p>
-                                                        <p>{school.district.grades === null ? 'No data available' : school.district.grades}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Nearby schools */}
-                                            <div>
-                                                <h1>School list</h1>
-                                                {propertyDetails['nearby_schools'].schools.map((school, l) => (
-                                                    <div>
-                                                        <h1>School:</h1>
-                                                        <p>Distance: {school['distance_in_miles']} miles</p>
-                                                        <p>Funding type: {school['funding_type']}</p>
-                                                        <p>
-                                                            Educational levels: {school['educational_levels'].map((level, l) => (
+                                                {/* Nearby schools */}
+                                                <div>
+                                                    <h1>School list</h1>
+                                                    {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
+                                                        <div>
+                                                            <h1>School:</h1>
+                                                            <p>Distance: {school['distance_in_miles']} miles</p>
+                                                            <p>Funding type: {school['funding_type']}</p>
+                                                            <p>
+                                                                Education levels: {school['education_levels'].map((level: any, l: any) => (
+                                                                    <div>
+                                                                        {level}
+                                                                    </div>
+                                                                ))}
+                                                            </p>
+                                                            <div>{school.grades.map((grade: any, l: any) => (
                                                                 <div>
-                                                                    {level}
+                                                                    <p>Grades:</p>
+                                                                    <div>
+                                                                        {grade}
+                                                                    </div>
                                                                 </div>
                                                             ))}
-                                                        </p>
-                                                        <div>{school.grades.map((grade, l) => (
-                                                            <div>
-                                                                <p>Grades:</p>
-                                                                <div>
-                                                                    {grade}
-                                                                </div>
                                                             </div>
-                                                        ))}
+                                                            <p>Name: {school.name}</p>
+                                                            <p>Parent rating: {school['parent_rating']}</p>
+                                                            <p>Rating: {school.rating}</p>
+                                                            <p>Student count: {school['student_count']}</p>
                                                         </div>
-                                                        <p>Name: {school.name}</p>
-                                                        <p>Parent rating: {school['parent_rating']}</p>
-                                                        <p>Rating: {school.rating}</p>
-                                                        <p>Student count: {school['student_count']}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                    ))}
+                                                </div>
 
-                                            {/* Price per sqft */}
-                                            <div>
-                                                <p>Price per sqft: {propertyDetails['price_per_sqft']}</p>
-                                            </div>
+                                                {/* Price per sqft */}
+                                                <div>
+                                                    <p>Price per sqft: {propertyDetails['price_per_sqft']}</p>
+                                                </div>
 
-                                            {/* Flags */}
-                                            <div>
-                                                <p>Pending: {propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}</p>
-                                            </div>
+                                                {/* Flags */}
+                                                <div>
+                                                    <p>Pending: {propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}</p>
+                                                </div>
 
-                                            {/* Tax history */}
-                                            <div>
-                                                <p>{propertyDetails['tax_history'].map((taxHistory, m) => (
-                                                    <div>
-                                                        <p>Tax $ amount: {taxHistory.tax}</p>
-                                                        <p>Tax year: {taxHistory.year}</p>
-                                                        {/* Assessment */}
-                                                        <h1>Assessment:</h1>
-                                                        <p>Building: {usdFormatter.format(taxHistory.assessment.building)}</p>
-                                                        <p>Land: {usdFormatter.format(taxHistory.assessment.land)}</p>
-                                                        <p>Total: {usdFormatter.format(taxHistory.assessment.total)}</p>
-                                                    </div>
-                                                ))}</p>
-                                            </div>
+                                                {/* Tax history */}
+                                                <div>
+                                                    <p>{propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
+                                                        <div>
+                                                            <p>Tax $ amount: {taxHistory.tax}</p>
+                                                            <p>Tax year: {taxHistory.year}</p>
+                                                            {/* Assessment */}
+                                                            <h1>Assessment:</h1>
+                                                            <p>Building: {usdFormatter.format(taxHistory.assessment.building)}</p>
+                                                            <p>Land: {usdFormatter.format(taxHistory.assessment.land)}</p>
+                                                            <p>Total: {usdFormatter.format(taxHistory.assessment.total)}</p>
+                                                        </div>
+                                                    ))}</p>
+                                                </div>
 
-                                        </Tabs.Content>
+                                            </Tabs.Content>
 
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
-                                            value="tab3"
-                                        >
+                                            <Tabs.Content
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                                                value="tab3"
+                                            >
 
-                                            tab 3 content
-                                        </Tabs.Content>
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
-                                            value="tab4"
-                                        >
+                                                tab 3 content
+                                            </Tabs.Content>
+                                            <Tabs.Content
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-5 rounded-b-md outline-none "
+                                                value="tab4"
+                                            >
 
-                                            tab 4 content
-                                        </Tabs.Content>
-                                    </Tabs.Root>
+                                                tab 4 content
+                                            </Tabs.Content>
+                                        </Tabs.Root>
+                                    )}
+
                                 </div>
                             </div>
                         </div>
