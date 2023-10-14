@@ -3508,51 +3508,55 @@ const PropertyCard = ({
                                             <p className='flex items-center gap-2'>
                                                 <Bed />
                                                 <span className='font-medium'>Year built:</span>
-                                                {propertyDetails.description && (
-                                                    propertyDetails.description['year_built']
-                                                )}
+                                                <span className='font-light'>
+                                                    {propertyDetails.description && (
+                                                        propertyDetails.description['year_built']
+                                                    )}
+                                                </span>
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2 px-2'>
                                             <p className='flex items-center gap-2'>
                                                 <Calendar />
                                                 <span className='font-medium'>Date listed:</span>
-                                                {listDate.toLocaleDateString("en-US", options)}
+                                                <span className='font-light'>{listDate.toLocaleDateString("en-US", options)}</span>
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2 px-2'>
                                             <p className='flex items-center gap-2'>
                                                 <Bath />
                                                 <span className='font-medium'>Full baths:</span>
-                                                {fullBaths}
+                                                <span className='font-light'>{fullBaths}</span>
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2 px-2'>
                                             <p className='flex items-center gap-2'>
                                                 <Bath />
                                                 <span className='font-medium'>Half baths:</span>
-                                                {halfBaths}
+                                                <span className='font-light'>{halfBaths}</span>
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2 px-2'>
                                             <p className='flex items-center gap-2'>
                                                 <Calendar />
                                                 <span className='font-medium'>Last sold date:</span>
-                                                {lastSoldDate === 'No data available' ? 'No data available'
-                                                    :
-                                                    new Date(lastSoldDate).toLocaleString('en-US', {
-                                                        month: 'long',
-                                                        day: 'numeric',
-                                                        year: 'numeric'
-                                                    })
-                                                }
+                                                <span className='font-light'>
+                                                    {lastSoldDate === 'No data available' ? 'No data available'
+                                                        :
+                                                        new Date(lastSoldDate).toLocaleString('en-US', {
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })
+                                                    }
+                                                </span>
                                             </p>
                                         </li>
                                         <li className='rounded bg-blackA2 px-2'>
                                             <p className='flex items-center gap-2'>
                                                 <Dollar />
                                                 <span className='font-medium'>Last sold price:</span>
-                                                {lastSoldPrice}
+                                                <span className='font-light'>{lastSoldPrice}</span>
                                             </p>
                                         </li>
                                     </ul>
@@ -3591,38 +3595,43 @@ const PropertyCard = ({
                                 </div>
 
                                 <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
-                                    <p>{price}</p>
+                                    <p className='text-3xl'>{price}</p>
                                     <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
                                         <Warning />
                                         <p className='text-xs text-red9 font-light'>- {usdFormatter.format(priceReduction)}</p>
                                     </div>
                                 </div>
                                 {/* Status badge */}
-                                <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
-                                    <div className={
-                                        (() => {
-                                            switch (status) {
-                                                case 'For sale':
-                                                    return 'rounded-full bg-green-500 w-2 h-2';
-                                                case 'Ready to build':
-                                                    return 'rounded-full bg-yellow-500 w-2 h-2';
-                                                case 'For rent':
-                                                    return 'rounded-full bg-purple-500 w-2 h-2';
-                                                case 'Sold':
-                                                    return 'rounded-full bg-red-500 w-2 h-2';
-                                                case 'Off market':
-                                                    return 'rounded-full bg-gray-500 w-2 h-2';
-                                                case 'N/A':
-                                                    return 'rounded-full bg-black w-2 h-2';
-                                                case 'New community':
-                                                    return 'rounded-full bg-sky-500 w-2 h-2';
-                                                default:
-                                                    return '';
-                                            }
-                                        })()
-                                    }
-                                    />
-                                    <p className='text-xs'>{status}</p>
+                                <div className='flex gap-2'>
+                                    <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
+                                        <div className={
+                                            (() => {
+                                                switch (status) {
+                                                    case 'For sale':
+                                                        return 'rounded-full bg-green-500 w-2 h-2';
+                                                    case 'Ready to build':
+                                                        return 'rounded-full bg-yellow-500 w-2 h-2';
+                                                    case 'For rent':
+                                                        return 'rounded-full bg-purple-500 w-2 h-2';
+                                                    case 'Sold':
+                                                        return 'rounded-full bg-red-500 w-2 h-2';
+                                                    case 'Off market':
+                                                        return 'rounded-full bg-gray-500 w-2 h-2';
+                                                    case 'N/A':
+                                                        return 'rounded-full bg-black w-2 h-2';
+                                                    case 'New community':
+                                                        return 'rounded-full bg-sky-500 w-2 h-2';
+                                                    default:
+                                                        return '';
+                                                }
+                                            })()
+                                        }
+                                        />
+                                        <p className='text-xs'>{status}</p>
+                                    </div>
+                                    <div className={propertyDetails['days_on_market'] === null ? `hidden` : `flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30`}>
+                                        {propertyDetails['days_on_market']}
+                                    </div>
                                 </div>
                                 <div>
                                     <p className='text-xs text-mint11 capitalize'>{type}</p>
@@ -3664,7 +3673,7 @@ const PropertyCard = ({
 
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-slate4"
+                                            className="border rounded border-red-500"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
@@ -3688,7 +3697,7 @@ const PropertyCard = ({
                                                     Rates
                                                 </Tabs.Trigger>
                                                 <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    className="whitespace-nowrap hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab4"
                                                 >
                                                     Investment analysis
@@ -3699,43 +3708,62 @@ const PropertyCard = ({
                                                 className="flex flex-col gap-5 transition duration-150 ease-in-out max-h-[430px] overflow-y-scroll p-2"
                                                 value="tab1"
                                             >
-                                                <div className='flex flex-col gap-2'>
-                                                    <h1 className='font-bold text-mint11'>Mortgage</h1>
-                                                    <p className='rounded bg-blackA2 px-2'>Property tax rate: {(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Insurance rate: {(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%</p>
+                                                <div className='flex flex-col gap-2 text-sm'>
+                                                    <Seperator text={'Mortgage details'} />
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
+                                                    </p>
                                                     {/* Mortgage payment  */}
-                                                    <p className='rounded bg-blackA2 px-2'>Loan amount: {usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Monthly payment: {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Total cost of mortgage: {usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Down payment: {usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}</p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Loan amount:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Monthly payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Down payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
+                                                    </p>
                                                     {/* Rates for estimate  */}
-                                                    <p className='rounded bg-blackA2 px-2'>Average rate: {(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Loan term: {propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years</p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Average rate:</span>{(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Loan term:</span>{propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years
+                                                    </p>
                                                     {/* Monthly payment details  */}
                                                 </div>
 
                                                 {/* Monthly ownership expense */}
-                                                <div className='flex flex-col gap-2'>
-                                                    <h1 className='font-bold text-mint11 '>Monthly ownership expenses</h1>
+                                                <div className='flex flex-col gap-2 text-sm'>
+                                                    <Seperator text={'Monthly ownership expenses'} />
                                                     {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
-                                                        <p className='rounded bg-blackA2 px-2'>
-                                                            <span className='mr-2'>{details['display_name']}:</span>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>{details['display_name']}:</span>
                                                             {usdFormatter.format(details.amount)}
                                                         </p>
                                                     ))}
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        <span className='text-blue9'>Total:</span> {usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2'>
+                                                        <span className='text-blue9'>Total:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
                                                     </p>
                                                 </div>
 
                                                 {/* Average rates for different mortgage products in general */}
-                                                <div className='flex flex-col gap-2'>
-                                                    <h1 className='font-bold text-mint11'>
-                                                        Average Mortgage rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
-                                                    </h1>
+                                                <div className='flex flex-col gap-2 text-sm'>
+                                                    <Seperator text={
+                                                        <div>
+                                                            Average Mortgage rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
+                                                        </div>
+                                                    }
+                                                    />
                                                     {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
                                                         <div className='flex rounded gap-2 bg-blackA2 px-2'>
-                                                            <p className=''>
+                                                            <p className='font-medium'>
                                                                 {(() => {
                                                                     if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
                                                                         return '30yr. fixed:';
@@ -3757,54 +3785,72 @@ const PropertyCard = ({
 
                                                                 })()}
                                                             </p>
-                                                            <p>{(rates.rate * 100).toFixed(2)}%</p>
+                                                            <p className='font-light'>{(rates.rate * 100).toFixed(2)}%</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none max-h-[430px] overflow-y-scroll"
+                                                className="text-sm transition duration-150 ease-in-out flex flex-col p-2 max-h-[430px] overflow-y-scroll outline-none"
                                                 value="tab2"
                                             >
-                                                {/* HOA */}
-                                                <div>
-                                                    <h1>HOA fee</h1>
-                                                    <p>Fee: {propertyDetails.hoa.fee}</p>
-                                                </div>
-
                                                 {/* Descriptions */}
                                                 <div className='flex flex-col gap-2'>
-                                                    <h1 className='font-bold text-mint11'>Home description</h1>
-                                                    <p className='rounded bg-blackA2 px-2'>Baths: {propertyDetails.description.baths}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        Heating: {propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
+                                                    <Seperator text={'Home description'} />
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
                                                     </p>
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        Cooling: {propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
                                                     </p>
-                                                    <p className='rounded bg-blackA2 px-2'>Beds: {propertyDetails.description.beds}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>Garage: {propertyDetails.description.garage}</p>
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        Pool: {propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
                                                     </p>
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        Lot sqft.: {propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft']}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
                                                     </p>
-                                                    <p className='rounded bg-blackA2 px-2'>
-                                                        Stories: {propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Garage:</span>
+                                                        {(() => {
+                                                            if (propertyDetails.description.garage === null) {
+                                                                return 'No data available'
+                                                            } else if (propertyDetails.description.garage === 1) {
+                                                                return `${propertyDetails.description.garage} Garage space`
+                                                            } else if (propertyDetails.description.garage > 1) {
+                                                                return `${propertyDetails.description.garage} Garage spaces`
+                                                            }
+                                                        })()}
                                                     </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                    </p>
+                                                    {/* HOA */}
+                                                    <div className='rounded bg-blackA2 px-2 font-light'>
+                                                        <p className='flex items-center gap-2 '>
+                                                            <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
+                                                        </p>
+                                                    </div>
                                                     {/* Descriptive text */}
-                                                    <p className='rounded bg-blackA2 px-2'>Text: {propertyDetails.description.text}</p>
-                                                </div>
-
-                                                {/* Pet policy */}
-                                                <div>
-                                                    <p>Pet policy: {propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}</p>
+                                                    <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Text:</span> {propertyDetails.description.text}
+                                                    </p>
+                                                    {/* Pet policy */}
+                                                    <div className={status === 'For rent' ? 'block' : 'hidden'}>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}
+                                                        </p>
+                                                    </div>
                                                 </div>
 
                                                 {/* Assigned schools */}
-                                                <div>
+                                                {/* <div>
                                                     <h1>School list</h1>
                                                     {propertyDetails['assigned_schools'].schools.map((school: any, k: any) => (
                                                         <div>
@@ -3816,63 +3862,86 @@ const PropertyCard = ({
                                                             <p>{school.district.grades === null ? 'No data available' : school.district.grades}</p>
                                                         </div>
                                                     ))}
-                                                </div>
+                                                </div> */}
 
                                                 {/* Nearby schools */}
                                                 <div>
-                                                    <h1>School list</h1>
+                                                    <Seperator text={'Nearby schools'} />
                                                     {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                        <div>
-                                                            <h1>School:</h1>
-                                                            <p>Distance: {school['distance_in_miles']} miles</p>
-                                                            <p>Funding type: {school['funding_type']}</p>
-                                                            <p>
-                                                                Education levels: {school['education_levels'].map((level: any, l: any) => (
-                                                                    <div>
+                                                        <div className='border border-blue-500'>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Name:</span>{school.name}
+                                                            </p>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} miles
+                                                            </p>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                            </p>
+                                                            <p className='flex gap-2'>
+                                                                <span className='font-medium'>Education levels: </span>
+                                                                {school['education_levels'].map((level: any, l: any) => (
+                                                                    <div className='font-light'>
                                                                         {level}
                                                                     </div>
                                                                 ))}
                                                             </p>
-                                                            <div>{school.grades.map((grade: any, l: any) => (
-                                                                <div className='flex'>
-                                                                    <p>Grades:</p>
-                                                                    <div>
-                                                                        {grade}
-                                                                    </div>
-                                                                </div>
-                                                            ))}
+
+                                                            <div>
+                                                                {school.grades[0]} - {school.grades[(school.grades).length - 1]}
                                                             </div>
-                                                            <p>Name: {school.name}</p>
-                                                            <p>Parent rating: {school['parent_rating']}</p>
-                                                            <p>Rating: {school.rating}</p>
-                                                            <p>Student count: {school['student_count']}</p>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Parent rating:</span>{school['parent_rating']}
+                                                            </p>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Rating:</span>{school.rating}
+                                                            </p>
+                                                            <p className='font-light'>
+                                                                <span className='font-medium'>Student count:</span>{school['student_count']}
+                                                            </p>
                                                         </div>
                                                     ))}
                                                 </div>
 
                                                 {/* Price per sqft */}
                                                 <div>
-                                                    <p>Price per sqft: {propertyDetails['price_per_sqft']}</p>
+                                                    <p className='font-light'>
+                                                        <span className='font-medium'>Price per sqft:</span>{propertyDetails['price_per_sqft']}
+                                                    </p>
                                                 </div>
 
                                                 {/* Flags */}
                                                 <div>
-                                                    <p>Pending: {propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}</p>
+                                                    <p className='font-light'>
+                                                        <span className='font-medium'>Pending:</span>{propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}
+                                                    </p>
                                                 </div>
 
                                                 {/* Tax history */}
                                                 <div>
-                                                    <p>{propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
-                                                        <div>
-                                                            <p>Tax $ amount: {taxHistory.tax}</p>
-                                                            <p>Tax year: {taxHistory.year}</p>
-                                                            {/* Assessment */}
-                                                            <h1>Assessment:</h1>
-                                                            <p>Building: {usdFormatter.format(taxHistory.assessment.building)}</p>
-                                                            <p>Land: {usdFormatter.format(taxHistory.assessment.land)}</p>
-                                                            <p>Total: {usdFormatter.format(taxHistory.assessment.total)}</p>
-                                                        </div>
-                                                    ))}</p>
+                                                    <div>
+                                                        {propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
+                                                            <div>
+                                                                <p className='font-light'>
+                                                                    <span className='font-medium'>Tax $ amount:</span>{taxHistory.tax}
+                                                                </p>
+                                                                <p className='font-light'>
+                                                                    <span className='font-medium'>Tax year:</span>{taxHistory.year}
+                                                                </p>
+                                                                {/* Assessment */}
+                                                                <h1>Assessment:</h1>
+                                                                <p className='font-light'>
+                                                                    <span className='font-medium'>Building:</span>{usdFormatter.format(taxHistory.assessment.building)}
+                                                                </p>
+                                                                <p className='font-light'>
+                                                                    <span className='font-medium'>Land:</span>{usdFormatter.format(taxHistory.assessment.land)}
+                                                                </p>
+                                                                <p className='font-light'>
+                                                                    <span className='font-medium'>Total:</span>{usdFormatter.format(taxHistory.assessment.total)}
+                                                                </p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </div>
 
                                             </Tabs.Content>

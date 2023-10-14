@@ -14,16 +14,13 @@ const AccordionDemo = ({ accordionTrigger }: any) => (
     collapsible
   >
     <AccordionItem value="item-1">
-
       <AccordionTrigger>
         {accordionTrigger}
         <TickerBadge />
       </AccordionTrigger>
-
       <AccordionContent>
         Property cards
       </AccordionContent>
-
     </AccordionItem>
   </Accordion.Root>
 );
@@ -31,7 +28,7 @@ const AccordionDemo = ({ accordionTrigger }: any) => (
 const AccordionItem = React.forwardRef(({ children, className, ...props }: any, forwardedRef) => (
   <Accordion.Item
     className={classNames(
-      'hover:cursor-pointer transition duration-150 ease-in-out focus-within:shadow-mauve12 mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b ',
+      'hover:cursor-pointer transition duration-150 ease-in-out focus-within:shadow-mauve12 mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b',
       className
     )}
     {...props}

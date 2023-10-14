@@ -24,7 +24,7 @@ body, #dark-mode {
 }
 
 .stroke-color {
-  fill: rgb(var(--text-rgb));
+  stroke: rgb(var(--text-rgb));
 }
 
 #scroll-container, #mtg-container {
