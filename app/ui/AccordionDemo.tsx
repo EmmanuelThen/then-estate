@@ -6,9 +6,9 @@ import TickerBadge from './TickerBadge';
 
 
 
-const AccordionDemo = ({ accordionTrigger }: any) => (
+const AccordionDemo = ({ accordionTrigger, accordionContent }: any) => (
   <Accordion.Root
-    className="my-5 w-full rounded-md shadow-[0_2px_10px] shadow-black/5"
+    className="my-2 w-full rounded-md shadow-[0_2px_10px] shadow-black/5"
     type="single"
     defaultValue="item-2"
     collapsible
@@ -16,10 +16,10 @@ const AccordionDemo = ({ accordionTrigger }: any) => (
     <AccordionItem value="item-1">
       <AccordionTrigger>
         {accordionTrigger}
-        <TickerBadge />
+        {/* <TickerBadge /> */}
       </AccordionTrigger>
       <AccordionContent>
-        Property cards
+        {accordionContent}
       </AccordionContent>
     </AccordionItem>
   </Accordion.Root>

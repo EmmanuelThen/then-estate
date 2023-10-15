@@ -21,6 +21,10 @@ import Calendar from '../components/svg/Calendar';
 import Bed from '../components/svg/Bed';
 import Dollar from '../components/svg/Dollar';
 import Bath from '../components/svg/Bath';
+import AccordionDemo from './AccordionDemo';
+import TrendingUpArrow from '../components/svg/TrendingUpArrow';
+import GraduationCap from '../components/svg/GraduationCap';
+import Star from '../components/svg/Star';
 
 type Props = {
     imageSrc: any
@@ -3440,7 +3444,7 @@ const PropertyCard = ({
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[90vh] w-[95vw] max-w-[80%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <Dialog.Content id='dark-mode' className="z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[95vh] w-[95vw] max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
                             className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
@@ -3865,54 +3869,96 @@ const PropertyCard = ({
                                                 </div> */}
 
                                                 {/* Nearby schools */}
-                                                <div>
+                                                <div className=''>
                                                     <Seperator text={'Nearby schools'} />
                                                     {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                        <div className='border border-blue-500'>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Name:</span>{school.name}
-                                                            </p>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} miles
-                                                            </p>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
-                                                            </p>
-                                                            <p className='flex gap-2'>
-                                                                <span className='font-medium'>Education levels: </span>
-                                                                {school['education_levels'].map((level: any, l: any) => (
-                                                                    <div className='font-light'>
-                                                                        {level}
-                                                                    </div>
-                                                                ))}
-                                                            </p>
+                                                        <div className='flex flex-col gap-2'>
+                                                            <div className='flex items-center gap-2 font-light'>
+                                                                {/* <span className='font-medium'>Name:</span>{school.name} */}
+                                                                <AccordionDemo
+                                                                    accordionTrigger={
+                                                                        <div className='flex justify-between w-full'>
+                                                                            <div className='flex items-center gap-2 mr-10'>
+                                                                                <GraduationCap />
+                                                                                <p className='whitespace-nowrap text-sm'>
+                                                                                    {school.name}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`whitespace-nowrap flex items-center gap-2 w-fit rounded-full px-2 py-0.5 mr-2 
+                                                                            ${(() => {
+                                                                                    if (school['parent_rating'] >= 4) {
+                                                                                        return 'bg-green-500/10'
+                                                                                    } else if (school['parent_rating'] === 3) {
+                                                                                        return 'bg-yellow-500/10'
+                                                                                    } else if (school['parent_rating'] === null) {
+                                                                                        return 'bg-blackA5/10'
+                                                                                    } else if (school['parent_rating'] < 3) {
+                                                                                        return 'bg-red-500/10'
+                                                                                    }
+                                                                                })()}`}
+                                                                            >
+                                                                                <Star />
+                                                                                <p className={`whitespace-nowrap text-xs 
+                                                                                ${(() => {
+                                                                                        if (school['parent_rating'] >= 4) {
+                                                                                            return 'text-green-500'
+                                                                                        } else if (school['parent_rating'] === 3) {
+                                                                                            return 'text-yellow-500'
+                                                                                        } else if (school['parent_rating'] === null) {
+                                                                                            return 'text-blackA5'
+                                                                                        } else if (school['parent_rating'] < 3) {
+                                                                                            return 'text-red-500'
+                                                                                        }
+                                                                                    })()}`}
+                                                                                >
+                                                                                    {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    accordionContent={
+                                                                        <div className='flex flex-col gap-2'>
+                                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                            </p>
+                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                                            </p>
+                                                                            <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Education levels: </span>
+                                                                                {school['education_levels'].map((level: any, l: any) => (
+                                                                                    <div className='font-light'>
+                                                                                        {level}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </p>
 
-                                                            <div>
-                                                                {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                            <div className='rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                            </div>
+
+                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                            </p>
+                                                                        </div>
+                                                                    }
+                                                                />
                                                             </div>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Parent rating:</span>{school['parent_rating']}
-                                                            </p>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Rating:</span>{school.rating}
-                                                            </p>
-                                                            <p className='font-light'>
-                                                                <span className='font-medium'>Student count:</span>{school['student_count']}
-                                                            </p>
+
                                                         </div>
                                                     ))}
                                                 </div>
 
                                                 {/* Price per sqft */}
                                                 <div>
-                                                    <p className='font-light'>
+                                                    <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                         <span className='font-medium'>Price per sqft:</span>{propertyDetails['price_per_sqft']}
                                                     </p>
                                                 </div>
 
                                                 {/* Flags */}
                                                 <div>
-                                                    <p className='font-light'>
+                                                    <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                         <span className='font-medium'>Pending:</span>{propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}
                                                     </p>
                                                 </div>
@@ -3922,21 +3968,21 @@ const PropertyCard = ({
                                                     <div>
                                                         {propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
                                                             <div>
-                                                                <p className='font-light'>
+                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Tax $ amount:</span>{taxHistory.tax}
                                                                 </p>
-                                                                <p className='font-light'>
+                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Tax year:</span>{taxHistory.year}
                                                                 </p>
                                                                 {/* Assessment */}
                                                                 <h1>Assessment:</h1>
-                                                                <p className='font-light'>
+                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Building:</span>{usdFormatter.format(taxHistory.assessment.building)}
                                                                 </p>
-                                                                <p className='font-light'>
+                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Land:</span>{usdFormatter.format(taxHistory.assessment.land)}
                                                                 </p>
-                                                                <p className='font-light'>
+                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Total:</span>{usdFormatter.format(taxHistory.assessment.total)}
                                                                 </p>
                                                             </div>
