@@ -3290,6 +3290,8 @@ const PropertyCard = ({
     const usdFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
     });
 
     // Date formnatter
@@ -3564,6 +3566,7 @@ const PropertyCard = ({
                                             </p>
                                         </li>
                                     </ul>
+
                                     {/* Seller info */}
                                     <div>
                                         <p className='capitalize'>
@@ -3590,7 +3593,7 @@ const PropertyCard = ({
                         </div>
 
                         <div className='md:ml-5 md:w-[50%]'>
-                            <div className="flex flex-col gap-2 w-full">
+                            <div className="flex flex-col gap-2.5 w-full">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
                                 </div>
@@ -3598,8 +3601,8 @@ const PropertyCard = ({
                                     {cityStateZip}
                                 </div>
 
-                                <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
-                                    <p className='text-3xl'>{price}</p>
+                                <div className='flex gap-1 text-lg md:text-xl font-semibold text-mint11'>
+                                    <p className='text-[36px]'>{price}</p>
                                     <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
                                         <Warning />
                                         <p className='text-xs text-red9 font-light'>- {usdFormatter.format(priceReduction)}</p>
@@ -3658,6 +3661,35 @@ const PropertyCard = ({
                                         orientation="vertical"
                                     />
                                     <div className="text-sm md:text-md leading-5">{squareFeet}</div>
+                                </div>
+                                {/* Price estimates */}
+                                <div>
+                                    {propertyDetails.estimates && status === 'For sale' && (
+                                        <div className='flex items-center gap-1 text-sm'>
+                                            <p className='font-medium'>
+                                                Thenstimate:
+                                            </p>
+                                            <p className='text-blue9 font-semibold'>
+                                                {usdFormatter.format(propertyDetails.estimates['current_values'][0]['estimate_low'])}
+                                            </p>
+                                            <span className='text-blue9'>-</span>
+                                            <p className='text-blue9 font-semibold'>
+                                                {usdFormatter.format(propertyDetails.estimates['current_values'][0]['estimate_high'])}
+                                            </p>
+                                            {/* estimate date */}
+                                            <div className='flex items-center gap-1 text-[8px] mb-5'>
+                                                <Calendar />
+                                                <p className=''>
+                                                    <span>As of </span>
+                                                    {new Date(propertyDetails.estimates['current_values'][0].date).toLocaleString('en-US', {
+                                                        year: "numeric",
+                                                        month: "long",
+                                                        day: "numeric",
+                                                    })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className={openHouse === null ? 'hidden' : 'block mt-2'}>
@@ -3802,44 +3834,53 @@ const PropertyCard = ({
                                                 {/* Descriptions */}
                                                 <div className='flex flex-col gap-2'>
                                                     <Seperator text={'Home description'} />
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Garage:</span>
-                                                        {(() => {
-                                                            if (propertyDetails.description.garage === null) {
-                                                                return 'No data available'
-                                                            } else if (propertyDetails.description.garage === 1) {
-                                                                return `${propertyDetails.description.garage} Garage space`
-                                                            } else if (propertyDetails.description.garage > 1) {
-                                                                return `${propertyDetails.description.garage} Garage spaces`
-                                                            }
-                                                        })()}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
-                                                    </p>
-                                                    {/* HOA */}
-                                                    <div className='rounded bg-blackA2 px-2 font-light'>
-                                                        <p className='flex items-center gap-2 '>
-                                                            <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
+                                                    <div className='grid grid-cols-2 gap-2'>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
                                                         </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Garage:</span>
+                                                            {(() => {
+                                                                if (propertyDetails.description.garage === null) {
+                                                                    return 'No data available'
+                                                                } else if (propertyDetails.description.garage === 1) {
+                                                                    return `${propertyDetails.description.garage} Garage space`
+                                                                } else if (propertyDetails.description.garage > 1) {
+                                                                    return `${propertyDetails.description.garage} Garage spaces`
+                                                                }
+                                                            })()}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
+                                                        </p>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                            <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                        </p>
+                                                        {/* HOA */}
+                                                        <div className='rounded bg-blackA2 px-2 font-light'>
+                                                            <p className='flex items-center gap-2 '>
+                                                                <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
+                                                            </p>
+                                                        </div>
+                                                        {/* Price per sqft */}
+                                                        <div>
+                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                <span className='font-medium'>Price per sqft:</span>
+                                                                {usdFormatter.format(propertyDetails['price_per_sqft'])}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                     {/* Descriptive text */}
                                                     <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
@@ -3949,12 +3990,7 @@ const PropertyCard = ({
                                                     ))}
                                                 </div>
 
-                                                {/* Price per sqft */}
-                                                <div>
-                                                    <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                        <span className='font-medium'>Price per sqft:</span>{propertyDetails['price_per_sqft']}
-                                                    </p>
-                                                </div>
+
 
                                                 {/* Flags */}
                                                 <div>

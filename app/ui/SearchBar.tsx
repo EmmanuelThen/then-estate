@@ -27771,6 +27771,8 @@ const SearchBar = () => {
     const usdFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
     });
 
     const [uniqueSearchStatus, setUniqueSearchStatus] = useState(new Set());
@@ -28116,7 +28118,7 @@ const SearchBar = () => {
                         lastSoldPrice={properties['last_sold_price'] === null ? 'No data available' : usdFormatter.format(properties['last_sold_price'])}
                         openHouse={properties['open_houses']}
                         foreclosure={properties.flags['is_foreclosure']}
-                        // Tab data section
+                    // Tab data section
                     />
                 ))}
             </div>
