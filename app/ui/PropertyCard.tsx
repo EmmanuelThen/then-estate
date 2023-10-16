@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Separator from '@radix-ui/react-separator';
 import * as Tabs from '@radix-ui/react-tabs'
-
 import Button from './Button';
 import Tooltips from './Tooltips';
 import Xmark from '../components/svg/Xmark';
@@ -25,6 +24,32 @@ import AccordionDemo from './AccordionDemo';
 import TrendingUpArrow from '../components/svg/TrendingUpArrow';
 import GraduationCap from '../components/svg/GraduationCap';
 import Star from '../components/svg/Star';
+import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale,
+
+} from 'chart.js'
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale,
+
+);
 
 type Props = {
     imageSrc: any
@@ -3212,8 +3237,6 @@ const PropertyCard = ({
         getpropertyDetails();
     }, [])
 
-
-
     // Get property images 
     const getPropertyImages = async () => {
         const url = `https://realty-in-us.p.rapidapi.com/properties/v3/get-photos?property_id=${propertyID}`;
@@ -3245,7 +3268,6 @@ const PropertyCard = ({
             console.error(error);
         }
     }
-
 
     // need to fix button logic, everything else is working to show all property images
     const showPreviousImage = () => {
@@ -3298,16 +3320,63 @@ const PropertyCard = ({
     function formatDate(dateString: any) {
         const date = new Date(dateString);
         return date.toLocaleString('en-US', {
-            // weekday: 'long',
-            // year: 'numeric',
             month: 'short',
             day: 'numeric',
             hour: 'numeric',
             minute: 'numeric',
-            // second: 'numeric',
-            // timeZoneName: 'short',
         });
     }
+
+    {/** Data for line chart */ }
+    const lineChartData = {
+        labels: propertyDetails.estimates &&
+            (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
+                // month: 'short',
+                year: 'numeric'
+            })).reverse(),
+        datasets: [
+            {
+                label: 'Price',
+                data: propertyDetails.estimates &&
+                    (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => estimate.estimate).reverse(),
+                // borderColor: 'red',
+                backgroundColor: 'rgb(0 144 255)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(0, 0, 0, 0.1)',
+            }
+        ]
+    }
+
+    {/** Options for our line chart */ }
+    const lineChartOptions = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: `Price history for ${streetAddress}`,
+            },
+            tooltip: {
+                callbacks: {
+
+                },
+                enabled: true,
+                backgroundColor: '#0084e6a1',
+            }
+        },
+        scales: {
+            x: {
+                display: true,
+            },
+            y: {
+                display: true,
+            },
+        },
+        elements: {
+            point: {
+                radius: 1,
+            },
+        },
+    };
 
     return (
         <Dialog.Root >
@@ -3692,7 +3761,7 @@ const PropertyCard = ({
                                     )}
                                 </div>
 
-                                <div className={openHouse === null ? 'hidden' : 'block mt-2'}>
+                                <div className={openHouse === null ? 'hidden' : 'block'}>
                                     <div className='flex gap-2 text-xs'>
                                         <span className='text-xs font-medium text-green-500'>Open house:</span>
                                         {openHouse === null ? '' :
@@ -3709,31 +3778,31 @@ const PropertyCard = ({
 
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-red-500"
+                                            className="border rounded border-blackA5 max-h-[400px] shadow-blackA9 shadow-[0px_4px_7px]"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
-                                            <Tabs.List className="max-h-[25px] border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
+                                            <Tabs.List className="max-h-[35px] border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
                                                 <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab1"
                                                 >
                                                     Mortgage
                                                 </Tabs.Trigger>
                                                 <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab2"
                                                 >
                                                     Details
                                                 </Tabs.Trigger>
                                                 <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab3"
                                                 >
-                                                    Rates
+                                                    Charts
                                                 </Tabs.Trigger>
                                                 <Tabs.Trigger
-                                                    className="whitespace-nowrap hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                    className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab4"
                                                 >
                                                     Investment analysis
@@ -3741,7 +3810,7 @@ const PropertyCard = ({
                                             </Tabs.List>
                                             {/* Home Content */}
                                             <Tabs.Content
-                                                className="flex flex-col gap-5 transition duration-150 ease-in-out max-h-[430px] overflow-y-scroll p-2"
+                                                className="flex flex-col gap-5 transition duration-150 ease-in-out max-h-[350px] overflow-y-scroll p-2"
                                                 value="tab1"
                                             >
                                                 <div className='flex flex-col gap-2 text-sm'>
@@ -3779,7 +3848,7 @@ const PropertyCard = ({
                                                 <div className='flex flex-col gap-2 text-sm'>
                                                     <Seperator text={'Monthly ownership expenses'} />
                                                     {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light' key={i}>
                                                             <span className='font-medium'>{details['display_name']}:</span>
                                                             {usdFormatter.format(details.amount)}
                                                         </p>
@@ -3798,7 +3867,7 @@ const PropertyCard = ({
                                                     }
                                                     />
                                                     {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
-                                                        <div className='flex rounded gap-2 bg-blackA2 px-2'>
+                                                        <div className='flex rounded gap-2 bg-blackA2 px-2' key={j}>
                                                             <p className='font-medium'>
                                                                 {(() => {
                                                                     if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
@@ -3828,7 +3897,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="text-sm transition duration-150 ease-in-out flex flex-col p-2 max-h-[430px] overflow-y-scroll outline-none"
+                                                className="text-sm transition duration-150 ease-in-out flex flex-col p-2 max-h-[350px] overflow-y-scroll"
                                                 value="tab2"
                                             >
                                                 {/* Descriptions */}
@@ -3913,7 +3982,7 @@ const PropertyCard = ({
                                                 <div className=''>
                                                     <Seperator text={'Nearby schools'} />
                                                     {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                        <div className='flex flex-col gap-2'>
+                                                        <div className='flex flex-col gap-2' key={l}>
                                                             <div className='flex items-center gap-2 font-light'>
                                                                 {/* <span className='font-medium'>Name:</span>{school.name} */}
                                                                 <AccordionDemo
@@ -3968,7 +4037,7 @@ const PropertyCard = ({
                                                                             <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
                                                                                 <span className='font-medium'>Education levels: </span>
                                                                                 {school['education_levels'].map((level: any, l: any) => (
-                                                                                    <div className='font-light'>
+                                                                                    <div className='font-light' key={l}>
                                                                                         {level}
                                                                                     </div>
                                                                                 ))}
@@ -3989,9 +4058,6 @@ const PropertyCard = ({
                                                         </div>
                                                     ))}
                                                 </div>
-
-
-
                                                 {/* Flags */}
                                                 <div>
                                                     <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
@@ -4003,7 +4069,7 @@ const PropertyCard = ({
                                                 <div>
                                                     <div>
                                                         {propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
-                                                            <div>
+                                                            <div key={m}>
                                                                 <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
                                                                     <span className='font-medium'>Tax $ amount:</span>{taxHistory.tax}
                                                                 </p>
@@ -4029,14 +4095,16 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab3"
                                             >
-
-                                                tab 3 content
+                                                {
+                                                    propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                    (<Line data={lineChartData} options={lineChartOptions} />)
+                                                }
                                             </Tabs.Content>
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
 

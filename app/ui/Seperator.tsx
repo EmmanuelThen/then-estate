@@ -6,7 +6,7 @@ type Props = {
 
 const Seperator = ({ text }: Props) => {
     return (
-        <div className='flex justify-center w-full mt-5'>
+        <div className='flex justify-center w-full'>
             <div className='flex items-center justify-center gap-8 w-full'>
                 <hr className='block w-full h-[1px] border-0 bg-blackA6' />
                 <span className='text-xs text-mint9 font-medium whitespace-nowrap'>{text}</span>
