@@ -3332,7 +3332,7 @@ const PropertyCard = ({
 
     // To format to 100K, 20M, 3B etc.
     const numberFormatter = (num: number) => {
-        if (num >= 1000000) {
+        if (num >= 1000) {
             if (num >= 1000000000) {
                 return (num / 1000000000).toFixed(1) + 'B';
             } else if (num >= 10000000) {
@@ -3344,13 +3344,15 @@ const PropertyCard = ({
         return num;
     };
 
+
+
     // FOr different chart views
     const handleChartViewHistory = () => {
         setIsChartViewHistory(true)
         setIsChartViewForecast(false);
 
     }
-    
+
     const handleChartViewForecast = () => {
         setIsChartViewForecast(true);
         setIsChartViewHistory(false)
@@ -3358,9 +3360,10 @@ const PropertyCard = ({
     }
 
 
-    
+
     // Line chart data
     const lineChartData = {
+        // X-axis
         labels: isChartViewHistory
             ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
                 month: 'short',
@@ -3370,28 +3373,53 @@ const PropertyCard = ({
                 ? (propertyDetails.estimates['forecast_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
                     month: 'short',
                     year: 'numeric'
-                })).reverse()
+                }))
                 : []
             ),
         datasets: [
             {
-                label: '',
+                // Y-axis
+                label: 'transparent',
                 data: isChartViewHistory
-                    ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => numberFormatter(estimate.estimate)).reverse()
+                    ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => estimate.estimate).reverse()
                     : (isChartViewForecast
-                        ? (propertyDetails.estimates['forecast_values'][0].estimates).map((estimate: any) => numberFormatter(estimate.estimate)).reverse()
+                        ? (propertyDetails.estimates['forecast_values'][0].estimates).map((estimate: any) => estimate.estimate)
                         : []
                     ),
                 // Point color
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 // Line color
-                borderColor: 'rgb(0 144 255)',
+                borderColor: 'rgb(2 120 100)',
                 borderWidth: 2,
                 hoverBackgroundColor: 'rgba(0, 0, 0, 0.1)',
-                pointRadius: 0,
+                pointRadius: 3,
             }
         ],
     };
+
+    const verticalLinePlugin = {
+        afterDraw: (chart, args, options) => {
+            const { ctx, scales } = chart;
+            // For vertical line on X-axis
+            const { xScale } = scales.x;
+
+            // To customize the line color and width
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+
+            // To et the X-axis value where I want the line
+            const xValue = new Date('2023-10-16');
+
+            // To convert the X-axis value to a pixel position
+            const xPosition = xScale.getPixelForValue(xValue);
+
+            ctx.beginPath();
+            ctx.moveTo(xPosition, 0);
+            ctx.lineTo(xPosition, chart.height);
+            ctx.stroke();
+        }
+    };
+
 
 
     {/** Options for our line chart */ }
@@ -3399,7 +3427,7 @@ const PropertyCard = ({
         responsive: true,
         plugins: {
             title: {
-                display: true,
+                display: false,
                 text: `Thenstimate history for ${streetAddress}`,
             },
             tooltip: {
@@ -3416,8 +3444,12 @@ const PropertyCard = ({
                     },
                 },
                 enabled: true,
-                backgroundColor: '#0084e6a1',
-            }
+                backgroundColor: 'rgb(2, 120, 100, 0.8)',
+            },
+            legend: {
+                display: false
+            },
+            customLine: verticalLinePlugin,
         },
         scales: {
             x: {
@@ -3426,16 +3458,31 @@ const PropertyCard = ({
                     color: 'rgba(0, 0, 0, 0)', // Transparent color to hide grid lines
                     borderDash: [5, 5], // Dashed line pattern to further hide grid lines
                 },
+
             },
             y: {
                 display: true,
+                ticks: {
+                    color: 'rgb(2, 120, 100)',
+                    fontWeight: 'bold',
+                    callback: function (value: any, index, ticks) {
+                        return '$' + value;
+                    }
+                },
 
             },
+
         },
         elements: {
             point: {
                 radius: 1,
             },
+        },
+
+        interaction: {
+            mode: 'index',
+            axis: 'xy', // Display tooltips on both X and Y axes
+            intersect: false,
         },
     };
 
@@ -3576,7 +3623,7 @@ const PropertyCard = ({
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[95vh] w-[95vw] max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <Dialog.Content id='dark-mode' className="overflow-y-scroll z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[95vw] max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
                             className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
@@ -3839,7 +3886,7 @@ const PropertyCard = ({
 
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-blackA5 max-h-[400px] shadow-blackA9 shadow-[0px_4px_7px]"
+                                            className="border rounded border-blackA5 max-h-[500px] shadow-blackA9 shadow-[0px_4px_7px]"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
@@ -3859,6 +3906,7 @@ const PropertyCard = ({
                                                 <Tabs.Trigger
                                                     className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab3"
+                                                    onClick={() => setIsChartViewHistory(true)}
                                                 >
                                                     Charts
                                                 </Tabs.Trigger>
@@ -4156,50 +4204,70 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none "
                                                 value="tab3"
                                             >
-                                                {/* History and Futurre prices */}
-                                                <div>
-                                                    <Tabs.Root
-                                                        defaultValue='tabHistory'
-                                                    >
-                                                        <Tabs.List className='flex gap-2'>
+                                                {/* History and Future prices */}
+
+                                                <Tabs.Root
+                                                    className='w-full px-3'
+                                                    defaultValue='tabHistory'
+                                                >
+                                                    <div className='flex items-center justify-between w-full px-2'>
+                                                        <div className='mb-5 w-[70%]'>
+                                                            <h2 className='font-semibold text-3xl text-mint11 '>
+                                                                {isChartViewHistory ? 'Historic values' : isChartViewForecast ? 'Forecasted values' : ''}
+                                                            </h2>
+                                                            <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
+                                                        </div>
+
+                                                        <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[30%] h-fit'>
                                                             <Tabs.Trigger
-                                                                className="border border-blue9 rounded bg-slate4 hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                                className="w-[50%]  rounded-tl rounded-bl data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
                                                                 value="tabHistory"
                                                                 onClick={handleChartViewHistory}
                                                             >
                                                                 History
                                                             </Tabs.Trigger>
                                                             <Tabs.Trigger
-                                                                className="border border-blue9 rounded bg-slate4 hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                                className="w-[50%] rounded-tr rounded-br data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
                                                                 value="tabForecast"
                                                                 onClick={handleChartViewForecast}
                                                             >
-                                                                Forecast
+                                                                Forecasts
                                                             </Tabs.Trigger>
                                                         </Tabs.List>
-                                                        <Tabs.Content
-                                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
-                                                            value="tabHistory"
-                                                        >
-                                                            {
-                                                                propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                                (<Line data={lineChartData} options={lineChartOptions} />)
-                                                            }
-                                                        </Tabs.Content>
-                                                        <Tabs.Content
-                                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
-                                                            value="tabForecast"
-                                                        >
-                                                            {
-                                                                propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                                (<Line data={lineChartData} options={lineChartOptions} />)
-                                                            }
-                                                        </Tabs.Content>
-                                                    </Tabs.Root>
-                                                </div>
+                                                    </div>
+                                                    <Tabs.Content
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll rounded-b-md outline-none "
+                                                        value="tabHistory"
+                                                    >
+                                                        {
+                                                            propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                            (<Line
+                                                                className='h-[400px] w-full'
+                                                                data={lineChartData}
+                                                                options={lineChartOptions}
+                                                            />
+                                                            )
+                                                        }
+                                                    </Tabs.Content>
+                                                    <Tabs.Content
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll rounded-b-md outline-none "
+                                                        value="tabForecast"
+                                                    >
+                                                        {
+                                                            propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                            (<Line
+                                                                className='h-[400px] w-full'
+                                                                data={lineChartData}
+                                                                options={lineChartOptions}
+                                                            />
+                                                            )
+                                                        }
+                                                    </Tabs.Content>
+                                                </Tabs.Root>
+
 
                                             </Tabs.Content>
                                             <Tabs.Content
