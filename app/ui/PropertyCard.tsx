@@ -123,6 +123,9 @@ const PropertyCard = ({
     // const [imageList, setImageList] = useState<any>([]);
     const [propertyImages, setPropertyImages] = useState<any>([])
     const [propertyDetails, setPropertyDetails] = useState<any>({})
+    // For chart historic and forecast values
+    const [isChartViewHistory, setIsChartViewHistory] = useState<any>(false);
+    const [isChartViewForecast, setIsChartViewForecast] = useState<any>(false);
 
     // Test for getPropertyImages api call
     let imagez: any = {
@@ -3327,25 +3330,69 @@ const PropertyCard = ({
         });
     }
 
-    {/** Data for line chart */ }
+    // To format to 100K, 20M, 3B etc.
+    const numberFormatter = (num: number) => {
+        if (num >= 1000000) {
+            if (num >= 1000000000) {
+                return (num / 1000000000).toFixed(1) + 'B';
+            } else if (num >= 10000000) {
+                return (num / 1000000).toFixed(0) + 'M';
+            } else {
+                return (num / 1000).toFixed(0) + 'K';
+            }
+        }
+        return num;
+    };
+
+    // FOr different chart views
+    const handleChartViewHistory = () => {
+        setIsChartViewHistory(true)
+        setIsChartViewForecast(false);
+
+    }
+    
+    const handleChartViewForecast = () => {
+        setIsChartViewForecast(true);
+        setIsChartViewHistory(false)
+
+    }
+
+
+    
+    // Line chart data
     const lineChartData = {
-        labels: propertyDetails.estimates &&
-            (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
-                // month: 'short',
+        labels: isChartViewHistory
+            ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
+                month: 'short',
                 year: 'numeric'
-            })).reverse(),
+            })).reverse()
+            : (isChartViewForecast
+                ? (propertyDetails.estimates['forecast_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    year: 'numeric'
+                })).reverse()
+                : []
+            ),
         datasets: [
             {
-                label: 'Price',
-                data: propertyDetails.estimates &&
-                    (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => estimate.estimate).reverse(),
-                // borderColor: 'red',
-                backgroundColor: 'rgb(0 144 255)',
-                borderWidth: 1,
+                label: '',
+                data: isChartViewHistory
+                    ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => numberFormatter(estimate.estimate)).reverse()
+                    : (isChartViewForecast
+                        ? (propertyDetails.estimates['forecast_values'][0].estimates).map((estimate: any) => numberFormatter(estimate.estimate)).reverse()
+                        : []
+                    ),
+                // Point color
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                // Line color
+                borderColor: 'rgb(0 144 255)',
+                borderWidth: 2,
                 hoverBackgroundColor: 'rgba(0, 0, 0, 0.1)',
+                pointRadius: 0,
             }
-        ]
-    }
+        ],
+    };
+
 
     {/** Options for our line chart */ }
     const lineChartOptions = {
@@ -3353,11 +3400,20 @@ const PropertyCard = ({
         plugins: {
             title: {
                 display: true,
-                text: `Price history for ${streetAddress}`,
+                text: `Thenstimate history for ${streetAddress}`,
             },
             tooltip: {
                 callbacks: {
+                    label: function (tooltipItem: any, data: any) {
+                        // Access the value of the data point
+                        const value = tooltipItem.parsed.y;
 
+                        // Custom tooltip text
+                        return `${usdFormatter.format(value)} on ${tooltipItem.label}`;
+                    },
+                    title: function (tooltipItem: any) {
+                        return 'Property value'
+                    },
                 },
                 enabled: true,
                 backgroundColor: '#0084e6a1',
@@ -3366,9 +3422,14 @@ const PropertyCard = ({
         scales: {
             x: {
                 display: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0)', // Transparent color to hide grid lines
+                    borderDash: [5, 5], // Dashed line pattern to further hide grid lines
+                },
             },
             y: {
                 display: true,
+
             },
         },
         elements: {
@@ -4098,10 +4159,48 @@ const PropertyCard = ({
                                                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab3"
                                             >
-                                                {
-                                                    propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                    (<Line data={lineChartData} options={lineChartOptions} />)
-                                                }
+                                                {/* History and Futurre prices */}
+                                                <div>
+                                                    <Tabs.Root
+                                                        defaultValue='tabHistory'
+                                                    >
+                                                        <Tabs.List className='flex gap-2'>
+                                                            <Tabs.Trigger
+                                                                className="border border-blue9 rounded bg-slate4 hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                                value="tabHistory"
+                                                                onClick={handleChartViewHistory}
+                                                            >
+                                                                History
+                                                            </Tabs.Trigger>
+                                                            <Tabs.Trigger
+                                                                className="border border-blue9 rounded bg-slate4 hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-blue9 data-[state=active]:text-blue9 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                                value="tabForecast"
+                                                                onClick={handleChartViewForecast}
+                                                            >
+                                                                Forecast
+                                                            </Tabs.Trigger>
+                                                        </Tabs.List>
+                                                        <Tabs.Content
+                                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                            value="tabHistory"
+                                                        >
+                                                            {
+                                                                propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                                (<Line data={lineChartData} options={lineChartOptions} />)
+                                                            }
+                                                        </Tabs.Content>
+                                                        <Tabs.Content
+                                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                            value="tabForecast"
+                                                        >
+                                                            {
+                                                                propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                                (<Line data={lineChartData} options={lineChartOptions} />)
+                                                            }
+                                                        </Tabs.Content>
+                                                    </Tabs.Root>
+                                                </div>
+
                                             </Tabs.Content>
                                             <Tabs.Content
                                                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
