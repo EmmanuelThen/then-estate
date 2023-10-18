@@ -28118,6 +28118,7 @@ const SearchBar = () => {
                         lastSoldPrice={properties['last_sold_price'] === null ? 'No data available' : usdFormatter.format(properties['last_sold_price'])}
                         openHouse={properties['open_houses']}
                         foreclosure={properties.flags['is_foreclosure']}
+                        agent_identification={properties.source.agents === null ? 'No agent Id' : properties.source.agents[0]['agent_id']}
                     // Tab data section
                     />
                 ))}
