@@ -10002,12 +10002,23 @@ const PropertyCard = ({
     // Tax assessment chart data
     const taxLineChartData = {
         labels: propertyDetails['tax_history'] &&
+            // Every tax history year
             propertyDetails['tax_history'].map((taxHistory: any, m: any) => taxHistory.year).reverse(),
         datasets: [
             {
                 label: 'Building',
+                // If API returns null for building year it will result to 0
                 data: propertyDetails['tax_history'] &&
-                    propertyDetails['tax_history'].map((taxHistory: any, m: any) => taxHistory.assessment.building),
+                    propertyDetails['tax_history'].map((taxHistory: any) => {
+                        const { assessment, year } = taxHistory;
+                        if (assessment.building === null) {
+                            return (
+                                0
+                            );
+                        } else {
+                            return taxHistory.assessment.building
+                        }
+                    }).reverse(),
                 backgroundColor: 'rgb(229 72 77)',
                 // Line color
                 borderColor: 'rgb(229 72 77)',
@@ -10017,8 +10028,18 @@ const PropertyCard = ({
             },
             {
                 label: 'Land',
+                // If API returns null for land year it will result to 0
                 data: propertyDetails['tax_history'] &&
-                    propertyDetails['tax_history'].map((taxHistory: any, m: any) => taxHistory.assessment.land),
+                    propertyDetails['tax_history'].map((taxHistory: any) => {
+                        const { assessment, year } = taxHistory;
+                        if (assessment.land === null) {
+                            return (
+                                0
+                            );
+                        } else {
+                            return taxHistory.assessment.land
+                        }
+                    }).reverse(),
                 backgroundColor: 'rgb(14 165 233)',
                 // Line color
                 borderColor: 'rgb(14 165 233)',
@@ -10034,8 +10055,7 @@ const PropertyCard = ({
         responsive: true,
         plugins: {
             title: {
-                display: true,
-                text: `Tax assessment for ${streetAddress}`,
+                display: false,
             },
             tooltip: {
                 callbacks: {
@@ -10044,14 +10064,18 @@ const PropertyCard = ({
                         const value = tooltipItem.parsed.y;
 
                         // Custom tooltip text
-                        return `${usdFormatter.format(value)} in ${tooltipItem.label}`;
+                        if (value === 0) {
+                            return `No data for ${tooltipItem.label}`
+                        } else {
+                            return `${usdFormatter.format(value)} in ${tooltipItem.label}`
+                        };
                     },
                     title: function (tooltipItem: any) {
                         return 'Assessment value'
                     },
                 },
                 enabled: true,
-                backgroundColor: 'rgb(2, 120, 100, 0.8)',
+                backgroundColor: 'rgb(0, 0, 0, 0.5)',
             },
             legend: {
                 display: true
@@ -10070,7 +10094,7 @@ const PropertyCard = ({
             y: {
                 display: true,
                 ticks: {
-                    color: 'rgb(2, 120, 100)',
+                    // color: 'rgb(2, 120, 100)',
                     fontWeight: 'bold',
                     callback: function (value: any, index, ticks) {
                         return '$' + value.toLocaleString();
@@ -10142,7 +10166,6 @@ const PropertyCard = ({
         plugins: {
             title: {
                 display: false,
-                text: `Thenstimate history for ${streetAddress}`,
             },
             tooltip: {
                 callbacks: {
@@ -10177,7 +10200,7 @@ const PropertyCard = ({
             y: {
                 display: true,
                 ticks: {
-                    color: 'rgb(2, 120, 100)',
+                    // color: 'rgb(2, 120, 100)',
                     fontWeight: 'bold',
                     callback: function (value: any, index, ticks) {
                         return '$' + value.toLocaleString();
@@ -10618,7 +10641,7 @@ const PropertyCard = ({
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
-                                            <Tabs.List className="max-h-[35px] border-b items-center shrink-0 flex z-[999]" aria-label="Nav bar">
+                                            <Tabs.List className="max-h-[35px] border-b items-center flex" aria-label="Nav bar">
                                                 <Tabs.Trigger
                                                     className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab1"
@@ -10642,7 +10665,7 @@ const PropertyCard = ({
                                                     className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                     value="tab4"
                                                 >
-                                                    Investment analysis
+                                                    Tax Assessments
                                                 </Tabs.Trigger>
                                             </Tabs.List>
                                             {/* Home Content */}
@@ -10999,19 +11022,51 @@ const PropertyCard = ({
 
                                             </Tabs.Content>
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[350px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
+                                                <div className='flex items-center justify-between w-full px-2 mb-5'>
+                                                    <div className=''>
+                                                        <h2 className='font-semibold text-3xl text-mint11'>
+                                                            Tax assessments
+                                                        </h2>
+                                                        <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
+                                                    </div>
 
-                                                {
-                                                    propertyDetails['tax_history'].length > 0 && (
-                                                        <Line
-                                                            className='h-[400px] w-full'
-                                                            data={taxLineChartData}
-                                                            options={taxLineChartOptions}
-                                                        />
-                                                    )
-                                                }
+
+                                                    <div className=''>
+                                                        {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
+                                                            const { assessment, year } = taxHistory;
+                                                            if (assessment.building === null) {
+                                                                return (
+                                                                    <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
+                                                                        <Cancel />
+                                                                        <span className='font-medium'>{`No data for ${year}`}</span>
+                                                                    </div>
+                                                                );
+                                                            } else if (assessment.land === null) {
+                                                                return (
+                                                                    <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-blue9/80 text-white text-[10px]' key={index}>
+                                                                        <Cancel />
+                                                                        <span className='font-medium'>{`No data for ${year}`}</span>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    {
+                                                        propertyDetails['tax_history'].length > 0 && (
+                                                            <Line
+                                                                className='h-[400px] w-full'
+                                                                data={taxLineChartData}
+                                                                options={taxLineChartOptions}
+                                                            />
+                                                        )
+                                                    }
+                                                </div>
                                             </Tabs.Content>
                                         </Tabs.Root>
                                     )}
