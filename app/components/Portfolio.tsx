@@ -2,6 +2,7 @@ import React from 'react'
 import TrendingUpArrow from './svg/TrendingUpArrow'
 import * as Accordion from '@radix-ui/react-accordion';
 import AccordionDemo from '../ui/AccordionDemo';
+import Watchlist from './svg/Watchlist';
 
 type Props = {}
 
@@ -87,13 +88,26 @@ const Portfolio = (props: Props) => {
                             Today
                         </p>
                     </div>
-                    <div className='w-full mt-10'>
-                        {states.map((states, i) => (
-                            <AccordionDemo
-                                key={i}
-                                accordionTrigger={`${states.name}, ${states.abbreviation}`}
-                            />
-                        ))}
+                    <div className='flex gap-5 w-full'>
+                        <div className='w-[70%]'>
+                            {states.map((states, i) => (
+                                <AccordionDemo
+                                    key={i}
+                                    accordionTrigger={`${states.name}, ${states.abbreviation}`}
+                                />
+                            ))}
+                        </div>
+                        {/* Watchlist */}
+                        <aside className='border-l-[0.8px] border-slate6 w-[30%]'>
+                            <div className='flex items-center w-full justify-between'>
+                                <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11 px-3'>
+                                    Watchlist
+                                </h1>
+                                <div>
+                                    <Watchlist />
+                                </div>
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </div>

@@ -38,6 +38,7 @@ import {
     TimeScale,
 
 } from 'chart.js'
+import Watchlist from '../components/svg/Watchlist';
 
 ChartJS.register(
     CategoryScale,
@@ -10326,10 +10327,7 @@ const PropertyCard = ({
                     <div className='flex gap-5 w-[70%]'>
                         <Tooltips
                             button={
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
+                                <Watchlist />
 
                             }
                             tooltipContent={`Add to watchlist`}
@@ -10487,13 +10485,13 @@ const PropertyCard = ({
                                         </li>
                                     </ul>
                                     {/* All agent info section */}
-                                    <div>
+                                    {/* <div>
                                         {agentList.map((agent, i) => (
                                             <div key={i}>
                                                 {agent['advertiser_id']}
                                             </div>
                                         ))}
-                                    </div>
+                                    </div> */}
 
                                     {/* Seller info */}
                                     <div>
@@ -10619,7 +10617,7 @@ const PropertyCard = ({
                                         </div>
                                     )}
                                 </div>
-
+                                {/* Open house dates */}
                                 <div className={openHouse === null ? 'hidden' : 'block'}>
                                     <div className='flex gap-2 text-xs'>
                                         <span className='text-xs font-medium text-green-500'>Open house:</span>
@@ -10631,13 +10629,11 @@ const PropertyCard = ({
                                             ))}
                                     </div>
                                 </div>
-
                                 {/* In depth details */}
                                 <div className=''>
-
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-blackA5 max-h-[500px] shadow-blackA9 shadow-[0px_4px_7px]"
+                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
@@ -10668,9 +10664,9 @@ const PropertyCard = ({
                                                     Tax Assessments
                                                 </Tabs.Trigger>
                                             </Tabs.List>
-                                            {/* Home Content */}
+                                            {/* Mortgage Content */}
                                             <Tabs.Content
-                                                className="flex flex-col gap-5 transition duration-150 ease-in-out max-h-[350px] overflow-y-scroll p-2"
+                                                className=" transition duration-150 ease-in-out max-h-[400px]  overflow-y-scroll p-2"
                                                 value="tab1"
                                             >
                                                 <div className='flex flex-col gap-2 text-sm'>
@@ -10757,7 +10753,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="text-sm transition duration-150 ease-in-out flex flex-col p-2 max-h-[350px] overflow-y-scroll"
+                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[400px]"
                                                 value="tab2"
                                             >
                                                 {/* Descriptions */}
@@ -10813,7 +10809,7 @@ const PropertyCard = ({
                                                     </div>
                                                     {/* Descriptive text */}
                                                     <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Text:</span> {propertyDetails.description.text}
+                                                        <span className='font-medium'>Description:</span> {propertyDetails.description.text}
                                                     </p>
                                                     {/* Pet policy */}
                                                     <div className={status === 'For rent' ? 'block' : 'hidden'}>
@@ -10822,21 +10818,6 @@ const PropertyCard = ({
                                                         </p>
                                                     </div>
                                                 </div>
-
-                                                {/* Assigned schools */}
-                                                {/* <div>
-                                                    <h1>School list</h1>
-                                                    {propertyDetails['assigned_schools'].schools.map((school: any, k: any) => (
-                                                        <div>
-                                                            <h1>School:</h1>
-                                                            <p>{school.district.name}</p>
-                                                            <p>{school.district.id}</p>
-                                                            <p>{school.district.phone === null ? 'No data available' : school.district.phone}</p>
-                                                            <p>{school.district['student_count'] === null ? 'No data available' : school.district['student_count']}</p>
-                                                            <p>{school.district.grades === null ? 'No data available' : school.district.grades}</p>
-                                                        </div>
-                                                    ))}
-                                                </div> */}
 
                                                 {/* Nearby schools */}
                                                 <div className=''>
@@ -10918,53 +10899,18 @@ const PropertyCard = ({
                                                         </div>
                                                     ))}
                                                 </div>
-                                                {/* Flags */}
-                                                <div>
-                                                    <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                        <span className='font-medium'>Pending:</span>{propertyDetails.flags['is_pending'] === null ? 'No data available' : propertyDetails.flags['is_pending']}
-                                                    </p>
-                                                </div>
-
-                                                {/* Tax history */}
-                                                <div>
-                                                    <div>
-                                                        {propertyDetails['tax_history'].map((taxHistory: any, m: any) => (
-                                                            <div key={m}>
-                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                    <span className='font-medium'>Tax $ amount:</span>{taxHistory.tax}
-                                                                </p>
-                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                    <span className='font-medium'>Tax year:</span>{taxHistory.year}
-                                                                </p>
-                                                                {/* Assessment */}
-                                                                <h1>Assessment:</h1>
-                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                    <span className='font-medium'>Building:</span>{usdFormatter.format(taxHistory.assessment.building)}
-                                                                </p>
-                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                    <span className='font-medium'>Land:</span>{usdFormatter.format(taxHistory.assessment.land)}
-                                                                </p>
-                                                                <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                    <span className='font-medium'>Total:</span>{usdFormatter.format(taxHistory.assessment.total)}
-                                                                </p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[400px]"
                                                 value="tab3"
                                             >
                                                 {/* History and Future prices */}
-
                                                 <Tabs.Root
                                                     className='w-full px-3'
                                                     defaultValue='tabHistory'
                                                 >
-                                                    <div className='flex items-center justify-between w-full px-2'>
+                                                    <div className='flex items-center justify-between w-full px-2 mt-5'>
                                                         <div className='mb-5 w-[70%]'>
                                                             <h2 className='font-semibold text-3xl text-mint11 '>
                                                                 {isChartViewHistory ? 'Historic values' : isChartViewForecast ? 'Forecasted values' : ''}
@@ -10990,7 +10936,7 @@ const PropertyCard = ({
                                                         </Tabs.List>
                                                     </div>
                                                     <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll rounded-b-md outline-none "
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[400px]"
                                                         value="tabHistory"
                                                     >
                                                         {
@@ -11018,22 +10964,18 @@ const PropertyCard = ({
                                                         }
                                                     </Tabs.Content>
                                                 </Tabs.Root>
-
-
                                             </Tabs.Content>
                                             <Tabs.Content
                                                 className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
-                                                <div className='flex items-center justify-between w-full px-2 mb-5'>
+                                                <div className='flex items-center justify-between w-full px-2 mb-5 mt-5'>
                                                     <div className=''>
                                                         <h2 className='font-semibold text-3xl text-mint11'>
                                                             Tax assessments
                                                         </h2>
                                                         <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
                                                     </div>
-
-
                                                     <div className=''>
                                                         {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
                                                             const { assessment, year } = taxHistory;
@@ -11055,7 +10997,6 @@ const PropertyCard = ({
                                                         })}
                                                     </div>
                                                 </div>
-
                                                 <div>
                                                     {
                                                         propertyDetails['tax_history'].length > 0 && (
@@ -11070,7 +11011,6 @@ const PropertyCard = ({
                                             </Tabs.Content>
                                         </Tabs.Root>
                                     )}
-
                                 </div>
                             </div>
                         </div>
