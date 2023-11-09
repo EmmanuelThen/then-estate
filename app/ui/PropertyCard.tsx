@@ -10156,11 +10156,6 @@ const PropertyCard = ({
     };
 
 
-
-
-
-
-
     {/** Options for our line chart */ }
     const lineChartOptions = {
         responsive: true,
@@ -10420,7 +10415,7 @@ const PropertyCard = ({
                                     <p>Agent ID: {agent_identification}</p>
                                 </div>
 
-                                <div className='text-sm'>
+                                <article className='text-sm'>
                                     {/* Details */}
                                     <ul className='flex flex-col gap-2 text-sm mb-5'>
                                         <li className={newConstruction ? 'block' : 'hidden'}>
@@ -10484,6 +10479,44 @@ const PropertyCard = ({
                                             </p>
                                         </li>
                                     </ul>
+                                    {/* Flood an noise level section */}
+                                    <div className=''>
+                                        {propertyDetails.local && (
+                                            <div>
+                                                <Seperator
+                                                    text={`Noise levels`}
+                                                />
+                                                <ul className='flex flex-col gap-2 text-sm mb-5'>
+                                                    <li className='rounded bg-blackA2 px-2'>
+                                                        <p className='flex items-center gap-2'>
+                                                            <span className='font-medium'>Overall score:</span>
+                                                            <span className='font-light'>{propertyDetails.local.noise.score}</span>
+                                                        </p>
+                                                    </li>
+                                                    {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
+                                                        <ul key={i}>
+                                                            <li className='rounded bg-blackA2 px-2'>
+                                                                <p className='flex items-center gap-2'>
+                                                                    <span className='capitalize font-medium'>{category.type}:</span>
+                                                                    {/* Noise level ratings are color labeled */}
+                                                                    <span className={
+                                                                        `${category.text === 'Low' ? 'text-green-500' :
+                                                                            category.text === 'Medium' ? 'text-yellow-500' :
+                                                                                category.text === 'High' ? 'text-red-500' :
+                                                                                    ''} font-light`
+                                                                    }>
+                                                                        {category.text}
+                                                                    </span>
+
+
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                     {/* All agent info section */}
                                     {/* <div>
                                         {agentList.map((agent, i) => (
@@ -10502,7 +10535,7 @@ const PropertyCard = ({
                                             <span className='text-medium text-slate10'>Email:</span> {agentEmail}
                                         </p>
                                     </div>
-                                </div>
+                                </article>
                                 {/* Contact button */}
                                 <form onSubmit={handleContactAgent} >
                                     <button className={
