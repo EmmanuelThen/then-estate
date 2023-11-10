@@ -10358,10 +10358,10 @@ const PropertyCard = ({
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="overflow-y-scroll z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[95vw] max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] md:w-[95vw] md:max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
-                            className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+                            className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex  appearance-none items-center justify-center rounded-full focus:outline-none bg-mint11 p-1 z-[9999]"
                             aria-label="Close"
                         >
                             <Xmark />
@@ -10405,6 +10405,7 @@ const PropertyCard = ({
                                     <ChevronRight />
                                 </button>
                             </div>
+                            
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5'>
                                 {/* Photo count */}
@@ -10483,9 +10484,11 @@ const PropertyCard = ({
                                     <div className=''>
                                         {propertyDetails.local && (
                                             <div>
-                                                <Seperator
-                                                    text={`Noise levels`}
-                                                />
+                                                <div className='mb-2'>
+                                                    <Seperator
+                                                        text={`Noise levels`}
+                                                    />
+                                                </div>
                                                 <ul className='flex flex-col gap-2 text-sm mb-5'>
                                                     <li className='rounded bg-blackA2 px-2'>
                                                         <p className='flex items-center gap-2'>
@@ -10526,28 +10529,9 @@ const PropertyCard = ({
                                         ))}
                                     </div> */}
 
-                                    {/* Seller info */}
-                                    <div>
-                                        <p className='capitalize'>
-                                            <span className='text-medium text-slate10'>{advertiserType}:</span> {agent === null ? 'No data available' : agent}
-                                        </p>
-                                        <p className=''>
-                                            <span className='text-medium text-slate10'>Email:</span> {agentEmail}
-                                        </p>
-                                    </div>
+
                                 </article>
-                                {/* Contact button */}
-                                <form onSubmit={handleContactAgent} >
-                                    <button className={
-                                        agentEmail === 'No data available' ?
-                                            'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
-                                            :
-                                            `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
-                                    }
-                                    >
-                                        {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
-                                    </button>
-                                </form>
+                                
                             </div>
                         </div>
 
@@ -10652,7 +10636,7 @@ const PropertyCard = ({
                                 </div>
                                 {/* Open house dates */}
                                 <div className={openHouse === null ? 'hidden' : 'block'}>
-                                    <div className='flex gap-2 text-xs'>
+                                    <div className='flex gap-1 text-xs'>
                                         <span className='text-xs font-medium text-green-500'>Open house:</span>
                                         {openHouse === null ? '' :
                                             openHouse.map((dates: any, i: any) => (
@@ -10661,6 +10645,28 @@ const PropertyCard = ({
                                                 </p>
                                             ))}
                                     </div>
+                                </div>
+                                {/* Seller info */}
+                                <div className='flex flex-col gap-2 text-sm'>
+                                    <p className='flex gap-1 capitalize'>
+                                        <span className='font-medium'>{advertiserType}:</span> 
+                                        <span className='font-light'>{agent === null ? 'No data available' : agent}</span>
+                                    </p>
+                                    <p className='flex gap-1'>
+                                        <span className='font-medium'>Email:</span> 
+                                        <span className='font-light'>{agentEmail}</span>
+                                    </p>
+                                    <form onSubmit={handleContactAgent} >
+                                        <button className={
+                                            agentEmail === 'No data available' ?
+                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
+                                                :
+                                                `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
+                                        }
+                                        >
+                                            {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
+                                        </button>
+                                    </form>
                                 </div>
                                 {/* In depth details */}
                                 <div className=''>
@@ -10751,7 +10757,7 @@ const PropertyCard = ({
                                                 <div className='flex flex-col gap-2 text-sm'>
                                                     <Seperator text={
                                                         <div>
-                                                            Average Mortgage rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
+                                                            Avg. rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
                                                         </div>
                                                     }
                                                     />
