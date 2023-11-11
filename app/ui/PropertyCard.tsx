@@ -83,9 +83,8 @@ type Props = {
     foreclosure: any
     listingID: any
     agent_identification: any
-
-
-
+    popUpWidth: any
+    popUpHeight: any
 }
 
 const PropertyCard = ({
@@ -118,7 +117,9 @@ const PropertyCard = ({
     openHouse,
     foreclosure,
     listingID,
-    agent_identification
+    agent_identification,
+    popUpWidth,
+    popUpHeight
 }: Props) => {
 
     const [imageIndex, setImageIndex] = useState<any>(0);
@@ -10441,8 +10442,11 @@ const PropertyCard = ({
     };
 
     // For high quality images, jpg were giving low quality
-    const customLoader = () => {
-        return `${imageSrc.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`)}`;
+    const primaryPhotoCustomLoader = () => {
+        return imageSrc?.replace('.jpg', `-w${width}_h${height}_x2.webp?w=${width}&q=75`);
+    };
+    const popUpPhotosCustomLoader = () => {
+        return propertyImages[imageIndex]?.href.replace('.jpg', `-w${popUpWidth}_h${popUpHeight}_x2.webp?w=${popUpWidth}&q=75`);
     };
 
     // For contact agent button on property card modal
@@ -10776,7 +10780,7 @@ const PropertyCard = ({
                         <Image
                             className={`h-[${height}px] w-[${width}px] object-cover rounded-t `}
                             alt='property-image'
-                            loader={customLoader}
+                            loader={primaryPhotoCustomLoader}
                             src={imageSrc}
                             width={width}
                             height={height}
@@ -10901,45 +10905,47 @@ const PropertyCard = ({
                                 <p className='text-xs font-semibold text-white'>New listing</p>
                             </div>
                             {/* All property images */}
-                            {propertyImages.length > 0 && (
-
-                                <Image
-                                    key={propertyID}
-                                    className={`h-[${height}px] w-[${width}px] object-cover`}
-                                    alt={`Image ${imageIndex + 1}`}
-                                    loader={customLoader}
-                                    src={propertyImages[imageIndex].href}
-                                    width={width}
-                                    height={height}
-                                />
-                            )}
-                            {/* Prev image and next image buttons */}
-                            <div className='z-[9999] absolute top-1/4 left-1/4 transform -translate-x-1/4 -translate-y-1/4 flex justify-between w-full px-2'>
-                                <button
-                                    onClick={showPreviousImage}
-                                    disabled={imageIndex === 0}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                >
-                                    <ChevronLeft />
-                                </button>
-                                <button
-                                    onClick={showNextImage}
-                                    disabled={imageIndex === propertyImages.length - 1}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                >
-                                    <ChevronRight />
-                                </button>
+                            <div>
+                                {propertyImages.length > 0 && (
+                                    <Image
+                                        key={propertyID}
+                                        className={`h-[${popUpHeight}px] w-[${popUpWidth}px] object-cover`}
+                                        alt={`Image ${imageIndex + 1}`}
+                                        loader={popUpPhotosCustomLoader}
+                                        src={propertyImages[imageIndex].href}
+                                        width={popUpWidth}
+                                        height={popUpHeight}
+                                    />
+                                )}
                             </div>
+
 
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5'>
+                                {/* Prev image and next image buttons */}
+                                <div className='flex justify-between w-full px-2 mt-2'>
+                                    <button
+                                        onClick={showPreviousImage}
+                                        disabled={imageIndex === 0}
+                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                    >
+                                        <ChevronLeft />
+                                    </button>
+                                    <button
+                                        onClick={showNextImage}
+                                        disabled={imageIndex === propertyImages.length - 1}
+                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                    >
+                                        <ChevronRight />
+                                    </button>
+                                </div>
                                 {/* Photo count */}
-                                <div className='flex text-xs justify-between'>
+                                {/* <div className='flex text-xs justify-between'>
                                     <p>Photo count: {photoCount}</p>
                                     <p>Property ID: {propertyID}</p>
                                     <p>Listing ID: {listingID}</p>
                                     <p>Agent ID: {agent_identification}</p>
-                                </div>
+                                </div> */}
 
                                 <article className='text-sm'>
                                     {/* Details */}
@@ -11595,7 +11601,7 @@ const PropertyCard = ({
                                 text={`Similar homes nearby`}
                             />
                         </div>
-                        <div className='grid md:grid-cols-3 lg:grid-cols-5 gap-3 w-full mt-5'>
+                        <div className='grid md:grid-cols-3 lg:grid-cols-4 gap-3 w-full mt-5'>
                             {similarHomesArray.length > 1 &&
                                 (similarHomesArray.map((home, i) => (
                                     <div
@@ -11609,20 +11615,25 @@ const PropertyCard = ({
                                             width={300}
                                             height={300}
                                         />
-                                        <div className='p-2'>
+                                        <div className='flex flex-col gap-2 p-2'>
                                             <caption className='w-full font-medium'>
                                                 {`${home.location.address.line}`}
                                             </caption>
                                             <div className='flex justify-between gap-2'>
-                                                <p className=''>
+                                                <p className='font-semibold text-mint11'>
                                                     {usdFormatter.format(home['list_price'])}
                                                 </p>
                                                 <div className='flex gap-2'>
                                                     <p className=''>
                                                         {home.description.beds} beds
                                                     </p>
+                                                    <div className='h-full w-[1px] bg-mint11' />
                                                     <p className=''>
                                                         {home.description.baths} baths
+                                                    </p>
+                                                    <div className='h-full w-[1px] bg-mint11' />
+                                                    <p className=''>
+                                                        {(home.description.sqft).toLocaleString()} sqft.
                                                     </p>
                                                 </div>
                                             </div>

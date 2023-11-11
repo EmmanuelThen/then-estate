@@ -28070,6 +28070,8 @@ const SearchBar = () => {
                         key={i}
                         width={800}
                         height={300}
+                        popUpWidth={800}
+                        popUpHeight={500}
                         imageSrc={properties['primary_photo'] === null ? '/fallback-img.svg' : properties['primary_photo'].href}
                         // propertyImages={propertyImages}
                         beds={properties.description.beds === null ? '-- beds' : `${properties.description.beds} beds`}
