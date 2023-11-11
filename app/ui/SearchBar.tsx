@@ -27927,7 +27927,7 @@ const SearchBar = () => {
 
 
     return (
-        <div className='mt-7 w-full h-full'>
+        <div className='w-full h-full p-20'>
             <div className='flex flex-col items-center justify-center mt-10 px-10 md:px-20 lg:px-[250px] xl:px-[500px]'>
                 <div className='inline-block relative w-full'>
                     <svg style={{
