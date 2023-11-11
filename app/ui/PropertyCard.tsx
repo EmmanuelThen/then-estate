@@ -131,6 +131,8 @@ const PropertyCard = ({
     //For agent list
     const [agentList, setAgentList] = useState<any>([]);
     const [agentID, setAgentID] = useState<any>();
+    //For similar homes
+    const [similarHomesArray, setSimilarHomesArray] = useState<any>([])
 
     // Test for getPropertyImages api call
     let imagez: any = {
@@ -9805,6 +9807,515 @@ const PropertyCard = ({
         ]
     }
 
+    //Test for getSimilarHomes api call
+    const similarHomes: any = {
+        "data": {
+            "home": {
+                "__typename": "Home",
+                "related_homes": {
+                    "__typename": "SearchHomeResult",
+                    "results": [
+                        {
+                            "__typename": "SearchHome",
+                            "property_id": "6984693735",
+                            "listing_id": "2960959008",
+                            "plan_id": null,
+                            "status": "for_sale",
+                            "list_price": 599000,
+                            "last_sold_price": null,
+                            "last_sold_date": null,
+                            "primary_photo": {
+                                "__typename": "Photo",
+                                "href": "https://ap.rdcpix.com/139c3328cd10b6af176445e5489bc97el-m6264234xd-w300_h300_q80.jpg"
+                            },
+                            "location": {
+                                "__typename": "SearchHomeLocation",
+                                "address": {
+                                    "__typename": "SearchHomeAddress",
+                                    "unit": null,
+                                    "line": "9928 Colvard Cir",
+                                    "street_number": null,
+                                    "street_name": "",
+                                    "city": "Charlotte",
+                                    "state": "North Carolina",
+                                    "state_code": "NC",
+                                    "postal_code": "28269",
+                                    "street_suffix": null,
+                                    "country": null,
+                                    "coordinate": {
+                                        "__typename": "Coordinate",
+                                        "lat": 35.337781,
+                                        "lon": -80.77715
+                                    }
+                                },
+                                "street_view_url": "https://maps.googleapis.com/maps/api/streetview?channel=rdc-streetview&client=gme-movesalesinc&location=9928%20Colvard%20Cir%2C%20Charlotte%2C%20NC%2028269&size=640x480&source=outdoor&signature=sFgmYrfsoIDFZxOUSzBEuvLSkQ8="
+                            },
+                            "description": {
+                                "__typename": "SearchHomeDescription",
+                                "beds": 4,
+                                "baths_full_calc": 2,
+                                "baths_partial_calc": 1,
+                                "baths": 3,
+                                "sqft": 2859,
+                                "beds_min": null,
+                                "beds_max": null,
+                                "baths_min": null,
+                                "baths_max": null,
+                                "baths_full": 2,
+                                "baths_half": 1,
+                                "sqft_min": null,
+                                "sqft_max": null,
+                                "lot_sqft": null,
+                                "type": null,
+                                "sub_type": null,
+                                "year_built": null,
+                                "sold_price": null,
+                                "text": null
+                            },
+                            "comparable_data": {
+                                "__typename": "HomeComparableData",
+                                "price": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -4,
+                                    "absolute": -26000
+                                },
+                                "comparable_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -8,
+                                    "absolute": -248
+                                },
+                                "comparable_lot_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": null,
+                                    "absolute": null
+                                },
+                                "year_built": {
+                                    "__typename": "ComparableDataAbsoluteValue",
+                                    "absolute": null
+                                }
+                            },
+                            "list_price_min": null,
+                            "list_price_max": null,
+                            "href": "https://www.realtor.com/realestateandhomes-detail/9928-Colvard-Cir_Charlotte_NC_28269_M69846-93735",
+                            "permalink": "9928-Colvard-Cir_Charlotte_NC_28269_M69846-93735",
+                            "list_date": null,
+                            "last_update_date": "2023-11-03T02:12:22Z",
+                            "flags": {
+                                "__typename": "HomeFlags",
+                                "is_contingent": null,
+                                "is_pending": null,
+                                "is_price_reduced": null,
+                                "is_new_listing": null,
+                                "is_foreclosure": null
+                            },
+                            "photos": null,
+                            "estimate": {
+                                "__typename": "LatestEstimate",
+                                "estimate": 539900
+                            }
+                        },
+                        {
+                            "__typename": "SearchHome",
+                            "property_id": "5060783998",
+                            "listing_id": "2960892480",
+                            "plan_id": null,
+                            "status": "for_sale",
+                            "list_price": 525000,
+                            "last_sold_price": null,
+                            "last_sold_date": null,
+                            "primary_photo": {
+                                "__typename": "Photo",
+                                "href": "https://ap.rdcpix.com/0ec5b19363b3361bd1e8f44e9a819aeal-m185937939xd-w300_h300_q80.jpg"
+                            },
+                            "location": {
+                                "__typename": "SearchHomeLocation",
+                                "address": {
+                                    "__typename": "SearchHomeAddress",
+                                    "unit": null,
+                                    "line": "6128 Swanston Dr",
+                                    "street_number": null,
+                                    "street_name": "",
+                                    "city": "Charlotte",
+                                    "state": "North Carolina",
+                                    "state_code": "NC",
+                                    "postal_code": "28269",
+                                    "street_suffix": null,
+                                    "country": null,
+                                    "coordinate": {
+                                        "__typename": "Coordinate",
+                                        "lat": 35.375154,
+                                        "lon": -80.753638
+                                    }
+                                },
+                                "street_view_url": "https://maps.googleapis.com/maps/api/streetview?channel=rdc-streetview&client=gme-movesalesinc&location=6128%20Swanston%20Dr%2C%20Charlotte%2C%20NC%2028269&size=640x480&source=outdoor&signature=5_3K4v_Og_f-_fuCTjngr-ykSkg="
+                            },
+                            "description": {
+                                "__typename": "SearchHomeDescription",
+                                "beds": 5,
+                                "baths_full_calc": 2,
+                                "baths_partial_calc": 1,
+                                "baths": 3,
+                                "sqft": 2726,
+                                "beds_min": null,
+                                "beds_max": null,
+                                "baths_min": null,
+                                "baths_max": null,
+                                "baths_full": 2,
+                                "baths_half": 1,
+                                "sqft_min": null,
+                                "sqft_max": null,
+                                "lot_sqft": null,
+                                "type": null,
+                                "sub_type": null,
+                                "year_built": null,
+                                "sold_price": null,
+                                "text": null
+                            },
+                            "comparable_data": {
+                                "__typename": "HomeComparableData",
+                                "price": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -16,
+                                    "absolute": -100000
+                                },
+                                "comparable_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -12,
+                                    "absolute": -381
+                                },
+                                "comparable_lot_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": null,
+                                    "absolute": null
+                                },
+                                "year_built": {
+                                    "__typename": "ComparableDataAbsoluteValue",
+                                    "absolute": null
+                                }
+                            },
+                            "list_price_min": null,
+                            "list_price_max": null,
+                            "href": "https://www.realtor.com/realestateandhomes-detail/6128-Swanston-Dr_Charlotte_NC_28269_M50607-83998",
+                            "permalink": "6128-Swanston-Dr_Charlotte_NC_28269_M50607-83998",
+                            "list_date": null,
+                            "last_update_date": "2023-11-03T12:09:47Z",
+                            "flags": {
+                                "__typename": "HomeFlags",
+                                "is_contingent": null,
+                                "is_pending": null,
+                                "is_price_reduced": true,
+                                "is_new_listing": null,
+                                "is_foreclosure": null
+                            },
+                            "photos": null,
+                            "estimate": {
+                                "__typename": "LatestEstimate",
+                                "estimate": 479300
+                            }
+                        },
+                        {
+                            "__typename": "SearchHome",
+                            "property_id": "5384852303",
+                            "listing_id": "2959781004",
+                            "plan_id": null,
+                            "status": "for_sale",
+                            "list_price": 700000,
+                            "last_sold_price": null,
+                            "last_sold_date": null,
+                            "primary_photo": {
+                                "__typename": "Photo",
+                                "href": "https://ap.rdcpix.com/b04ca5e53356de95c323bc9594e955b6l-m770534258xd-w300_h300_q80.jpg"
+                            },
+                            "location": {
+                                "__typename": "SearchHomeLocation",
+                                "address": {
+                                    "__typename": "SearchHomeAddress",
+                                    "unit": null,
+                                    "line": "3500 French Woods Rd",
+                                    "street_number": null,
+                                    "street_name": "",
+                                    "city": "Charlotte",
+                                    "state": "North Carolina",
+                                    "state_code": "NC",
+                                    "postal_code": "28269",
+                                    "street_suffix": null,
+                                    "country": null,
+                                    "coordinate": {
+                                        "__typename": "Coordinate",
+                                        "lat": 35.338143,
+                                        "lon": -80.783937
+                                    }
+                                },
+                                "street_view_url": "https://maps.googleapis.com/maps/api/streetview?channel=rdc-streetview&client=gme-movesalesinc&location=3500%20French%20Woods%20Rd%2C%20Charlotte%2C%20NC%2028269&size=640x480&source=outdoor&signature=jo9EC7EaPtmKJUxa9xx4U_WRtek="
+                            },
+                            "description": {
+                                "__typename": "SearchHomeDescription",
+                                "beds": 4,
+                                "baths_full_calc": 2,
+                                "baths_partial_calc": 1,
+                                "baths": 3,
+                                "sqft": 3508,
+                                "beds_min": null,
+                                "beds_max": null,
+                                "baths_min": null,
+                                "baths_max": null,
+                                "baths_full": 2,
+                                "baths_half": 1,
+                                "sqft_min": null,
+                                "sqft_max": null,
+                                "lot_sqft": null,
+                                "type": null,
+                                "sub_type": null,
+                                "year_built": null,
+                                "sold_price": null,
+                                "text": null
+                            },
+                            "comparable_data": {
+                                "__typename": "HomeComparableData",
+                                "price": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": 12,
+                                    "absolute": 75000
+                                },
+                                "comparable_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": 13,
+                                    "absolute": 401
+                                },
+                                "comparable_lot_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": null,
+                                    "absolute": null
+                                },
+                                "year_built": {
+                                    "__typename": "ComparableDataAbsoluteValue",
+                                    "absolute": null
+                                }
+                            },
+                            "list_price_min": null,
+                            "list_price_max": null,
+                            "href": "https://www.realtor.com/realestateandhomes-detail/3500-French-Woods-Rd_Charlotte_NC_28269_M53848-52303",
+                            "permalink": "3500-French-Woods-Rd_Charlotte_NC_28269_M53848-52303",
+                            "list_date": null,
+                            "last_update_date": "2023-11-09T10:28:06Z",
+                            "flags": {
+                                "__typename": "HomeFlags",
+                                "is_contingent": null,
+                                "is_pending": null,
+                                "is_price_reduced": null,
+                                "is_new_listing": null,
+                                "is_foreclosure": null
+                            },
+                            "photos": null,
+                            "estimate": {
+                                "__typename": "LatestEstimate",
+                                "estimate": 604000
+                            }
+                        },
+                        {
+                            "__typename": "SearchHome",
+                            "property_id": "5124173183",
+                            "listing_id": "2960303084",
+                            "plan_id": null,
+                            "status": "for_sale",
+                            "list_price": 559000,
+                            "last_sold_price": null,
+                            "last_sold_date": null,
+                            "primary_photo": {
+                                "__typename": "Photo",
+                                "href": "https://ap.rdcpix.com/614c9b16a4e0d6159a36d760e92159b6l-m73794620xd-w300_h300_q80.jpg"
+                            },
+                            "location": {
+                                "__typename": "SearchHomeLocation",
+                                "address": {
+                                    "__typename": "SearchHomeAddress",
+                                    "unit": null,
+                                    "line": "10195 Claybrooke Dr",
+                                    "street_number": null,
+                                    "street_name": "",
+                                    "city": "Charlotte",
+                                    "state": "North Carolina",
+                                    "state_code": "NC",
+                                    "postal_code": "28262",
+                                    "street_suffix": null,
+                                    "country": null,
+                                    "coordinate": {
+                                        "__typename": "Coordinate",
+                                        "lat": 35.339219,
+                                        "lon": -80.749732
+                                    }
+                                },
+                                "street_view_url": "https://maps.googleapis.com/maps/api/streetview?channel=rdc-streetview&client=gme-movesalesinc&location=10195%20Claybrooke%20Dr%2C%20Charlotte%2C%20NC%2028262&size=640x480&source=outdoor&signature=oOK26dgOT4QgYX4iaOnKuCNlQyc="
+                            },
+                            "description": {
+                                "__typename": "SearchHomeDescription",
+                                "beds": 5,
+                                "baths_full_calc": 3,
+                                "baths_partial_calc": 1,
+                                "baths": 4,
+                                "sqft": 2961,
+                                "beds_min": null,
+                                "beds_max": null,
+                                "baths_min": null,
+                                "baths_max": null,
+                                "baths_full": 3,
+                                "baths_half": 1,
+                                "sqft_min": null,
+                                "sqft_max": null,
+                                "lot_sqft": null,
+                                "type": null,
+                                "sub_type": null,
+                                "year_built": null,
+                                "sold_price": null,
+                                "text": null
+                            },
+                            "comparable_data": {
+                                "__typename": "HomeComparableData",
+                                "price": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -11,
+                                    "absolute": -66000
+                                },
+                                "comparable_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": -5,
+                                    "absolute": -146
+                                },
+                                "comparable_lot_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": null,
+                                    "absolute": null
+                                },
+                                "year_built": {
+                                    "__typename": "ComparableDataAbsoluteValue",
+                                    "absolute": null
+                                }
+                            },
+                            "list_price_min": null,
+                            "list_price_max": null,
+                            "href": "https://www.realtor.com/realestateandhomes-detail/10195-Claybrooke-Dr_Charlotte_NC_28262_M51241-73183",
+                            "permalink": "10195-Claybrooke-Dr_Charlotte_NC_28262_M51241-73183",
+                            "list_date": null,
+                            "last_update_date": "2023-10-24T16:54:09Z",
+                            "flags": {
+                                "__typename": "HomeFlags",
+                                "is_contingent": null,
+                                "is_pending": null,
+                                "is_price_reduced": true,
+                                "is_new_listing": null,
+                                "is_foreclosure": null
+                            },
+                            "photos": null,
+                            "estimate": {
+                                "__typename": "LatestEstimate",
+                                "estimate": 500000
+                            }
+                        },
+                        {
+                            "__typename": "SearchHome",
+                            "property_id": "5977291369",
+                            "listing_id": "2960749419",
+                            "plan_id": null,
+                            "status": "for_sale",
+                            "list_price": 685000,
+                            "last_sold_price": null,
+                            "last_sold_date": null,
+                            "primary_photo": {
+                                "__typename": "Photo",
+                                "href": "https://ap.rdcpix.com/ff2926b9ba880c21ba27b41be40d2c7dl-m3164244181xd-w300_h300_q80.jpg"
+                            },
+                            "location": {
+                                "__typename": "SearchHomeLocation",
+                                "address": {
+                                    "__typename": "SearchHomeAddress",
+                                    "unit": null,
+                                    "line": "15054 Northgreen Dr",
+                                    "street_number": null,
+                                    "street_name": "",
+                                    "city": "Huntersville",
+                                    "state": "North Carolina",
+                                    "state_code": "NC",
+                                    "postal_code": "28078",
+                                    "street_suffix": null,
+                                    "country": null,
+                                    "coordinate": {
+                                        "__typename": "Coordinate",
+                                        "lat": 35.410755,
+                                        "lon": -80.759639
+                                    }
+                                },
+                                "street_view_url": "https://maps.googleapis.com/maps/api/streetview?channel=rdc-streetview&client=gme-movesalesinc&location=15054%20Northgreen%20Dr%2C%20Huntersville%2C%20NC%2028078&size=640x480&source=outdoor&signature=nxKqVwXgCoWhUQ8pKUpA6mk2rGY="
+                            },
+                            "description": {
+                                "__typename": "SearchHomeDescription",
+                                "beds": 4,
+                                "baths_full_calc": 2,
+                                "baths_partial_calc": 1,
+                                "baths": 3,
+                                "sqft": 3540,
+                                "beds_min": null,
+                                "beds_max": null,
+                                "baths_min": null,
+                                "baths_max": null,
+                                "baths_full": 2,
+                                "baths_half": 1,
+                                "sqft_min": null,
+                                "sqft_max": null,
+                                "lot_sqft": null,
+                                "type": null,
+                                "sub_type": null,
+                                "year_built": null,
+                                "sold_price": null,
+                                "text": null
+                            },
+                            "comparable_data": {
+                                "__typename": "HomeComparableData",
+                                "price": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": 10,
+                                    "absolute": 60000
+                                },
+                                "comparable_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": 14,
+                                    "absolute": 433
+                                },
+                                "comparable_lot_sqft": {
+                                    "__typename": "ComparableDataValue",
+                                    "percent": null,
+                                    "absolute": null
+                                },
+                                "year_built": {
+                                    "__typename": "ComparableDataAbsoluteValue",
+                                    "absolute": null
+                                }
+                            },
+                            "list_price_min": null,
+                            "list_price_max": null,
+                            "href": "https://www.realtor.com/realestateandhomes-detail/15054-Northgreen-Dr_Huntersville_NC_28078_M59772-91369",
+                            "permalink": "15054-Northgreen-Dr_Huntersville_NC_28078_M59772-91369",
+                            "list_date": null,
+                            "last_update_date": "2023-11-08T20:37:17Z",
+                            "flags": {
+                                "__typename": "HomeFlags",
+                                "is_contingent": null,
+                                "is_pending": null,
+                                "is_price_reduced": true,
+                                "is_new_listing": null,
+                                "is_foreclosure": null
+                            },
+                            "photos": null,
+                            "estimate": {
+                                "__typename": "LatestEstimate",
+                                "estimate": 689000
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
     const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
 
     useEffect(() => {
@@ -9888,6 +10399,30 @@ const PropertyCard = ({
             }
         }
         getAgentList();
+    }, [])
+
+    // getSimilarHomes api call
+    useEffect(() => {
+        const getSimilarHomes = async () => {
+            const url = `https://realty-in-us.p.rapidapi.com/properties/v3/list-similar-homes?property_id=${propertyID}&limit=3&status=for_sale`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'bfe3b112a2mshd066685ec635a3dp135ceejsnaecff3296ecb',
+                    'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+                }
+            };
+
+            try {
+                // const response = await fetch(url, options);
+                // const result = await response.text();
+                // console.log(result);
+                setSimilarHomesArray(similarHomes.data.home['related_homes'].results)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getSimilarHomes();
     }, [])
 
     // need to fix button logic, everything else is working to show all property images
@@ -10345,16 +10880,6 @@ const PropertyCard = ({
                     </Dialog.Trigger>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
@@ -10405,7 +10930,7 @@ const PropertyCard = ({
                                     <ChevronRight />
                                 </button>
                             </div>
-                            
+
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5'>
                                 {/* Photo count */}
@@ -10520,6 +11045,13 @@ const PropertyCard = ({
                                             </div>
                                         )}
                                     </div>
+                                    {/* Investmeny analysis section */}
+                                    <div>
+                                        <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
+                                            {`Investalyze ${streetAddress}`}
+                                        </button>
+                                    </div>
+
                                     {/* All agent info section */}
                                     {/* <div>
                                         {agentList.map((agent, i) => (
@@ -10528,10 +11060,7 @@ const PropertyCard = ({
                                             </div>
                                         ))}
                                     </div> */}
-
-
                                 </article>
-                                
                             </div>
                         </div>
 
@@ -10647,13 +11176,18 @@ const PropertyCard = ({
                                     </div>
                                 </div>
                                 {/* Seller info */}
-                                <div className='flex flex-col gap-2 text-sm'>
+                                <div className='mb-2'>
+                                    <Seperator
+                                        text={`Seller information`}
+                                    />
+                                </div>
+                                <div className='flex flex-col gap-2 text-sm rounded bg-blackA2 p-2'>
                                     <p className='flex gap-1 capitalize'>
-                                        <span className='font-medium'>{advertiserType}:</span> 
+                                        <span className='font-medium'>{advertiserType}:</span>
                                         <span className='font-light'>{agent === null ? 'No data available' : agent}</span>
                                     </p>
                                     <p className='flex gap-1'>
-                                        <span className='font-medium'>Email:</span> 
+                                        <span className='font-medium'>Email:</span>
                                         <span className='font-light'>{agentEmail}</span>
                                     </p>
                                     <form onSubmit={handleContactAgent} >
@@ -10711,7 +11245,7 @@ const PropertyCard = ({
                                                 <div className='flex flex-col gap-2 text-sm'>
                                                     <Seperator text={'Mortgage details'} />
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
+                                                        <span className='font-medium text-mint11'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
                                                         <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
@@ -10727,7 +11261,7 @@ const PropertyCard = ({
                                                         <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Down payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
+                                                        <span className='font-medium'>Down payment (25%):</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
                                                     </p>
                                                     {/* Rates for estimate  */}
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
@@ -11052,6 +11586,49 @@ const PropertyCard = ({
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    {/* Similar homes section */}
+                    <div>
+                        <div className='mb-2'>
+                            <Seperator
+                                text={`Similar homes nearby`}
+                            />
+                        </div>
+                        <div className='grid md:grid-cols-3 lg:grid-cols-5 gap-3 w-full mt-5'>
+                            {similarHomesArray.length > 1 &&
+                                (similarHomesArray.map((home, i) => (
+                                    <div
+                                        className='text-[12px] rounded shadow-blackA9 shadow-[0px_4px_7px] hover:cursor-pointer hover:opacity-80'
+                                        key={i}
+                                    >
+                                        <Image
+                                            className='w-full h-[150px] rounded-tl rounded-tr object-cover'
+                                            src={home['primary_photo'].href}
+                                            alt={''}
+                                            width={300}
+                                            height={300}
+                                        />
+                                        <div className='p-2'>
+                                            <caption className='w-full font-medium'>
+                                                {`${home.location.address.line}`}
+                                            </caption>
+                                            <div className='flex justify-between gap-2'>
+                                                <p className=''>
+                                                    {usdFormatter.format(home['list_price'])}
+                                                </p>
+                                                <div className='flex gap-2'>
+                                                    <p className=''>
+                                                        {home.description.beds} beds
+                                                    </p>
+                                                    <p className=''>
+                                                        {home.description.baths} baths
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )))}
                         </div>
                     </div>
                 </Dialog.Content>

@@ -27927,8 +27927,8 @@ const SearchBar = () => {
 
 
     return (
-        <div className='w-full h-full p-20'>
-            <div className='flex flex-col items-center justify-center mt-10 px-10 md:px-20 lg:px-[250px] xl:px-[500px]'>
+        <div className='w-full h-full'>
+            <div className='flex flex-col items-center justify-center px-10 md:px-20 lg:px-[250px] xl:px-[500px] p-20'>
                 <div className='inline-block relative w-full'>
                     <svg style={{
                         position: 'absolute',
