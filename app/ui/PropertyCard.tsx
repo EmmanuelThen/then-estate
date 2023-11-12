@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
+import { usePortfolioContext } from '../context/PortfolioContext';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Separator from '@radix-ui/react-separator';
 import * as Tabs from '@radix-ui/react-tabs'
@@ -85,6 +86,8 @@ type Props = {
     agent_identification: any
     popUpWidth: any
     popUpHeight: any
+    state: any
+    stateCode: any
 }
 
 const PropertyCard = ({
@@ -94,6 +97,8 @@ const PropertyCard = ({
     squareFeet,
     streetAddress,
     cityStateZip,
+    state,
+    stateCode,
     price,
     key,
     width,
@@ -121,7 +126,7 @@ const PropertyCard = ({
     popUpWidth,
     popUpHeight
 }: Props) => {
-
+    const [loading, setLoading] = useState<any>(false);
     const [imageIndex, setImageIndex] = useState<any>(0);
     // const [imageList, setImageList] = useState<any>([]);
     const [propertyImages, setPropertyImages] = useState<any>([])
@@ -134,6 +139,9 @@ const PropertyCard = ({
     const [agentID, setAgentID] = useState<any>();
     //For similar homes
     const [similarHomesArray, setSimilarHomesArray] = useState<any>([])
+    //PortfolioContext
+    const { addToPortfolio, addToWatchlist, addToTotalValue } = usePortfolioContext();
+
 
     // Test for getPropertyImages api call
     let imagez: any = {
@@ -10428,17 +10436,21 @@ const PropertyCard = ({
 
     // need to fix button logic, everything else is working to show all property images
     const showPreviousImage = () => {
+        setLoading(true)
         setImageIndex((prevIndex: any) => {
             const newIndex = prevIndex - 1;
             return newIndex >= 0 ? newIndex : prevIndex;
         });
+        setLoading(false)
     };
 
     const showNextImage = () => {
+        setLoading(true)
         setImageIndex((prevIndex: any) => {
             const newIndex = prevIndex + 1;
             return newIndex < propertyImages.length ? newIndex : prevIndex;
         });
+        setLoading(false)
     };
 
     // For high quality images, jpg were giving low quality
@@ -10758,6 +10770,8 @@ const PropertyCard = ({
         },
     };
 
+
+
     return (
         <Dialog.Root >
             <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]'>
@@ -10857,7 +10871,7 @@ const PropertyCard = ({
 
                 </div>
                 {/* Add to portfolio button and more info button */}
-                <div className='{border border-red-500} flex items-center justify-between w-full mb-4 px-4'>
+                <div className='flex items-center justify-between w-full mb-4 px-4'>
                     <div className='flex gap-5 w-[70%]'>
                         <Tooltips
                             button={
@@ -10887,17 +10901,18 @@ const PropertyCard = ({
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] md:w-[95vw] md:max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] lg:w-[95vw] lg:max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
                             className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex  appearance-none items-center justify-center rounded-full focus:outline-none bg-mint11 p-1 z-[9999]"
                             aria-label="Close"
+                            onClick={() => setImageIndex(0)}
                         >
                             <Xmark />
                         </button>
                     </Dialog.Close>
                     {/* Full container */}
-                    <div className='md:flex w-full'>
+                    <div className='md:flex w-full h-full'>
                         {/* Property image */}
                         <div className='relative md:w-[50%]'>
                             <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
@@ -10905,17 +10920,22 @@ const PropertyCard = ({
                                 <p className='text-xs font-semibold text-white'>New listing</p>
                             </div>
                             {/* All property images */}
-                            <div>
+                            <div className={`h-[${popUpHeight}px] w-[${popUpWidth}px]`}>
                                 {propertyImages.length > 0 && (
-                                    <Image
-                                        key={propertyID}
-                                        className={`h-[${popUpHeight}px] w-[${popUpWidth}px] object-cover`}
-                                        alt={`Image ${imageIndex + 1}`}
-                                        loader={popUpPhotosCustomLoader}
-                                        src={propertyImages[imageIndex].href}
-                                        width={popUpWidth}
-                                        height={popUpHeight}
-                                    />
+                                    <>
+                                        <Image
+                                            key={propertyID}
+                                            className={`${loading ? `opacity-70` : ``} h-[${popUpHeight}px] w-[${popUpWidth}px] object-cover`}
+                                            alt={`Image ${imageIndex + 1}`}
+                                            loader={popUpPhotosCustomLoader}
+                                            src={propertyImages[imageIndex].href}
+                                            width={popUpWidth}
+                                            height={popUpHeight}
+                                        />
+                                        <caption className='flex justify-center text-sm text-slate10'>
+                                            {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
+                                        </caption>
+                                    </>
                                 )}
                             </div>
 
@@ -10931,6 +10951,7 @@ const PropertyCard = ({
                                     >
                                         <ChevronLeft />
                                     </button>
+
                                     <button
                                         onClick={showNextImage}
                                         disabled={imageIndex === propertyImages.length - 1}
@@ -11069,8 +11090,8 @@ const PropertyCard = ({
                                 </article>
                             </div>
                         </div>
-
-                        <div className='md:ml-5 md:w-[50%]'>
+                        {/* Right side of pop up */}
+                        <div className='md:ml-5 md:w-[50%] h-full'>
                             <div className="flex flex-col gap-2.5 w-full">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
@@ -11169,6 +11190,7 @@ const PropertyCard = ({
                                         </div>
                                     )}
                                 </div>
+
                                 {/* Open house dates */}
                                 <div className={openHouse === null ? 'hidden' : 'block'}>
                                     <div className='flex gap-1 text-xs'>
@@ -11180,6 +11202,31 @@ const PropertyCard = ({
                                                 </p>
                                             ))}
                                     </div>
+                                </div>
+                                {/* Add to portfolio & watchlist buttons */}
+                                <div className='flex gap-5 mt-2 z-[99999999]'>
+                                    <Tooltips
+                                        button={
+                                            <button onClick={() => addToPortfolio({
+                                                    property_id: propertyID,
+                                                    state: state,
+                                                    state_code: stateCode,
+                                                    listing_price: price
+                                                })
+                                            }>
+                                                <Watchlist />
+                                            </button>
+                                        }
+                                        tooltipContent={`Add to watchlist`}
+                                    />
+                                    <Tooltips
+                                        button={
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                                            </svg>
+                                        }
+                                        tooltipContent={`Add to portfolio`}
+                                    />
                                 </div>
                                 {/* Seller info */}
                                 <div className='mb-2'>
@@ -11212,7 +11259,7 @@ const PropertyCard = ({
                                 <div className=''>
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
+                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] h-full"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
@@ -11245,7 +11292,7 @@ const PropertyCard = ({
                                             </Tabs.List>
                                             {/* Mortgage Content */}
                                             <Tabs.Content
-                                                className=" transition duration-150 ease-in-out max-h-[400px]  overflow-y-scroll p-2"
+                                                className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[490px]"
                                                 value="tab1"
                                             >
                                                 <div className='flex flex-col gap-2 text-sm'>
@@ -11332,7 +11379,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[400px]"
+                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[490px]"
                                                 value="tab2"
                                             >
                                                 {/* Descriptions */}
@@ -11481,7 +11528,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[400px]"
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[490px]"
                                                 value="tab3"
                                             >
                                                 {/* History and Future prices */}
@@ -11515,13 +11562,13 @@ const PropertyCard = ({
                                                         </Tabs.List>
                                                     </div>
                                                     <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[400px]"
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[490px]"
                                                         value="tabHistory"
                                                     >
                                                         {
                                                             propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                             (<Line
-                                                                className='h-[400px] w-full'
+                                                                className='h-full w-full'
                                                                 data={lineChartData}
                                                                 options={lineChartOptions}
                                                             />
@@ -11529,13 +11576,13 @@ const PropertyCard = ({
                                                         }
                                                     </Tabs.Content>
                                                     <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll rounded-b-md outline-none "
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[490px]"
                                                         value="tabForecast"
                                                     >
                                                         {
                                                             propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                             (<Line
-                                                                className='h-[400px] w-full'
+                                                                className='h-full w-full'
                                                                 data={lineChartData}
                                                                 options={lineChartOptions}
                                                             />
@@ -11545,7 +11592,7 @@ const PropertyCard = ({
                                                 </Tabs.Root>
                                             </Tabs.Content>
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-fit overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[490px] overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
                                                 <div className='flex items-center justify-between w-full px-2 mb-5 mt-5'>
@@ -11598,7 +11645,7 @@ const PropertyCard = ({
                     <div>
                         <div className='mb-2'>
                             <Seperator
-                                text={`Similar homes nearby`}
+                                text={`Similar homes for sale`}
                             />
                         </div>
                         <div className='grid md:grid-cols-3 lg:grid-cols-4 gap-3 w-full mt-5'>

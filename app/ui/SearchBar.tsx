@@ -28079,6 +28079,8 @@ const SearchBar = () => {
                         squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft.toLocaleString()} sqft.`}
                         streetAddress={properties.location.address.line}
                         cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
+                        state={properties.location.address.state}
+                        stateCode={properties.location.address['state_code']}
                         price={usdFormatter.format(properties['list_price'])}
                         status={
                             (() => {

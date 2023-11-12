@@ -3,6 +3,8 @@ import TrendingUpArrow from './svg/TrendingUpArrow'
 import * as Accordion from '@radix-ui/react-accordion';
 import AccordionDemo from '../ui/AccordionDemo';
 import Watchlist from './svg/Watchlist';
+import { usePortfolioContext } from '../context/PortfolioContext';
+
 
 type Props = {}
 
@@ -61,6 +63,8 @@ const states = [
 
 const Portfolio = (props: Props) => {
     const [propertyHoldingsArray, setPropertyHoldingsArray] = useState([]);
+    const { addToPortfolio, addToWatchlist, addToTotalValue, totalValue, portfolioHoldings, watchlist } = usePortfolioContext();
+
 
     // Test for getpropertyDetails api call
     let propertyDetailz: any = {
@@ -2986,14 +2990,14 @@ const Portfolio = (props: Props) => {
     return (
         <div className='flex justify-between w-full'>
             {/* Heading */}
-            <div className='flex flex-col gap-2 w-full'>
-                <h1 className='flex justify-start font-medium mt-5 tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
+            <div className='flex flex-col gap-2 w-full mt-20'>
+                <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
                     Holdings
                 </h1>
                 {/* Dollar amount of holdings */}
                 <div className='flex flex-col'>
                     <h2 className='text-[45px]'>
-                        $275,474.39
+                        {totalValue}
                     </h2>
                     {/* Percentage change and dollar amount change */}
                     <div className='flex items-center gap-2'>
@@ -3012,13 +3016,19 @@ const Portfolio = (props: Props) => {
                     </div>
                     <div className='flex gap-5 w-full'>
                         <div className='w-[70%]'>
-                            {states.map((states, i) => (
-                                <AccordionDemo
-                                    key={i}
-                                    accordionTrigger={`${states.name}, ${states.abbreviation}`}
-                                    accordionContent={propertyHoldingsArray}
-                                />
-                            ))}
+                            {portfolioHoldings.length > 0 ? (
+                                portfolioHoldings.map((holding, i) => (
+                                    <AccordionDemo
+                                        key={i}
+                                        accordionTrigger={`${holding.state}, ${holding['state_code']}`}
+                                        accordionContent={holding['listing_price']}
+                                    />
+                                ))
+                            ) : (
+                                <div>
+                                    no holdings
+                                </div>
+                            )}
                         </div>
                         {/* Watchlist */}
                         <aside className='border-l-[0.8px] border-slate6 w-[30%]'>
