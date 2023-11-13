@@ -142,6 +142,19 @@ const PropertyCard = ({
     //PortfolioContext
     const { addToPortfolio, addToWatchlist, addToTotalValue } = usePortfolioContext();
 
+    const handleAddToPortfolio = () => {
+        addToPortfolio({
+            property_id: propertyID,
+            address: streetAddress,
+            state: state,
+            state_code: stateCode,
+            listing_price: price
+        });
+
+        addToTotalValue((price))
+
+    }
+
 
     // Test for getPropertyImages api call
     let imagez: any = {
@@ -11207,13 +11220,7 @@ const PropertyCard = ({
                                 <div className='flex gap-5 mt-2 z-[99999999]'>
                                     <Tooltips
                                         button={
-                                            <button onClick={() => addToPortfolio({
-                                                    property_id: propertyID,
-                                                    state: state,
-                                                    state_code: stateCode,
-                                                    listing_price: price
-                                                })
-                                            }>
+                                            <button onClick={handleAddToPortfolio}>
                                                 <Watchlist />
                                             </button>
                                         }

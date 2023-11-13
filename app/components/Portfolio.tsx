@@ -2997,7 +2997,19 @@ const Portfolio = (props: Props) => {
                 {/* Dollar amount of holdings */}
                 <div className='flex flex-col'>
                     <h2 className='text-[45px]'>
-                        {totalValue}
+                        {totalValue.length > 0 ?
+                            (
+                                <span>
+                                    {totalValue.reduce((acc, value) => acc + value)}
+                                </span>
+                            )
+                            :
+                            (
+                                <div>
+                                    no value
+                                </div>
+                            )
+                        }
                     </h2>
                     {/* Percentage change and dollar amount change */}
                     <div className='flex items-center gap-2'>
@@ -3013,6 +3025,13 @@ const Portfolio = (props: Props) => {
                         <p className='text-xs'>
                             Today
                         </p>
+                        {/* to clear localstorage if needed */}
+                        <button
+                            className='bg-red-500 text-white rounded p-2'
+                            onClick={() => localStorage.clear()}
+                        >
+                            Clear local storage
+                        </button>
                     </div>
                     <div className='flex gap-5 w-full'>
                         <div className='w-[70%]'>
@@ -3021,7 +3040,7 @@ const Portfolio = (props: Props) => {
                                     <AccordionDemo
                                         key={i}
                                         accordionTrigger={`${holding.state}, ${holding['state_code']}`}
-                                        accordionContent={holding['listing_price']}
+                                        accordionContent={holding.address}
                                     />
                                 ))
                             ) : (

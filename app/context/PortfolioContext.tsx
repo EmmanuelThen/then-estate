@@ -1,8 +1,6 @@
 'use client'
-import React, { createContext, useContext, useState } from 'react';
-import AccordionDemo from '../ui/AccordionDemo';
-import Tooltips from '../ui/Tooltips';
-import Watchlist from '../components/svg/Watchlist';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
 
 interface PortfolioContextProps {
     portfolioHoldings: PropertyInfo;
@@ -15,20 +13,37 @@ interface PortfolioContextProps {
 
 interface PropertyInfo {
     property_id: string;
+    address: string;
     state: string;
     state_code: string;
     listing_price: number;
-  }
+}
 
 const PortfolioContext = createContext<PortfolioContextProps | undefined>(undefined);
 
 const PortfolioProvider = ({ children }: any) => {
-    const [portfolioHoldings, setPortfolioHoldings] = useState<PropertyInfo[]>([]);
-    const [watchlist, setWatchlist] = useState<string[]>([]);
-    const [totalValue, setTotalValue] = useState<number[]>([]);
+    // Checks local storage to see if anything is there and gets it, if not returns an empty array since nothing is there
+    const [portfolioHoldings, setPortfolioHoldings] = useState<PropertyInfo[]>(() => {
+        const portfolioHoldings = localStorage.getItem('portfolioHoldings');
+        return portfolioHoldings ? JSON.parse(portfolioHoldings) : [];
+    });
+    const [watchlist, setWatchlist] = useState<string[]>(() => {
+        const watchlist = localStorage.getItem('watchlist');
+        return watchlist ? JSON.parse(watchlist) : [];
+    });
+    const [totalValue, setTotalValue] = useState<number[]>(() => {
+        const storedValue = localStorage.getItem('totalValue');
+        return storedValue ? JSON.parse(storedValue) : [];
+    });
+
+    // To save to local storage whenever any of the portfolio values change changes
+    useEffect(() => {
+        localStorage.setItem('portfolioHoldings', JSON.stringify(portfolioHoldings))
+        localStorage.setItem('watchlist', JSON.stringify(watchlist))
+        localStorage.setItem('totalValue', JSON.stringify(totalValue));
+    }, [portfolioHoldings, watchlist, totalValue]);
 
     // Portfolio context
-    // The function takes a PropertyInfo object as an argument, and when called, it adds that object to the array.
     const addToPortfolio = (propertyInfo: PropertyInfo) => {
         setPortfolioHoldings([...portfolioHoldings, propertyInfo]);
     };
