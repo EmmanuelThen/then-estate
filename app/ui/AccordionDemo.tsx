@@ -19,7 +19,9 @@ const AccordionDemo = ({ accordionTrigger, accordionContent }: any) => (
         {/* <TickerBadge /> */}
       </AccordionTrigger>
       <AccordionContent>
-        <div>{accordionContent}</div>
+        <div className=''>
+          {accordionContent}
+        </div>
       </AccordionContent>
     </AccordionItem>
   </Accordion.Root>

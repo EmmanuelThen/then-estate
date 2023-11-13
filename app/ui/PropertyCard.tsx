@@ -148,7 +148,11 @@ const PropertyCard = ({
             address: streetAddress,
             state: state,
             state_code: stateCode,
-            listing_price: price
+            listing_price: price,
+            image: imageSrc,
+            beds: beds,
+            baths: baths,
+            sqft: squareFeet,
         });
 
         addToTotalValue((price))

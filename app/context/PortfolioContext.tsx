@@ -17,6 +17,10 @@ interface PropertyInfo {
     state: string;
     state_code: string;
     listing_price: number;
+    image: string;
+    beds: string;
+    baths: string;
+    sqft: number;
 }
 
 const PortfolioContext = createContext<PortfolioContextProps | undefined>(undefined);
