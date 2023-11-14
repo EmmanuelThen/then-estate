@@ -21,6 +21,8 @@ interface PropertyInfo {
     beds: string;
     baths: string;
     sqft: number;
+    price_reduction: number;
+    last_sold_price: number;
 }
 
 const PortfolioContext = createContext<PortfolioContextProps | undefined>(undefined);

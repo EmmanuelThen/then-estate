@@ -81,7 +81,7 @@ type Props = {
     fullBaths: number
     halfBaths: number
     lastSoldDate: any
-    lastSoldPrice: string
+    lastSoldPrice: any
     openHouse: any
     foreclosure: any
     listingID: any
@@ -156,6 +156,8 @@ const PropertyCard = ({
             beds: beds,
             baths: baths,
             sqft: squareFeet,
+            price_reduction: priceReduction,
+            last_sold_price: lastSoldPrice,
         });
 
         addToTotalValue((price));

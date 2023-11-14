@@ -8,7 +8,7 @@ const Navbar = (props: Props) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <nav className="flex item-center max-h-[35px] fixed w-full backdrop-blur-2xl shrink-0 border-b-[0.5px] z-[999] justify-between" aria-label="Nav bar">
+        <nav className="flex item-center max-h-[45px] fixed w-full backdrop-blur-2xl shrink-0 border-b-[0.5px] z-[999] justify-between" aria-label="Nav bar">
             {/* Logo div */}
             <svg width="35" height="35" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink">
                 <rect width="500" height="500" fill="url(#pattern0)" />
@@ -20,7 +20,7 @@ const Navbar = (props: Props) => {
                 </defs>
             </svg>
             <Link
-                className="hidden hover:cursor-pointer px-5 h-[35px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                className="hidden hover:cursor-pointer px-5 h-[45px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                 href='/'
             // value="tab1"
             >
@@ -30,7 +30,7 @@ const Navbar = (props: Props) => {
 
             </Link>
             <Link
-                className="hidden hover:cursor-pointer px-5 h-[35px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                className="hidden hover:cursor-pointer px-5 h-[45px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                 href='/search'
             // value="tab2"
             >
@@ -40,7 +40,7 @@ const Navbar = (props: Props) => {
 
             </Link>
             <Link
-                className="hidden hover:cursor-pointer px-5 h-[35px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                className="hidden hover:cursor-pointer px-5 h-[45px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                 href='/portfolio'
             // value="tab3"
             >
@@ -54,7 +54,7 @@ const Navbar = (props: Props) => {
                 </span>
             </Link>
             <Link
-                className="hidden hover:cursor-pointer px-5 h-[35px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                className="hidden hover:cursor-pointer px-5 h-[45px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                 href='/tools'
             // value="tab4"
             >
@@ -68,7 +68,7 @@ const Navbar = (props: Props) => {
                 </span>
             </Link>
             {/* Log in/Sign up */}
-            <div className='hidden md:flex items-center gap-2 h-[35px] mr-2'>
+            <div className='hidden md:flex items-center gap-2 h-[45px] mr-2'>
                 <Link
                     className='rounded border border-mint11 bg-mint11 z-50 inline-flex items-center justify-center leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out text-white text-sm py-1 px-2'
                     href='/'
@@ -82,9 +82,9 @@ const Navbar = (props: Props) => {
                     Log in
                 </Link>
             </div>
-            <h1 className='flex items-center font-semibold text-mint11'>ThenEstate</h1>
+            <h1 className='flex items-center font-semibold text-mint11 md:hidden'>ThenEstate</h1>
             <button
-                className='flex items-center md:hidden px-2'
+                className='flex items-center md:hidden px-2 transition duration-150 ease-in-out'
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
                 {isMobileMenuOpen ? (
@@ -104,7 +104,7 @@ const Navbar = (props: Props) => {
                     <ul id='dark-mode' className='scale-in-tr absolute flex flex-col gap-20 p-2 top-8 right-0 transition-all duration-75 ease-in-out  w-screen h-screen' >
                         <li className='mt-10'>
                             <Link
-                                className='flex items-center gap-3'
+                                className='flex items-center gap-3 transition duration-150 ease-in-out hover:opacity-80'
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 href='/'
                             >
@@ -116,7 +116,7 @@ const Navbar = (props: Props) => {
                         </li>
                         <li>
                             <Link
-                                className='flex items-center gap-3'
+                                className='flex items-center gap-3 transition duration-150 ease-in-out hover:opacity-80'
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 href='/search'
                             >
@@ -128,7 +128,7 @@ const Navbar = (props: Props) => {
                         </li>
                         <li>
                             <Link
-                                className='flex items-center gap-3'
+                                className='flex items-center gap-3 transition duration-150 ease-in-out hover:opacity-80'
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 href='/portfolio'
                             >
@@ -140,9 +140,9 @@ const Navbar = (props: Props) => {
                         </li>
                         <li>
                             <Link
-                                className='flex items-center gap-3'
+                                className='flex items-center gap-3 transition duration-150 ease-in-out hover:opacity-80'
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                href='tools'
+                                href='/tools'
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-8 h-8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
@@ -152,8 +152,8 @@ const Navbar = (props: Props) => {
                         </li>
                         <li>
                             <Link
-                                className='flex items-center gap-3'
-                                href='tools'
+                                className='flex items-center gap-3 transition duration-150 ease-in-out hover:opacity-80'
+                                href='/auth'
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-8 h-8 text-red9">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TrendingUpArrow from './svg/TrendingUpArrow'
 import * as Accordion from '@radix-ui/react-accordion';
 import AccordionDemo from '../ui/AccordionDemo';
@@ -10,11 +10,17 @@ import Button from '../ui/Button';
 import ActionButton from '../ui/ActionButton';
 import { useRouter } from 'next/navigation'
 import Seperator from '../ui/Seperator';
+import Xmark from './svg/Xmark';
+import Popup from '../ui/Popup';
+import Warning from './svg/Warning';
 
 type Props = {}
 
 const Portfolio = (props: Props) => {
-    const [propertyHoldingsArray, setPropertyHoldingsArray] = useState([]);
+    // const [propertyHoldingsArray, setPropertyHoldingsArray] = useState([]);
+    const [dailyChanges, setDailyChanges] = useState(0);
+    const [percentageChange, setPercentageChange] = useState(0);
+    const [accContent, setAccContent] = useState([]);
     const { addToPortfolio, addToWatchlist, addToTotalValue, totalValue, portfolioHoldings, watchlist } = usePortfolioContext();
     const router = useRouter()
 
@@ -40,10 +46,38 @@ const Portfolio = (props: Props) => {
     // To get state codes that havent been added to portfolio
     const uniqueStateCodes = Array.from(new Set(portfolioHoldings.map(holding => holding['state_code'])));
 
+
+    useEffect(() => {
+        const getDailyAndPercentageChange = () => {
+            // Calculate all the numbers in totalValue and sum them up
+            const cumulativeSum = totalValue.reduce((acc, value) => {
+                acc.push(acc.length > 0 ? acc[acc.length - 1] + value : value);
+                return acc;
+            }, []);
+
+            // To calculate the daily change and percentage change based on the cumulative sum of totalValue
+            if (cumulativeSum.length >= 2) {
+                const todayIndex = cumulativeSum.length - 1;
+                const yesterdayIndex = todayIndex - 1;
+
+                const todayTotal = cumulativeSum[todayIndex];
+                const yesterdayTotal = cumulativeSum[yesterdayIndex];
+
+                const todayChange = todayTotal - yesterdayTotal;
+                const todayPercentageChange = ((todayChange / yesterdayTotal) * 100).toFixed(2);
+
+                setDailyChanges(todayChange);
+                setPercentageChange(todayPercentageChange);
+            }
+        };
+
+        getDailyAndPercentageChange();
+    }, [totalValue]);
+
     return (
         <div className='flex justify-between w-full'>
             {/* Heading */}
-            <div className='flex flex-col gap-2 w-full mt-20'>
+            <div className='flex flex-col gap-2 w-full mt-20 px-2'>
                 <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
                     Total Portfolio Value
                 </h1>
@@ -69,15 +103,20 @@ const Portfolio = (props: Props) => {
                         <TrendingUpArrow
                             stroke={'rgb(34 197 94)'}
                         />
-                        <p className='font-light text-sm text-green-500'>
-                            $21.06
-                        </p>
-                        <p className='font-light text-sm text-green-500'>
-                            (0.35%)
-                        </p>
-                        <p className='text-xs'>
-                            Today
-                        </p>
+                        {
+                            <div className='flex gap-2 text-xs'>
+                                <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {usdFormatter.format(dailyChanges)}
+                                </span>
+                                <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {`(${percentageChange}%)`}
+                                </span>
+                                <span>
+                                    Today
+                                </span>
+                            </div>
+
+                        }
                         {/* to clear localstorage if needed */}
                         <button
                             className='bg-red-500 text-white rounded p-2'
@@ -87,7 +126,7 @@ const Portfolio = (props: Props) => {
                         </button>
                     </div>
                     <div className='md:w-[70%]'>
-                        <Seperator text={`Portfolio`}/>
+                        <Seperator text={`Portfolio`} />
                     </div>
                     <div className='md:flex gap-5 w-full'>
                         <div className='md:w-[70%]'>
@@ -107,7 +146,7 @@ const Portfolio = (props: Props) => {
                                     const accordionContent = holdingsWithStateCode.map((holding, j) => (
                                         <div key={j}>
                                             {/* Property badge container */}
-                                            <div className={`flex bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                            <div className={`flex relative bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                 <Image
                                                     className={`object-cover border border-mint11 rounded-full`}
                                                     alt='property-image'
@@ -116,12 +155,9 @@ const Portfolio = (props: Props) => {
                                                     height={50}
                                                 />
                                                 <div className='p-2 text-white whitespace-nowrap w-full'>
-                                                    <div className='flex justify-between w-full'>
+                                                    <div className=''>
                                                         <p className='font-bold'>
                                                             {holding.address}
-                                                        </p>
-                                                        <p className='font-bold'>
-                                                            {usdFormatter.format(holding.listing_price)}
                                                         </p>
                                                     </div>
                                                     <div className='flex gap-2'>
@@ -138,6 +174,54 @@ const Portfolio = (props: Props) => {
                                                         </p>
                                                     </div>
                                                 </div>
+                                                <button className='flex items-center justify-center border border-blackA5 rounded-full min-w-[50px] transition duration-150 ease-in-out'>
+                                                    <Popup
+                                                        content={
+                                                            <div className='flex flex-col gap-2.5 text-xs text-white'>
+                                                                {/* Price container */}
+                                                                <div className='flex gap-1'>
+                                                                    <p className='font-medium'>
+                                                                        Current price:
+                                                                    </p>
+                                                                    <p className='font-light'>
+                                                                        {usdFormatter.format(holding.listing_price)}
+                                                                    </p>
+                                                                    <div className={holding['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
+                                                                        <Warning />
+                                                                        <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
+                                                                    </div>
+                                                                </div>
+                                                                {/* Last sold price */}
+                                                                <div className='flex gap-1'>
+                                                                    <p className='font-medium'>
+                                                                        Last sold price:
+                                                                    </p>
+                                                                    <span className='font-light'>
+                                                                        {holding.last_sold_price}
+                                                                    </span>
+                                                                </div>
+                                                                {/* Action buttons */}
+                                                                <div className='flex justify-center'>
+                                                                    <ActionButton
+                                                                        text={`Remove`}
+                                                                        bgColor={'bg-red9 text-xs w-full'}
+                                                                        onClick={() => {
+                                                                            const propertyIDToRemove = holding['property_id'];
+
+                                                                            // To create a new array without the property that im removing
+                                                                            const newArray = holdingsWithStateCode.filter(item => item['property_id'] !== propertyIDToRemove);
+                                                                            router.push('/portfolio');
+                                                                            router.refresh();
+                                                                            // Need to set a state to update new array add it here when figured out
+
+                                                                            console.log(newArray);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    />
+                                                </button>
                                             </div>
                                         </div>
                                     ));
