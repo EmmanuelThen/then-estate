@@ -9,6 +9,7 @@ import OpenFolder from './svg/OpenFolder';
 import Button from '../ui/Button';
 import ActionButton from '../ui/ActionButton';
 import { useRouter } from 'next/navigation'
+import Seperator from '../ui/Seperator';
 
 type Props = {}
 
@@ -44,14 +45,14 @@ const Portfolio = (props: Props) => {
             {/* Heading */}
             <div className='flex flex-col gap-2 w-full mt-20'>
                 <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
-                    Holdings
+                    Total Portfolio Value
                 </h1>
                 {/* Dollar amount of holdings */}
                 <div className='flex flex-col'>
                     <h2 className='text-[45px]'>
                         {totalValue.length > 0 ?
                             (
-                                <span>
+                                <span className='font-light'>
                                     {formattedTotalValue}
                                 </span>
                             )
@@ -85,6 +86,9 @@ const Portfolio = (props: Props) => {
                             Clear local storage
                         </button>
                     </div>
+                    <div className='md:w-[70%]'>
+                        <Seperator text={`Portfolio`}/>
+                    </div>
                     <div className='md:flex gap-5 w-full'>
                         <div className='md:w-[70%]'>
                             {portfolioHoldings.length > 0 ? (
@@ -103,7 +107,7 @@ const Portfolio = (props: Props) => {
                                     const accordionContent = holdingsWithStateCode.map((holding, j) => (
                                         <div key={j}>
                                             {/* Property badge container */}
-                                            <div className='flex bg-mint11/80 rounded-full w-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden'>
+                                            <div className={`flex bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                 <Image
                                                     className={`object-cover border border-mint11 rounded-full`}
                                                     alt='property-image'
@@ -162,7 +166,7 @@ const Portfolio = (props: Props) => {
                                             </span>
                                         </h1>
                                         <ActionButton
-                                            text={`Search now`}
+                                            text={`Search for properties`}
                                             bgColor='bg-mint11'
                                             onClick={() => {
                                                 router.push('/search');

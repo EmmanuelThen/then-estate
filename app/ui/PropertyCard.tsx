@@ -40,6 +40,8 @@ import {
 
 } from 'chart.js'
 import Watchlist from '../components/svg/Watchlist';
+import LoaderRing from './LoaderRing';
+import Checkmark from '../components/svg/Checkmark';
 
 ChartJS.register(
     CategoryScale,
@@ -143,6 +145,7 @@ const PropertyCard = ({
     const { addToPortfolio, addToWatchlist, addToTotalValue } = usePortfolioContext();
 
     const handleAddToPortfolio = () => {
+        setLoading(true);
         addToPortfolio({
             property_id: propertyID,
             address: streetAddress,
@@ -155,8 +158,8 @@ const PropertyCard = ({
             sqft: squareFeet,
         });
 
-        addToTotalValue((price))
-
+        addToTotalValue((price));
+        setLoading(false);
     }
 
 
@@ -11224,17 +11227,19 @@ const PropertyCard = ({
                                 <div className='flex gap-5 mt-2 z-[99999999]'>
                                     <Tooltips
                                         button={
-                                            <button onClick={handleAddToPortfolio}>
+                                            <span>
                                                 <Watchlist />
-                                            </button>
+                                            </span>
                                         }
                                         tooltipContent={`Add to watchlist`}
                                     />
                                     <Tooltips
                                         button={
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                                            </svg>
+                                            <span onClick={handleAddToPortfolio}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                                                </svg>
+                                            </span>
                                         }
                                         tooltipContent={`Add to portfolio`}
                                     />
