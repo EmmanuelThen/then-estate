@@ -13,6 +13,7 @@ import Seperator from '../ui/Seperator';
 import Xmark from './svg/Xmark';
 import Popup from '../ui/Popup';
 import Warning from './svg/Warning';
+import TrendingDownArrow from './svg/TrendingDownArrow';
 
 type Props = {}
 
@@ -86,7 +87,7 @@ const Portfolio = (props: Props) => {
                     <h2 className='text-[45px]'>
                         {totalValue.length > 0 ?
                             (
-                                <span className='font-light'>
+                                <span className='font-medium'>
                                     {formattedTotalValue}
                                 </span>
                             )
@@ -100,22 +101,31 @@ const Portfolio = (props: Props) => {
                     </h2>
                     {/* Percentage change and dollar amount change */}
                     <div className='flex items-center gap-2'>
-                        <TrendingUpArrow
-                            stroke={'rgb(34 197 94)'}
-                        />
-                        {
-                            <div className='flex gap-2 text-xs'>
-                                <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                    {usdFormatter.format(dailyChanges)}
-                                </span>
-                                <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                    {`(${percentageChange}%)`}
-                                </span>
-                                <span>
-                                    Today
-                                </span>
+                        {dailyChanges && (
+                            <div className='flex items-center gap-2'>
+                                {dailyChanges > 0 ? (
+                                    <TrendingUpArrow
+                                        stroke={'rgb(34 197 94)'}
+                                    />
+                                ) :
+                                    (
+                                        <TrendingDownArrow
+                                            stroke={'rgb(239 68 68)'}
+                                        />
+                                    )}
+                                <div className='flex gap-2 text-xs'>
+                                    <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'} `}>
+                                        {usdFormatter.format(dailyChanges)}
+                                    </span>
+                                    <span className={`${dailyChanges > 0 ? 'text-green-500' : 'text-red-500'} `}>
+                                        {`(${percentageChange}%)`}
+                                    </span>
+                                    <span>
+                                        Today
+                                    </span>
+                                </div>
                             </div>
-
+                        )
                         }
                         {/* to clear localstorage if needed */}
                         <button
@@ -262,8 +272,11 @@ const Portfolio = (props: Props) => {
                             )}
                         </div>
                         {/* Watchlist */}
-                        <aside className='md:border-l-[0.8px] border-slate6 w-[30%]'>
-                            <div className='flex items-center w-full justify-between'>
+                        <aside className='md:border-l-[0.8px] border-slate6 md:w-[30%]'>
+                            <div className='md:hidden'>
+                                <Seperator text={`Watchlist`} />
+                            </div>
+                            <div className='hidden md:flex items-center w-full justify-between'>
                                 <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11 px-3'>
                                     Watchlist
                                 </h1>

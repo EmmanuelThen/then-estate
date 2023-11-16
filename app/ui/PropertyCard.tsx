@@ -10836,7 +10836,7 @@ const PropertyCard = ({
                             </div>
 
                             <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
-                                <p>{price}</p>
+                                <p>{usdFormatter.format(price)}</p>
                                 <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
                                     <Warning />
                                     <p className='text-xs text-red9 font-light'>Price reduction</p>
@@ -10897,16 +10897,19 @@ const PropertyCard = ({
                     <div className='flex gap-5 w-[70%]'>
                         <Tooltips
                             button={
-                                <Watchlist />
-
+                                <span>
+                                    <Watchlist />
+                                </span>
                             }
                             tooltipContent={`Add to watchlist`}
                         />
                         <Tooltips
                             button={
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                                </svg>
+                                <span onClick={handleAddToPortfolio}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                                    </svg>
+                                </span>
                             }
                             tooltipContent={`Add to portfolio`}
                         />
@@ -10923,7 +10926,7 @@ const PropertyCard = ({
             {/* Popup content */}
             <Dialog.Portal>
                 <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] lg:w-[95vw] lg:max-w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] lg:max-w-[95%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                     <Dialog.Close asChild>
                         <button
                             className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex  appearance-none items-center justify-center rounded-full focus:outline-none bg-mint11 p-1 z-[9999]"
@@ -10934,186 +10937,10 @@ const PropertyCard = ({
                         </button>
                     </Dialog.Close>
                     {/* Full container */}
-                    <div className='md:flex w-full h-full'>
-                        {/* Property image */}
-                        <div className='relative md:w-[50%]'>
-                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
-                                <Sparkles />
-                                <p className='text-xs font-semibold text-white'>New listing</p>
-                            </div>
-                            {/* All property images */}
-                            <div className={`h-[${popUpHeight}px] w-[${popUpWidth}px]`}>
-                                {propertyImages.length > 0 && (
-                                    <>
-                                        <Image
-                                            key={propertyID}
-                                            className={`${loading ? `opacity-70` : ``} h-[${popUpHeight}px] w-[${popUpWidth}px] object-cover`}
-                                            alt={`Image ${imageIndex + 1}`}
-                                            loader={popUpPhotosCustomLoader}
-                                            src={propertyImages[imageIndex].href}
-                                            width={popUpWidth}
-                                            height={popUpHeight}
-                                        />
-                                        <caption className='flex justify-center text-sm text-slate10'>
-                                            {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
-                                        </caption>
-                                    </>
-                                )}
-                            </div>
+                    <div className='md:flex w-full h-full border border-green-500 p-2'>
 
-
-                            {/* Under photo section */}
-                            <div className='flex flex-col gap-5'>
-                                {/* Prev image and next image buttons */}
-                                <div className='flex justify-between w-full px-2 mt-2'>
-                                    <button
-                                        onClick={showPreviousImage}
-                                        disabled={imageIndex === 0}
-                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                    >
-                                        <ChevronLeft />
-                                    </button>
-
-                                    <button
-                                        onClick={showNextImage}
-                                        disabled={imageIndex === propertyImages.length - 1}
-                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                    >
-                                        <ChevronRight />
-                                    </button>
-                                </div>
-                                {/* Photo count */}
-                                {/* <div className='flex text-xs justify-between'>
-                                    <p>Photo count: {photoCount}</p>
-                                    <p>Property ID: {propertyID}</p>
-                                    <p>Listing ID: {listingID}</p>
-                                    <p>Agent ID: {agent_identification}</p>
-                                </div> */}
-
-                                <article className='text-sm'>
-                                    {/* Details */}
-                                    <ul className='flex flex-col gap-2 text-sm mb-5'>
-                                        <li className={newConstruction ? 'block' : 'hidden'}>
-                                            <p className='font-medium text-yellow-500'>
-                                                New construction
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bed />
-                                                <span className='font-medium'>Year built:</span>
-                                                <span className='font-light'>
-                                                    {propertyDetails.description && (
-                                                        propertyDetails.description['year_built']
-                                                    )}
-                                                </span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Calendar />
-                                                <span className='font-medium'>Date listed:</span>
-                                                <span className='font-light'>{listDate.toLocaleDateString("en-US", options)}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bath />
-                                                <span className='font-medium'>Full baths:</span>
-                                                <span className='font-light'>{fullBaths}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bath />
-                                                <span className='font-medium'>Half baths:</span>
-                                                <span className='font-light'>{halfBaths}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Calendar />
-                                                <span className='font-medium'>Last sold date:</span>
-                                                <span className='font-light'>
-                                                    {lastSoldDate === 'No data available' ? 'No data available'
-                                                        :
-                                                        new Date(lastSoldDate).toLocaleString('en-US', {
-                                                            month: 'long',
-                                                            day: 'numeric',
-                                                            year: 'numeric'
-                                                        })
-                                                    }
-                                                </span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Dollar />
-                                                <span className='font-medium'>Last sold price:</span>
-                                                <span className='font-light'>{lastSoldPrice}</span>
-                                            </p>
-                                        </li>
-                                    </ul>
-                                    {/* Flood an noise level section */}
-                                    <div className=''>
-                                        {propertyDetails.local && (
-                                            <div>
-                                                <div className='mb-2'>
-                                                    <Seperator
-                                                        text={`Noise levels`}
-                                                    />
-                                                </div>
-                                                <ul className='flex flex-col gap-2 text-sm mb-5'>
-                                                    <li className='rounded bg-blackA2 px-2'>
-                                                        <p className='flex items-center gap-2'>
-                                                            <span className='font-medium'>Overall score:</span>
-                                                            <span className='font-light'>{propertyDetails.local.noise.score}</span>
-                                                        </p>
-                                                    </li>
-                                                    {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
-                                                        <ul key={i}>
-                                                            <li className='rounded bg-blackA2 px-2'>
-                                                                <p className='flex items-center gap-2'>
-                                                                    <span className='capitalize font-medium'>{category.type}:</span>
-                                                                    {/* Noise level ratings are color labeled */}
-                                                                    <span className={
-                                                                        `${category.text === 'Low' ? 'text-green-500' :
-                                                                            category.text === 'Medium' ? 'text-yellow-500' :
-                                                                                category.text === 'High' ? 'text-red-500' :
-                                                                                    ''} font-light`
-                                                                    }>
-                                                                        {category.text}
-                                                                    </span>
-
-
-                                                                </p>
-                                                            </li>
-                                                        </ul>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                    </div>
-                                    {/* Investmeny analysis section */}
-                                    <div>
-                                        <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
-                                            {`Investalyze ${streetAddress}`}
-                                        </button>
-                                    </div>
-
-                                    {/* All agent info section */}
-                                    {/* <div>
-                                        {agentList.map((agent, i) => (
-                                            <div key={i}>
-                                                {agent['advertiser_id']}
-                                            </div>
-                                        ))}
-                                    </div> */}
-                                </article>
-                            </div>
-                        </div>
                         {/* Right side of pop up */}
-                        <div className='md:ml-5 md:w-[50%] h-full'>
+                        <div className='md:w-[40%] h-full border border-blue-500 p-2'>
                             <div className="flex flex-col gap-2.5 w-full">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
@@ -11123,7 +10950,7 @@ const PropertyCard = ({
                                 </div>
 
                                 <div className='flex gap-1 text-lg md:text-xl font-semibold text-mint11'>
-                                    <p className='text-[36px]'>{price}</p>
+                                    <p className='text-[36px]'>{usdFormatter.format(price)}</p>
                                     <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
                                         <Warning />
                                         <p className='text-xs text-red9 font-light'>- {usdFormatter.format(priceReduction)}</p>
@@ -11273,11 +11100,131 @@ const PropertyCard = ({
                                         </button>
                                     </form>
                                 </div>
-                                {/* In depth details */}
-                                <div className=''>
+                                
+                            </div>
+                            {/* Under photo section */}
+                            <div className='flex flex-col gap-5 mt-10'>
+                                <article className='text-sm'>
+                                    {/* Details */}
+                                    <ul className='flex flex-col gap-2 text-sm mb-5'>
+                                        <li className={newConstruction ? 'block' : 'hidden'}>
+                                            <p className='font-medium text-yellow-500'>
+                                                New construction
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bed />
+                                                <span className='font-medium'>Year built:</span>
+                                                <span className='font-light'>
+                                                    {propertyDetails.description && (
+                                                        propertyDetails.description['year_built']
+                                                    )}
+                                                </span>
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Calendar />
+                                                <span className='font-medium'>Date listed:</span>
+                                                <span className='font-light'>{listDate.toLocaleDateString("en-US", options)}</span>
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bath />
+                                                <span className='font-medium'>Full baths:</span>
+                                                <span className='font-light'>{fullBaths}</span>
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Bath />
+                                                <span className='font-medium'>Half baths:</span>
+                                                <span className='font-light'>{halfBaths}</span>
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Calendar />
+                                                <span className='font-medium'>Last sold date:</span>
+                                                <span className='font-light'>
+                                                    {lastSoldDate === 'No data available' ? 'No data available'
+                                                        :
+                                                        new Date(lastSoldDate).toLocaleString('en-US', {
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })
+                                                    }
+                                                </span>
+                                            </p>
+                                        </li>
+                                        <li className='rounded bg-blackA2 px-2'>
+                                            <p className='flex items-center gap-2'>
+                                                <Dollar />
+                                                <span className='font-medium'>Last sold price:</span>
+                                                <span className='font-light'>{lastSoldPrice}</span>
+                                            </p>
+                                        </li>
+                                    </ul>
+
+                                    {/* Investmeny analysis section */}
+                                    <div>
+                                        <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
+                                            {`Investalyze ${streetAddress}`}
+                                        </button>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        {/* Property image */}
+                        <div className='relative flex flex-col gap-20 md:w-[60%] border border-red-500'>
+                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
+                                <Sparkles />
+                                <p className='text-xs font-semibold text-white'>New listing</p>
+                            </div>
+                            {/* All property images */}
+                            <div className={`w-full h-[50%]`}>
+                                {propertyImages.length > 0 && (
+                                    <>
+                                        <Image
+                                            key={propertyID}
+                                            className={`${loading ? `opacity-70` : ``} w-full h-full object-cover border border-blackA9`}
+                                            alt={`Image ${imageIndex + 1}`}
+                                            loader={popUpPhotosCustomLoader}
+                                            src={propertyImages[imageIndex].href}
+                                            width={popUpWidth}
+                                            height={popUpHeight}
+                                        />
+                                        <caption className='flex justify-center text-sm text-slate10'>
+                                            {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
+                                        </caption>
+                                    </>
+                                )}
+                                <div className='flex justify-between w-full px-2 mt-2'>
+                                    <button
+                                        onClick={showPreviousImage}
+                                        disabled={imageIndex === 0}
+                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                    >
+                                        <ChevronLeft />
+                                    </button>
+
+                                    <button
+                                        onClick={showNextImage}
+                                        disabled={imageIndex === propertyImages.length - 1}
+                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                    >
+                                        <ChevronRight />
+                                    </button>
+                                </div>
+                            </div>
+                                    {/* In depth details */}
+                                <div className='border border-green-500 h-[50%]'>
                                     {propertyDetails.mortgage && (
                                         <Tabs.Root
-                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] h-full"
+                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
                                             defaultValue="tab1"
                                         >
                                             {/* Navbar */}
@@ -11310,11 +11257,11 @@ const PropertyCard = ({
                                             </Tabs.List>
                                             {/* Mortgage Content */}
                                             <Tabs.Content
-                                                className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[490px]"
+                                                className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[495px]"
                                                 value="tab1"
                                             >
                                                 <div className='flex flex-col gap-2 text-sm'>
-                                                    <Seperator text={'Mortgage details'} />
+                                                    <Seperator text={'30 yr. mortgage details'} />
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
                                                         <span className='font-medium text-mint11'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
                                                     </p>
@@ -11397,7 +11344,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[490px]"
+                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[495px]"
                                                 value="tab2"
                                             >
                                                 {/* Descriptions */}
@@ -11460,6 +11407,46 @@ const PropertyCard = ({
                                                         <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
                                                             <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}
                                                         </p>
+                                                    </div>
+                                                    {/* Flood an noise level section */}
+                                                    <div className=''>
+                                                        {propertyDetails.local && (
+                                                            <div>
+                                                                <div className='mb-2'>
+                                                                    <Seperator
+                                                                        text={`Noise levels`}
+                                                                    />
+                                                                </div>
+                                                                <ul className='flex flex-col gap-2 text-sm mb-5'>
+                                                                    <li className='rounded bg-blackA2 px-2'>
+                                                                        <p className='flex items-center gap-2'>
+                                                                            <span className='font-medium'>Overall score:</span>
+                                                                            <span className='font-light'>{propertyDetails.local.noise.score}</span>
+                                                                        </p>
+                                                                    </li>
+                                                                    {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
+                                                                        <ul key={i}>
+                                                                            <li className='rounded bg-blackA2 px-2'>
+                                                                                <p className='flex items-center gap-2'>
+                                                                                    <span className='capitalize font-medium'>{category.type}:</span>
+                                                                                    {/* Noise level ratings are color labeled */}
+                                                                                    <span className={
+                                                                                        `${category.text === 'Low' ? 'text-green-500' :
+                                                                                            category.text === 'Medium' ? 'text-yellow-500' :
+                                                                                                category.text === 'High' ? 'text-red-500' :
+                                                                                                    ''} font-light`
+                                                                                    }>
+                                                                                        {category.text}
+                                                                                    </span>
+
+
+                                                                                </p>
+                                                                            </li>
+                                                                        </ul>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -11546,7 +11533,7 @@ const PropertyCard = ({
                                             </Tabs.Content>
 
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[490px]"
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
                                                 value="tab3"
                                             >
                                                 {/* History and Future prices */}
@@ -11580,7 +11567,7 @@ const PropertyCard = ({
                                                         </Tabs.List>
                                                     </div>
                                                     <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[490px]"
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
                                                         value="tabHistory"
                                                     >
                                                         {
@@ -11594,7 +11581,7 @@ const PropertyCard = ({
                                                         }
                                                     </Tabs.Content>
                                                     <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[490px]"
+                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[495px]"
                                                         value="tabForecast"
                                                     >
                                                         {
@@ -11610,10 +11597,10 @@ const PropertyCard = ({
                                                 </Tabs.Root>
                                             </Tabs.Content>
                                             <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[490px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[495px] overflow-y-scroll p-2 rounded-b-md outline-none "
                                                 value="tab4"
                                             >
-                                                <div className='flex items-center justify-between w-full px-2 mb-5 mt-5'>
+                                                <div className='flex items-center justify-between w-full p-2 mb-5'>
                                                     <div className=''>
                                                         <h2 className='font-semibold text-3xl text-mint11'>
                                                             Tax assessments
@@ -11627,7 +11614,7 @@ const PropertyCard = ({
                                                                 return (
                                                                     <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
                                                                         <Cancel />
-                                                                        <span className='font-medium'>{`No data for ${year}`}</span>
+                                                                        <span className='font-medium whitespace-nowrap'>{`No data for ${year}`}</span>
                                                                     </div>
                                                                 );
                                                             } else if (assessment.land === null) {
@@ -11641,11 +11628,11 @@ const PropertyCard = ({
                                                         })}
                                                     </div>
                                                 </div>
-                                                <div>
+                                                <div className='max-h-[495px] w-full'>
                                                     {
                                                         propertyDetails['tax_history'].length > 0 && (
                                                             <Line
-                                                                className='h-[400px] w-full'
+                                                                className='h-full w-full'
                                                                 data={taxLineChartData}
                                                                 options={taxLineChartOptions}
                                                             />
@@ -11656,9 +11643,12 @@ const PropertyCard = ({
                                         </Tabs.Root>
                                     )}
                                 </div>
-                            </div>
+
+
                         </div>
+
                     </div>
+
                     {/* Similar homes section */}
                     <div>
                         <div className='mb-2'>
