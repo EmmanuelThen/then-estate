@@ -28078,7 +28078,7 @@ const SearchBar = () => {
                         baths={properties.description.baths === null ? '-- baths' : `${properties.description.baths} baths`}
                         squareFeet={properties.description.sqft === null ? '-- sqft' : `${properties.description.sqft.toLocaleString()} sqft.`}
                         streetAddress={properties.location.address.line}
-                        cityStateZip={`${properties.location.address.city}, ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
+                        cityStateZip={`${properties.location.address.city} ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
                         state={properties.location.address.state}
                         stateCode={properties.location.address['state_code']}
                         price={properties['list_price']} // Change back to formatted version if needed

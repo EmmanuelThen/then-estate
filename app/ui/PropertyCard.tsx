@@ -159,9 +159,26 @@ const PropertyCard = ({
             price_reduction: priceReduction,
             last_sold_price: lastSoldPrice,
         });
-
+        // To sum up all prices to display the total value of your portfolio
         addToTotalValue((price));
         setLoading(false);
+    }
+
+    const handleAddToWatchlist = () => {
+        addToWatchlist({
+            property_id: propertyID,
+            address: streetAddress,
+            city_state_zip: cityStateZip,
+            state: state,
+            state_code: stateCode,
+            listing_price: price,
+            image: imageSrc,
+            beds: beds,
+            baths: baths,
+            sqft: squareFeet,
+            price_reduction: priceReduction,
+            last_sold_price: lastSoldPrice,
+        });
     }
 
 
@@ -10897,7 +10914,7 @@ const PropertyCard = ({
                     <div className='flex gap-5 w-[70%]'>
                         <Tooltips
                             button={
-                                <span>
+                                <span onClick={handleAddToWatchlist}>
                                     <Watchlist />
                                 </span>
                             }
@@ -11056,7 +11073,7 @@ const PropertyCard = ({
                                 <div className='flex gap-5 mt-2 z-[99999999]'>
                                     <Tooltips
                                         button={
-                                            <span>
+                                            <span onClick={handleAddToWatchlist}>
                                                 <Watchlist />
                                             </span>
                                         }
@@ -11100,7 +11117,7 @@ const PropertyCard = ({
                                         </button>
                                     </form>
                                 </div>
-                                
+
                             </div>
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5 mt-10'>
@@ -11220,429 +11237,429 @@ const PropertyCard = ({
                                     </button>
                                 </div>
                             </div>
-                                    {/* In depth details */}
-                                <div className='border border-green-500 h-[50%]'>
-                                    {propertyDetails.mortgage && (
-                                        <Tabs.Root
-                                            className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
-                                            defaultValue="tab1"
-                                        >
-                                            {/* Navbar */}
-                                            <Tabs.List className="max-h-[35px] border-b items-center flex" aria-label="Nav bar">
-                                                <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                    value="tab1"
-                                                >
-                                                    Mortgage
-                                                </Tabs.Trigger>
-                                                <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                    value="tab2"
-                                                >
-                                                    Details
-                                                </Tabs.Trigger>
-                                                <Tabs.Trigger
-                                                    className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                    value="tab3"
-                                                    onClick={() => setIsChartViewHistory(true)}
-                                                >
-                                                    Values
-                                                </Tabs.Trigger>
-                                                <Tabs.Trigger
-                                                    className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                    value="tab4"
-                                                >
-                                                    Tax Assessments
-                                                </Tabs.Trigger>
-                                            </Tabs.List>
-                                            {/* Mortgage Content */}
-                                            <Tabs.Content
-                                                className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[495px]"
+                            {/* In depth details */}
+                            <div className='border border-green-500 h-[50%]'>
+                                {propertyDetails.mortgage && (
+                                    <Tabs.Root
+                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
+                                        defaultValue="tab1"
+                                    >
+                                        {/* Navbar */}
+                                        <Tabs.List className="max-h-[35px] border-b items-center flex" aria-label="Nav bar">
+                                            <Tabs.Trigger
+                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                 value="tab1"
                                             >
-                                                <div className='flex flex-col gap-2 text-sm'>
-                                                    <Seperator text={'30 yr. mortgage details'} />
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium text-mint11'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
-                                                    </p>
-                                                    {/* Mortgage payment  */}
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Loan amount:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Monthly payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Down payment (25%):</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
-                                                    </p>
-                                                    {/* Rates for estimate  */}
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Average rate:</span>{(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Loan term:</span>{propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years
-                                                    </p>
-                                                    {/* Monthly payment details  */}
-                                                </div>
-
-                                                {/* Monthly ownership expense */}
-                                                <div className='flex flex-col gap-2 text-sm'>
-                                                    <Seperator text={'Monthly ownership expenses'} />
-                                                    {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light' key={i}>
-                                                            <span className='font-medium'>{details['display_name']}:</span>
-                                                            {usdFormatter.format(details.amount)}
-                                                        </p>
-                                                    ))}
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2'>
-                                                        <span className='text-blue9'>Total:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
-                                                    </p>
-                                                </div>
-
-                                                {/* Average rates for different mortgage products in general */}
-                                                <div className='flex flex-col gap-2 text-sm'>
-                                                    <Seperator text={
-                                                        <div>
-                                                            Avg. rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
-                                                        </div>
-                                                    }
-                                                    />
-                                                    {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
-                                                        <div className='flex rounded gap-2 bg-blackA2 px-2' key={j}>
-                                                            <p className='font-medium'>
-                                                                {(() => {
-                                                                    if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
-                                                                        return '30yr. fixed:';
-                                                                    } else if (rates['loan_type']['loan_id'] === 'twenty_year_fix') {
-                                                                        return '20yr. fixed:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'fifteen_year_fix') {
-                                                                        return '15yr. fixed:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'ten_year_fix') {
-                                                                        return '10yr. fixed:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'thirty_year_fha') {
-                                                                        return '30yr. FHA:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'thirty_year_va') {
-                                                                        return '30yr. VA:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'five_one_arm') {
-                                                                        return '5/1 ARM:'
-                                                                    } else if (rates['loan_type']['loan_id'] === 'seven_one_arm') {
-                                                                        return '7/1 ARM:'
-                                                                    }
-
-                                                                })()}
-                                                            </p>
-                                                            <p className='font-light'>{(rates.rate * 100).toFixed(2)}%</p>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </Tabs.Content>
-
-                                            <Tabs.Content
-                                                className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[495px]"
+                                                Mortgage
+                                            </Tabs.Trigger>
+                                            <Tabs.Trigger
+                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                 value="tab2"
                                             >
-                                                {/* Descriptions */}
-                                                <div className='flex flex-col gap-2'>
-                                                    <Seperator text={'Home description'} />
-                                                    <div className='grid grid-cols-2 gap-2'>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Garage:</span>
+                                                Details
+                                            </Tabs.Trigger>
+                                            <Tabs.Trigger
+                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                value="tab3"
+                                                onClick={() => setIsChartViewHistory(true)}
+                                            >
+                                                Values
+                                            </Tabs.Trigger>
+                                            <Tabs.Trigger
+                                                className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                                                value="tab4"
+                                            >
+                                                Tax Assessments
+                                            </Tabs.Trigger>
+                                        </Tabs.List>
+                                        {/* Mortgage Content */}
+                                        <Tabs.Content
+                                            className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[495px]"
+                                            value="tab1"
+                                        >
+                                            <div className='flex flex-col gap-2 text-sm'>
+                                                <Seperator text={'30 yr. mortgage details'} />
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium text-mint11'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
+                                                </p>
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
+                                                </p>
+                                                {/* Mortgage payment  */}
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Loan amount:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}
+                                                </p>
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Monthly payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                </p>
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
+                                                </p>
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Down payment (25%):</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
+                                                </p>
+                                                {/* Rates for estimate  */}
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Average rate:</span>{(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%
+                                                </p>
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Loan term:</span>{propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years
+                                                </p>
+                                                {/* Monthly payment details  */}
+                                            </div>
+
+                                            {/* Monthly ownership expense */}
+                                            <div className='flex flex-col gap-2 text-sm'>
+                                                <Seperator text={'Monthly ownership expenses'} />
+                                                {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light' key={i}>
+                                                        <span className='font-medium'>{details['display_name']}:</span>
+                                                        {usdFormatter.format(details.amount)}
+                                                    </p>
+                                                ))}
+                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2'>
+                                                    <span className='text-blue9'>Total:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                </p>
+                                            </div>
+
+                                            {/* Average rates for different mortgage products in general */}
+                                            <div className='flex flex-col gap-2 text-sm'>
+                                                <Seperator text={
+                                                    <div>
+                                                        Avg. rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
+                                                    </div>
+                                                }
+                                                />
+                                                {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
+                                                    <div className='flex rounded gap-2 bg-blackA2 px-2' key={j}>
+                                                        <p className='font-medium'>
                                                             {(() => {
-                                                                if (propertyDetails.description.garage === null) {
-                                                                    return 'No data available'
-                                                                } else if (propertyDetails.description.garage === 1) {
-                                                                    return `${propertyDetails.description.garage} Garage space`
-                                                                } else if (propertyDetails.description.garage > 1) {
-                                                                    return `${propertyDetails.description.garage} Garage spaces`
+                                                                if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
+                                                                    return '30yr. fixed:';
+                                                                } else if (rates['loan_type']['loan_id'] === 'twenty_year_fix') {
+                                                                    return '20yr. fixed:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'fifteen_year_fix') {
+                                                                    return '15yr. fixed:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'ten_year_fix') {
+                                                                    return '10yr. fixed:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_fha') {
+                                                                    return '30yr. FHA:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_va') {
+                                                                    return '30yr. VA:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'five_one_arm') {
+                                                                    return '5/1 ARM:'
+                                                                } else if (rates['loan_type']['loan_id'] === 'seven_one_arm') {
+                                                                    return '7/1 ARM:'
                                                                 }
+
                                                             })()}
                                                         </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
-                                                        </p>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
-                                                        </p>
-                                                        {/* HOA */}
-                                                        <div className='rounded bg-blackA2 px-2 font-light'>
-                                                            <p className='flex items-center gap-2 '>
-                                                                <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
-                                                            </p>
-                                                        </div>
-                                                        {/* Price per sqft */}
-                                                        <div>
-                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                <span className='font-medium'>Price per sqft:</span>
-                                                                {usdFormatter.format(propertyDetails['price_per_sqft'])}
-                                                            </p>
-                                                        </div>
+                                                        <p className='font-light'>{(rates.rate * 100).toFixed(2)}%</p>
                                                     </div>
-                                                    {/* Descriptive text */}
-                                                    <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Description:</span> {propertyDetails.description.text}
+                                                ))}
+                                            </div>
+                                        </Tabs.Content>
+
+                                        <Tabs.Content
+                                            className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[495px]"
+                                            value="tab2"
+                                        >
+                                            {/* Descriptions */}
+                                            <div className='flex flex-col gap-2'>
+                                                <Seperator text={'Home description'} />
+                                                <div className='grid grid-cols-2 gap-2'>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
                                                     </p>
-                                                    {/* Pet policy */}
-                                                    <div className={status === 'For rent' ? 'block' : 'hidden'}>
-                                                        <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                            <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Garage:</span>
+                                                        {(() => {
+                                                            if (propertyDetails.description.garage === null) {
+                                                                return 'No data available'
+                                                            } else if (propertyDetails.description.garage === 1) {
+                                                                return `${propertyDetails.description.garage} Garage space`
+                                                            } else if (propertyDetails.description.garage > 1) {
+                                                                return `${propertyDetails.description.garage} Garage spaces`
+                                                            }
+                                                        })()}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
+                                                    </p>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                    </p>
+                                                    {/* HOA */}
+                                                    <div className='rounded bg-blackA2 px-2 font-light'>
+                                                        <p className='flex items-center gap-2 '>
+                                                            <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
                                                         </p>
                                                     </div>
-                                                    {/* Flood an noise level section */}
-                                                    <div className=''>
-                                                        {propertyDetails.local && (
-                                                            <div>
-                                                                <div className='mb-2'>
-                                                                    <Seperator
-                                                                        text={`Noise levels`}
-                                                                    />
-                                                                </div>
-                                                                <ul className='flex flex-col gap-2 text-sm mb-5'>
-                                                                    <li className='rounded bg-blackA2 px-2'>
-                                                                        <p className='flex items-center gap-2'>
-                                                                            <span className='font-medium'>Overall score:</span>
-                                                                            <span className='font-light'>{propertyDetails.local.noise.score}</span>
-                                                                        </p>
-                                                                    </li>
-                                                                    {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
-                                                                        <ul key={i}>
-                                                                            <li className='rounded bg-blackA2 px-2'>
-                                                                                <p className='flex items-center gap-2'>
-                                                                                    <span className='capitalize font-medium'>{category.type}:</span>
-                                                                                    {/* Noise level ratings are color labeled */}
-                                                                                    <span className={
-                                                                                        `${category.text === 'Low' ? 'text-green-500' :
-                                                                                            category.text === 'Medium' ? 'text-yellow-500' :
-                                                                                                category.text === 'High' ? 'text-red-500' :
-                                                                                                    ''} font-light`
-                                                                                    }>
-                                                                                        {category.text}
-                                                                                    </span>
-
-
-                                                                                </p>
-                                                                            </li>
-                                                                        </ul>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        )}
+                                                    {/* Price per sqft */}
+                                                    <div>
+                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                            <span className='font-medium'>Price per sqft:</span>
+                                                            {usdFormatter.format(propertyDetails['price_per_sqft'])}
+                                                        </p>
                                                     </div>
                                                 </div>
-
-                                                {/* Nearby schools */}
+                                                {/* Descriptive text */}
+                                                <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                    <span className='font-medium'>Description:</span> {propertyDetails.description.text}
+                                                </p>
+                                                {/* Pet policy */}
+                                                <div className={status === 'For rent' ? 'block' : 'hidden'}>
+                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                        <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}
+                                                    </p>
+                                                </div>
+                                                {/* Flood an noise level section */}
                                                 <div className=''>
-                                                    <Seperator text={'Nearby schools'} />
-                                                    {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                        <div className='flex flex-col gap-2' key={l}>
-                                                            <div className='flex items-center gap-2 font-light'>
-                                                                {/* <span className='font-medium'>Name:</span>{school.name} */}
-                                                                <AccordionDemo
-                                                                    accordionTrigger={
-                                                                        <div className='flex justify-between w-full'>
-                                                                            <div className='flex items-center gap-2 mr-10'>
-                                                                                <GraduationCap />
-                                                                                <p className='whitespace-nowrap text-sm'>
-                                                                                    {school.name}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div className={`whitespace-nowrap flex items-center gap-2 w-fit rounded-full px-2 py-0.5 mr-2 
+                                                    {propertyDetails.local && (
+                                                        <div>
+                                                            <div className='mb-2'>
+                                                                <Seperator
+                                                                    text={`Noise levels`}
+                                                                />
+                                                            </div>
+                                                            <ul className='flex flex-col gap-2 text-sm mb-5'>
+                                                                <li className='rounded bg-blackA2 px-2'>
+                                                                    <p className='flex items-center gap-2'>
+                                                                        <span className='font-medium'>Overall score:</span>
+                                                                        <span className='font-light'>{propertyDetails.local.noise.score}</span>
+                                                                    </p>
+                                                                </li>
+                                                                {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
+                                                                    <ul key={i}>
+                                                                        <li className='rounded bg-blackA2 px-2'>
+                                                                            <p className='flex items-center gap-2'>
+                                                                                <span className='capitalize font-medium'>{category.type}:</span>
+                                                                                {/* Noise level ratings are color labeled */}
+                                                                                <span className={
+                                                                                    `${category.text === 'Low' ? 'text-green-500' :
+                                                                                        category.text === 'Medium' ? 'text-yellow-500' :
+                                                                                            category.text === 'High' ? 'text-red-500' :
+                                                                                                ''} font-light`
+                                                                                }>
+                                                                                    {category.text}
+                                                                                </span>
+
+
+                                                                            </p>
+                                                                        </li>
+                                                                    </ul>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Nearby schools */}
+                                            <div className=''>
+                                                <Seperator text={'Nearby schools'} />
+                                                {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
+                                                    <div className='flex flex-col gap-2' key={l}>
+                                                        <div className='flex items-center gap-2 font-light'>
+                                                            {/* <span className='font-medium'>Name:</span>{school.name} */}
+                                                            <AccordionDemo
+                                                                accordionTrigger={
+                                                                    <div className='flex justify-between w-full'>
+                                                                        <div className='flex items-center gap-2 mr-10'>
+                                                                            <GraduationCap />
+                                                                            <p className='whitespace-nowrap text-sm'>
+                                                                                {school.name}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className={`whitespace-nowrap flex items-center gap-2 w-fit rounded-full px-2 py-0.5 mr-2 
                                                                             ${(() => {
+                                                                                if (school['parent_rating'] >= 4) {
+                                                                                    return 'bg-green-500/10'
+                                                                                } else if (school['parent_rating'] === 3) {
+                                                                                    return 'bg-yellow-500/10'
+                                                                                } else if (school['parent_rating'] === null) {
+                                                                                    return 'bg-blackA5/10'
+                                                                                } else if (school['parent_rating'] < 3) {
+                                                                                    return 'bg-red-500/10'
+                                                                                }
+                                                                            })()}`}
+                                                                        >
+                                                                            <Star />
+                                                                            <p className={`whitespace-nowrap text-xs 
+                                                                                ${(() => {
                                                                                     if (school['parent_rating'] >= 4) {
-                                                                                        return 'bg-green-500/10'
+                                                                                        return 'text-green-500'
                                                                                     } else if (school['parent_rating'] === 3) {
-                                                                                        return 'bg-yellow-500/10'
+                                                                                        return 'text-yellow-500'
                                                                                     } else if (school['parent_rating'] === null) {
-                                                                                        return 'bg-blackA5/10'
+                                                                                        return 'text-blackA5'
                                                                                     } else if (school['parent_rating'] < 3) {
-                                                                                        return 'bg-red-500/10'
+                                                                                        return 'text-red-500'
                                                                                     }
                                                                                 })()}`}
                                                                             >
-                                                                                <Star />
-                                                                                <p className={`whitespace-nowrap text-xs 
-                                                                                ${(() => {
-                                                                                        if (school['parent_rating'] >= 4) {
-                                                                                            return 'text-green-500'
-                                                                                        } else if (school['parent_rating'] === 3) {
-                                                                                            return 'text-yellow-500'
-                                                                                        } else if (school['parent_rating'] === null) {
-                                                                                            return 'text-blackA5'
-                                                                                        } else if (school['parent_rating'] < 3) {
-                                                                                            return 'text-red-500'
-                                                                                        }
-                                                                                    })()}`}
-                                                                                >
-                                                                                    {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                    accordionContent={
-                                                                        <div className='flex flex-col gap-2'>
-                                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
-                                                                            </p>
-                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
-                                                                            </p>
-                                                                            <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Education levels: </span>
-                                                                                {school['education_levels'].map((level: any, l: any) => (
-                                                                                    <div className='font-light' key={l}>
-                                                                                        {level}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </p>
-
-                                                                            <div className='rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
-                                                                            </div>
-
-                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                                {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
                                                                             </p>
                                                                         </div>
-                                                                    }
-                                                                />
-                                                            </div>
+                                                                    </div>
+                                                                }
+                                                                accordionContent={
+                                                                    <div className='flex flex-col gap-2'>
+                                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                        </p>
+                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                                        </p>
+                                                                        <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Education levels: </span>
+                                                                            {school['education_levels'].map((level: any, l: any) => (
+                                                                                <div className='font-light' key={l}>
+                                                                                    {level}
+                                                                                </div>
+                                                                            ))}
+                                                                        </p>
 
+                                                                        <div className='rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                        </div>
+
+                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                        </p>
+                                                                    </div>
+                                                                }
+                                                            />
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            </Tabs.Content>
 
-                                            <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
-                                                value="tab3"
-                                            >
-                                                {/* History and Future prices */}
-                                                <Tabs.Root
-                                                    className='w-full px-3'
-                                                    defaultValue='tabHistory'
-                                                >
-                                                    <div className='flex items-center justify-between w-full px-2 mt-5'>
-                                                        <div className='mb-5 w-[70%]'>
-                                                            <h2 className='font-semibold text-3xl text-mint11 '>
-                                                                {isChartViewHistory ? 'Historic values' : isChartViewForecast ? 'Forecasted values' : ''}
-                                                            </h2>
-                                                            <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
-                                                        </div>
-
-                                                        <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[30%] h-fit'>
-                                                            <Tabs.Trigger
-                                                                className="w-[50%]  rounded-tl rounded-bl data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
-                                                                value="tabHistory"
-                                                                onClick={handleChartViewHistory}
-                                                            >
-                                                                History
-                                                            </Tabs.Trigger>
-                                                            <Tabs.Trigger
-                                                                className="w-[50%] rounded-tr rounded-br data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
-                                                                value="tabForecast"
-                                                                onClick={handleChartViewForecast}
-                                                            >
-                                                                Forecasts
-                                                            </Tabs.Trigger>
-                                                        </Tabs.List>
                                                     </div>
-                                                    <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
-                                                        value="tabHistory"
-                                                    >
-                                                        {
-                                                            propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                            (<Line
-                                                                className='h-full w-full'
-                                                                data={lineChartData}
-                                                                options={lineChartOptions}
-                                                            />
-                                                            )
-                                                        }
-                                                    </Tabs.Content>
-                                                    <Tabs.Content
-                                                        className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[495px]"
-                                                        value="tabForecast"
-                                                    >
-                                                        {
-                                                            propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                            (<Line
-                                                                className='h-full w-full'
-                                                                data={lineChartData}
-                                                                options={lineChartOptions}
-                                                            />
-                                                            )
-                                                        }
-                                                    </Tabs.Content>
-                                                </Tabs.Root>
-                                            </Tabs.Content>
-                                            <Tabs.Content
-                                                className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[495px] overflow-y-scroll p-2 rounded-b-md outline-none "
-                                                value="tab4"
+                                                ))}
+                                            </div>
+                                        </Tabs.Content>
+
+                                        <Tabs.Content
+                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
+                                            value="tab3"
+                                        >
+                                            {/* History and Future prices */}
+                                            <Tabs.Root
+                                                className='w-full px-3'
+                                                defaultValue='tabHistory'
                                             >
-                                                <div className='flex items-center justify-between w-full p-2 mb-5'>
-                                                    <div className=''>
-                                                        <h2 className='font-semibold text-3xl text-mint11'>
-                                                            Tax assessments
+                                                <div className='flex items-center justify-between w-full px-2 mt-5'>
+                                                    <div className='mb-5 w-[70%]'>
+                                                        <h2 className='font-semibold text-3xl text-mint11 '>
+                                                            {isChartViewHistory ? 'Historic values' : isChartViewForecast ? 'Forecasted values' : ''}
                                                         </h2>
                                                         <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
                                                     </div>
-                                                    <div className=''>
-                                                        {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
-                                                            const { assessment, year } = taxHistory;
-                                                            if (assessment.building === null) {
-                                                                return (
-                                                                    <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
-                                                                        <Cancel />
-                                                                        <span className='font-medium whitespace-nowrap'>{`No data for ${year}`}</span>
-                                                                    </div>
-                                                                );
-                                                            } else if (assessment.land === null) {
-                                                                return (
-                                                                    <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-blue9/80 text-white text-[10px]' key={index}>
-                                                                        <Cancel />
-                                                                        <span className='font-medium'>{`No data for ${year}`}</span>
-                                                                    </div>
-                                                                );
-                                                            }
-                                                        })}
-                                                    </div>
+
+                                                    <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[30%] h-fit'>
+                                                        <Tabs.Trigger
+                                                            className="w-[50%]  rounded-tl rounded-bl data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
+                                                            value="tabHistory"
+                                                            onClick={handleChartViewHistory}
+                                                        >
+                                                            History
+                                                        </Tabs.Trigger>
+                                                        <Tabs.Trigger
+                                                            className="w-[50%] rounded-tr rounded-br data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
+                                                            value="tabForecast"
+                                                            onClick={handleChartViewForecast}
+                                                        >
+                                                            Forecasts
+                                                        </Tabs.Trigger>
+                                                    </Tabs.List>
                                                 </div>
-                                                <div className='max-h-[495px] w-full'>
+                                                <Tabs.Content
+                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
+                                                    value="tabHistory"
+                                                >
                                                     {
-                                                        propertyDetails['tax_history'].length > 0 && (
-                                                            <Line
-                                                                className='h-full w-full'
-                                                                data={taxLineChartData}
-                                                                options={taxLineChartOptions}
-                                                            />
+                                                        propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                        (<Line
+                                                            className='h-full w-full'
+                                                            data={lineChartData}
+                                                            options={lineChartOptions}
+                                                        />
                                                         )
                                                     }
+                                                </Tabs.Content>
+                                                <Tabs.Content
+                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[495px]"
+                                                    value="tabForecast"
+                                                >
+                                                    {
+                                                        propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                        (<Line
+                                                            className='h-full w-full'
+                                                            data={lineChartData}
+                                                            options={lineChartOptions}
+                                                        />
+                                                        )
+                                                    }
+                                                </Tabs.Content>
+                                            </Tabs.Root>
+                                        </Tabs.Content>
+                                        <Tabs.Content
+                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[495px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                            value="tab4"
+                                        >
+                                            <div className='flex items-center justify-between w-full p-2 mb-5'>
+                                                <div className=''>
+                                                    <h2 className='font-semibold text-3xl text-mint11'>
+                                                        Tax assessments
+                                                    </h2>
+                                                    <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
                                                 </div>
-                                            </Tabs.Content>
-                                        </Tabs.Root>
-                                    )}
-                                </div>
+                                                <div className=''>
+                                                    {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
+                                                        const { assessment, year } = taxHistory;
+                                                        if (assessment.building === null) {
+                                                            return (
+                                                                <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
+                                                                    <Cancel />
+                                                                    <span className='font-medium whitespace-nowrap'>{`No data for ${year}`}</span>
+                                                                </div>
+                                                            );
+                                                        } else if (assessment.land === null) {
+                                                            return (
+                                                                <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-blue9/80 text-white text-[10px]' key={index}>
+                                                                    <Cancel />
+                                                                    <span className='font-medium'>{`No data for ${year}`}</span>
+                                                                </div>
+                                                            );
+                                                        }
+                                                    })}
+                                                </div>
+                                            </div>
+                                            <div className='max-h-[495px] w-full'>
+                                                {
+                                                    propertyDetails['tax_history'].length > 0 && (
+                                                        <Line
+                                                            className='h-full w-full'
+                                                            data={taxLineChartData}
+                                                            options={taxLineChartOptions}
+                                                        />
+                                                    )
+                                                }
+                                            </div>
+                                        </Tabs.Content>
+                                    </Tabs.Root>
+                                )}
+                            </div>
 
 
                         </div>

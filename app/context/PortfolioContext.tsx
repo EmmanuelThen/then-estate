@@ -4,8 +4,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface PortfolioContextProps {
     portfolioHoldings: PropertyInfo;
-    watchlist: string[];
+    watchlist: PropertyInfo;
     totalValue: number[];
+    setPortfolioHoldings: PropertyInfo[];
+    setWatchlist: PropertyInfo[];
+    setTotalValue: PropertyInfo[];
     addToPortfolio: (propertyInfo: PropertyInfo) => void;
     addToWatchlist: (propertyID: string) => void;
     addToTotalValue: (listingPrice: number) => void;
@@ -33,7 +36,7 @@ const PortfolioProvider = ({ children }: any) => {
         const portfolioHoldings = localStorage.getItem('portfolioHoldings');
         return portfolioHoldings ? JSON.parse(portfolioHoldings) : [];
     });
-    const [watchlist, setWatchlist] = useState<string[]>(() => {
+    const [watchlist, setWatchlist] = useState<PropertyInfo[]>(() => {
         const watchlist = localStorage.getItem('watchlist');
         return watchlist ? JSON.parse(watchlist) : [];
     });
@@ -54,8 +57,8 @@ const PortfolioProvider = ({ children }: any) => {
         setPortfolioHoldings([...portfolioHoldings, propertyInfo]);
     };
 
-    const addToWatchlist = (propertyID: string) => {
-        setWatchlist([...watchlist, propertyID]);
+    const addToWatchlist = (propertyInfo: PropertyInfo) => {
+        setWatchlist([...watchlist, propertyInfo]);
     };
 
     const addToTotalValue = (listingPrice: number) => {
@@ -66,6 +69,9 @@ const PortfolioProvider = ({ children }: any) => {
         portfolioHoldings,
         watchlist,
         totalValue,
+        setPortfolioHoldings,
+        setWatchlist,
+        setTotalValue,
         addToPortfolio,
         addToWatchlist,
         addToTotalValue,

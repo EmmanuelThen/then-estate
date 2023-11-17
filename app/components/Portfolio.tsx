@@ -10,10 +10,10 @@ import Button from '../ui/Button';
 import ActionButton from '../ui/ActionButton';
 import { useRouter } from 'next/navigation'
 import Seperator from '../ui/Seperator';
-import Xmark from './svg/Xmark';
 import Popup from '../ui/Popup';
 import Warning from './svg/Warning';
 import TrendingDownArrow from './svg/TrendingDownArrow';
+import WatchlistEmpty from './svg/WatchlistEmpty';
 
 type Props = {}
 
@@ -21,8 +21,7 @@ const Portfolio = (props: Props) => {
     // const [propertyHoldingsArray, setPropertyHoldingsArray] = useState([]);
     const [dailyChanges, setDailyChanges] = useState(0);
     const [percentageChange, setPercentageChange] = useState(0);
-    const [accContent, setAccContent] = useState([]);
-    const { addToPortfolio, addToWatchlist, addToTotalValue, totalValue, portfolioHoldings, watchlist } = usePortfolioContext();
+    const { totalValue, portfolioHoldings, watchlist, setWatchlist, setPortfolioHoldings, setTotalValue } = usePortfolioContext();
     const router = useRouter()
 
     // For high quality images, jpg were giving low quality
@@ -31,7 +30,7 @@ const Portfolio = (props: Props) => {
     };
 
     // To format total portfolio value
-    const formattedTotalValue = new Intl.NumberFormat('en-US', {
+    const formattedTotalValue: any = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD'
     }).format(totalValue.reduce((acc, value) => acc + value, 0));
@@ -135,52 +134,184 @@ const Portfolio = (props: Props) => {
                             Clear local storage
                         </button>
                     </div>
-                    <div className='md:w-[70%]'>
+                    {/* <div className='md:w-[50%]'>
                         <Seperator text={`Portfolio`} />
-                    </div>
+                    </div> */}
                     <div className='md:flex gap-5 w-full'>
-                        <div className='md:w-[70%]'>
-                            {portfolioHoldings.length > 0 ? (
-                                uniqueStateCodes.map((stateCode, i) => {
-                                    // To find all holdings with the current state code
-                                    const holdingsWithStateCode = portfolioHoldings.filter(holding => holding['state_code'] === stateCode);
+                        <div className='md:w-[50%] '>
+                            <div className=''>
+                                <Seperator text={`Portfolio`} />
+                            </div>
+                            <div className='border border-blackA6 rounded p-2'>
+                                {portfolioHoldings.length > 0 ? (
+                                    uniqueStateCodes.map((stateCode, i) => {
+                                        // To find all holdings with the current state code on accordion
+                                        const holdingsWithStateCode = portfolioHoldings.filter(holding => holding['state_code'] === stateCode);
+                                        // To render the accordionTrigger only once if state code has already been added, so we dont have multiple accordions with the same state
+                                        const accordionTrigger = (
+                                            <h1 key={i} className='text-mint11 font-medium'>
+                                                {holdingsWithStateCode[0].state}, {holdingsWithStateCode[0]['state_code']}
+                                            </h1>
+                                        );
+                                        // to render the property badge for each holding with the same state code, so they are all grouped together under the same accordion
+                                        const accordionContent = holdingsWithStateCode.map((holding, j) => (
+                                            <div key={j}>
+                                                {/* Property badge container */}
+                                                <div className={`flex relative bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                                    <Image
+                                                        className={`object-cover border border-mint11 rounded-full`}
+                                                        alt='property-image'
+                                                        src={holding.image}
+                                                        width={50}
+                                                        height={50}
+                                                    />
+                                                    <div className='p-2 text-white whitespace-nowrap w-full'>
+                                                        <div className=''>
+                                                            <p className='font-bold'>
+                                                                {holding.address}
+                                                            </p>
+                                                        </div>
+                                                        <div className='flex gap-2'>
+                                                            <p className='font-light'>
+                                                                {holding.beds}
+                                                            </p>
+                                                            <div className='h-full w-[1px] bg-white' />
+                                                            <p className='font-light'>
+                                                                {holding.baths}
+                                                            </p>
+                                                            <div className='h-full w-[1px] bg-white' />
+                                                            <p className='font-light'>
+                                                                {holding.sqft.toLocaleString()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <button className='flex items-center justify-center border border-blackA5 rounded-full min-w-[50px] transition duration-150 ease-in-out'>
+                                                        <Popup
+                                                            content={
+                                                                <div className='flex flex-col gap-2.5 text-xs text-white'>
+                                                                    {/* Price container */}
+                                                                    <div className='flex gap-1'>
+                                                                        <p className='font-medium'>
+                                                                            Current price:
+                                                                        </p>
+                                                                        <p className='font-light'>
+                                                                            {usdFormatter.format(holding['listing_price'])}
+                                                                        </p>
+                                                                        <div className={holding['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
+                                                                            <Warning />
+                                                                            <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    {/* Last sold price */}
+                                                                    <div className='flex gap-1'>
+                                                                        <p className='font-medium'>
+                                                                            Last sold price:
+                                                                        </p>
+                                                                        <span className='font-light'>
+                                                                            {holding['last_sold_price']}
+                                                                        </span>
+                                                                    </div>
+                                                                    {/* Action buttons */}
+                                                                    <div className='flex justify-center'>
+                                                                        <ActionButton
+                                                                            text={`Remove`}
+                                                                            bgColor={'bg-red9 text-xs w-full'}
+                                                                            onClick={() => {
+                                                                                const propertyIDToRemove = holding['property_id'];
+                                                                                const propertyPriceToRemove = holding['listing_price'];
+                                                                                // Update portfolioHoldings state
+                                                                                setPortfolioHoldings((prevHoldings) =>
+                                                                                    prevHoldings.filter((holding) => holding['property_id'] !== propertyIDToRemove)
+                                                                                );
+                                                                                // Update totalValue state
+                                                                                setTotalValue((prevTotalValue) =>
+                                                                                    prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyPriceToRemove))
+                                                                                );
+                                                                                const newTotalValue = totalValue.filter(item => parseFloat(item['listing_price']) !== parseFloat(propertyPriceToRemove));
+                                                                                console.log(newTotalValue);
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ));
+                                        return (
+                                            <AccordionDemo
+                                                key={i}
+                                                accordionTrigger={accordionTrigger}
+                                                accordionContent={
+                                                    <div className='property-badge-grid'>
+                                                        {accordionContent}
+                                                    </div>
+                                                }
+                                            />
+                                        );
+                                    })
+                                ) : (
+                                    <div className='flex justify-center w-full p-10'>
+                                        <div className='flex flex-col items-center gap-5'>
+                                            <h1 className='flex flex-col items-center gap-2 text-slate10'>
+                                                <span>
+                                                    <OpenFolder />
+                                                </span>
+                                                <span className='text-3xl font-light'>
+                                                    Portfolio is empty
+                                                </span>
+                                            </h1>
+                                            <ActionButton
+                                                text={`Search for properties`}
+                                                bgColor='bg-mint11'
+                                                onClick={() => {
+                                                    router.push('/search');
+                                                    router.refresh();
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
-                                    // To render the accordionTrigger only once if state code has already been added, so we dont have multiple accordions with the same state
-                                    const accordionTrigger = (
-                                        <h1 key={i} className='text-mint11 font-medium'>
-                                            {holdingsWithStateCode[0].state}, {holdingsWithStateCode[0]['state_code']}
-                                        </h1>
-                                    );
+                        {/* Watchlist */}
+                        <aside className=' md:w-[50%]'>
+                            <div className=''>
+                                <Seperator text={`Watchlist`} />
+                            </div>
+                            <div className='flex flex-col gap-[20px] p-2 border border-blackA6 rounded'>
 
-                                    // to render the property badge for each holding with the same state code, so they are all grouped together under the same accordion
-                                    const accordionContent = holdingsWithStateCode.map((holding, j) => (
-                                        <div key={j}>
+                                {watchlist.length > 0 ? (
+                                    watchlist.map((item, j) => (
+                                        <>
                                             {/* Property badge container */}
-                                            <div className={`flex relative bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                            <div className={`flex relative bg-sky12/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                 <Image
                                                     className={`object-cover border border-mint11 rounded-full`}
                                                     alt='property-image'
-                                                    src={holding.image}
+                                                    src={item.image}
                                                     width={50}
                                                     height={50}
                                                 />
                                                 <div className='p-2 text-white whitespace-nowrap w-full'>
                                                     <div className=''>
                                                         <p className='font-bold'>
-                                                            {holding.address}
+                                                            {item.address}, {item['state_code']}
                                                         </p>
                                                     </div>
                                                     <div className='flex gap-2'>
                                                         <p className='font-light'>
-                                                            {holding.beds}
+                                                            {item.beds}
                                                         </p>
                                                         <div className='h-full w-[1px] bg-white' />
                                                         <p className='font-light'>
-                                                            {holding.baths}
+                                                            {item.baths}
                                                         </p>
                                                         <div className='h-full w-[1px] bg-white' />
                                                         <p className='font-light'>
-                                                            {holding.sqft.toLocaleString()}
+                                                            {item.sqft.toLocaleString()}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -194,11 +325,11 @@ const Portfolio = (props: Props) => {
                                                                         Current price:
                                                                     </p>
                                                                     <p className='font-light'>
-                                                                        {usdFormatter.format(holding.listing_price)}
+                                                                        {usdFormatter.format(item['listing_price'])}
                                                                     </p>
-                                                                    <div className={holding['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
+                                                                    <div className={item['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
                                                                         <Warning />
-                                                                        <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
+                                                                        <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(item['price_reduction'])}</p>
                                                                     </div>
                                                                 </div>
                                                                 {/* Last sold price */}
@@ -207,7 +338,7 @@ const Portfolio = (props: Props) => {
                                                                         Last sold price:
                                                                     </p>
                                                                     <span className='font-light'>
-                                                                        {holding.last_sold_price}
+                                                                        {item['last_sold_price']}
                                                                     </span>
                                                                 </div>
                                                                 {/* Action buttons */}
@@ -216,13 +347,10 @@ const Portfolio = (props: Props) => {
                                                                         text={`Remove`}
                                                                         bgColor={'bg-red9 text-xs w-full'}
                                                                         onClick={() => {
-                                                                            const propertyIDToRemove = holding['property_id'];
+                                                                            const propertyIDToRemove = item['property_id'];
 
                                                                             // To create a new array without the property that im removing
-                                                                            const newArray = holdingsWithStateCode.filter(item => item['property_id'] !== propertyIDToRemove);
-                                                                            router.push('/portfolio');
-                                                                            router.refresh();
-                                                                            // Need to set a state to update new array add it here when figured out
+                                                                            const newArray = setWatchlist(() => watchlist.filter(item => item['property_id'] !== propertyIDToRemove));
 
                                                                             console.log(newArray);
                                                                         }}
@@ -233,56 +361,31 @@ const Portfolio = (props: Props) => {
                                                     />
                                                 </button>
                                             </div>
-                                        </div>
-                                    ));
+                                        </>
+                                    ))
 
-                                    return (
-                                        <AccordionDemo
-                                            key={i}
-                                            accordionTrigger={accordionTrigger}
-                                            accordionContent={
-                                                <div className='property-badge-grid'>
-                                                    {accordionContent}
-                                                </div>
-                                            }
-                                        />
-                                    );
-                                })
-                            ) : (
-                                <div className='flex justify-center w-full p-10'>
-                                    <div className='flex flex-col items-center gap-5'>
-                                        <h1 className='flex flex-col items-center gap-2 text-slate10'>
-                                            <span>
-                                                <OpenFolder />
-                                            </span>
-                                            <span className='text-3xl font-light'>
-                                                Portfolio is empty
-                                            </span>
-                                        </h1>
-                                        <ActionButton
-                                            text={`Search for properties`}
-                                            bgColor='bg-mint11'
-                                            onClick={() => {
-                                                router.push('/search');
-                                                router.refresh();
-                                            }}
-                                        />
+                                ) : (
+                                    <div className='flex justify-center w-full p-10'>
+                                        <div className='flex flex-col items-center gap-5'>
+                                            <h1 className='flex flex-col items-center gap-2 text-slate10'>
+                                                <span>
+                                                    <WatchlistEmpty />
+                                                </span>
+                                                <span className='text-3xl font-light'>
+                                                    Watchlist is empty
+                                                </span>
+                                            </h1>
+                                            <ActionButton
+                                                text={`Search for properties`}
+                                                bgColor='bg-sky12'
+                                                onClick={() => {
+                                                    router.push('/search');
+                                                    router.refresh();
+                                                }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                        {/* Watchlist */}
-                        <aside className='md:border-l-[0.8px] border-slate6 md:w-[30%]'>
-                            <div className='md:hidden'>
-                                <Seperator text={`Watchlist`} />
-                            </div>
-                            <div className='hidden md:flex items-center w-full justify-between'>
-                                <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11 px-3'>
-                                    Watchlist
-                                </h1>
-                                <div>
-                                    <Watchlist />
-                                </div>
+                                )}
                             </div>
                         </aside>
                     </div>
