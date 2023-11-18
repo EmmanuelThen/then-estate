@@ -78,7 +78,7 @@ const Portfolio = (props: Props) => {
         <div className='flex justify-between w-full'>
             {/* Heading */}
             <div className='flex flex-col gap-2 w-full mt-20 px-2'>
-                <h1 className='flex justify-start font-medium tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
+                <h1 className='flex justify-start font-light tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
                     Total Portfolio Value
                 </h1>
                 {/* Dollar amount of holdings */}

@@ -10954,10 +10954,69 @@ const PropertyCard = ({
                         </button>
                     </Dialog.Close>
                     {/* Full container */}
-                    <div className='md:flex w-full h-full border border-green-500 p-2'>
+                    <div className='relative h-[600px]'>
+                        <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
+                            <Sparkles />
+                            <p className='text-xs font-semibold text-white'>New listing</p>
+                        </div>
+                        {/* All property images */}
+                        <div className={`flex flex-col md:flex-row w-full h-full`}>
+                            <div className='items-center justify-center px-5 hidden md:flex'>
+                                <button
+                                    onClick={showPreviousImage}
+                                    disabled={imageIndex === 0}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px] max-h-[50%]'
+                                >
+                                    <ChevronLeft />
+                                </button>
+                            </div>
+                            {propertyImages.length > 0 && (
+                                <div className='w-full h-full'>
+                                    <Image
+                                        key={propertyID}
+                                        className={`${loading ? `opacity-70` : ``} w-full h-full object-contain`}
+                                        alt={`Image ${imageIndex + 1}`}
+                                        loader={popUpPhotosCustomLoader}
+                                        src={propertyImages[imageIndex].href}
+                                        width={popUpWidth}
+                                        height={popUpHeight}
+                                    />
+                                    <caption className='flex justify-center text-sm text-slate10'>
+                                        {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
+                                    </caption>
+                                </div>
+                            )}
+                            <div className='items-center justify-center px-5 hidden md:flex'>
+                                <button
+                                    onClick={showNextImage}
+                                    disabled={imageIndex === propertyImages.length - 1}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px] max-h-[50%]'
+                                >
+                                    <ChevronRight />
+                                </button>
+                            </div>
+                            <div className='flex justify-between w-full px-2 mt-2 md:hidden'>
+                                <button
+                                    onClick={showPreviousImage}
+                                    disabled={imageIndex === 0}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                >
+                                    <ChevronLeft />
+                                </button>
+                                <button
+                                    onClick={showNextImage}
+                                    disabled={imageIndex === propertyImages.length - 1}
+                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
+                                >
+                                    <ChevronRight />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='md:flex w-full h-full border border-green-500 p-2 mt-20'>
 
                         {/* Right side of pop up */}
-                        <div className='md:w-[40%] h-full border border-blue-500 p-2'>
+                        <div className='md:w-[40%] h-[800px] border border-blue-500 p-2'>
                             <div className="flex flex-col gap-2.5 w-full">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
@@ -11042,7 +11101,7 @@ const PropertyCard = ({
                                                 {usdFormatter.format(propertyDetails.estimates['current_values'][0]['estimate_high'])}
                                             </p>
                                             {/* estimate date */}
-                                            <div className='flex items-center gap-1 text-[8px] mb-5'>
+                                            {/* <div className='flex items-center gap-1 text-[8px] mb-5'>
                                                 <Calendar />
                                                 <p className=''>
                                                     <span>As of </span>
@@ -11052,7 +11111,7 @@ const PropertyCard = ({
                                                         day: "numeric",
                                                     })}
                                                 </p>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     )}
                                 </div>
@@ -11187,7 +11246,7 @@ const PropertyCard = ({
                                     </ul>
 
                                     {/* Investmeny analysis section */}
-                                    <div>
+                                    <div className='mt-10'>
                                         <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
                                             {`Investalyze ${streetAddress}`}
                                         </button>
@@ -11195,53 +11254,13 @@ const PropertyCard = ({
                                 </article>
                             </div>
                         </div>
-                        {/* Property image */}
-                        <div className='relative flex flex-col gap-20 md:w-[60%] border border-red-500'>
-                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
-                                <Sparkles />
-                                <p className='text-xs font-semibold text-white'>New listing</p>
-                            </div>
-                            {/* All property images */}
-                            <div className={`w-full h-[50%]`}>
-                                {propertyImages.length > 0 && (
-                                    <>
-                                        <Image
-                                            key={propertyID}
-                                            className={`${loading ? `opacity-70` : ``} w-full h-full object-cover border border-blackA9`}
-                                            alt={`Image ${imageIndex + 1}`}
-                                            loader={popUpPhotosCustomLoader}
-                                            src={propertyImages[imageIndex].href}
-                                            width={popUpWidth}
-                                            height={popUpHeight}
-                                        />
-                                        <caption className='flex justify-center text-sm text-slate10'>
-                                            {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
-                                        </caption>
-                                    </>
-                                )}
-                                <div className='flex justify-between w-full px-2 mt-2'>
-                                    <button
-                                        onClick={showPreviousImage}
-                                        disabled={imageIndex === 0}
-                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                    >
-                                        <ChevronLeft />
-                                    </button>
 
-                                    <button
-                                        onClick={showNextImage}
-                                        disabled={imageIndex === propertyImages.length - 1}
-                                        className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                    >
-                                        <ChevronRight />
-                                    </button>
-                                </div>
-                            </div>
+                        <div className='flex flex-col gap-20 md:w-[60%] border border-red-500 h-[800px] mt-10 md:mt-0'>
                             {/* In depth details */}
-                            <div className='border border-green-500 h-[50%]'>
+                            <div className='border border-green-500 h-[800px]'>
                                 {propertyDetails.mortgage && (
                                     <Tabs.Root
-                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px]"
+                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] h-[800px]"
                                         defaultValue="tab1"
                                     >
                                         {/* Navbar */}
@@ -11269,12 +11288,12 @@ const PropertyCard = ({
                                                 className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                 value="tab4"
                                             >
-                                                Tax Assessments
+                                                Assessments
                                             </Tabs.Trigger>
                                         </Tabs.List>
                                         {/* Mortgage Content */}
                                         <Tabs.Content
-                                            className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 max-h-[495px]"
+                                            className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 h-[95%]"
                                             value="tab1"
                                         >
                                             <div className='flex flex-col gap-2 text-sm'>
@@ -11361,21 +11380,21 @@ const PropertyCard = ({
                                         </Tabs.Content>
 
                                         <Tabs.Content
-                                            className="text-sm transition duration-150 ease-in-out  p-2 overflow-y-scroll max-h-[495px]"
+                                            className="text-sm transition duration-150 ease-in-out p-2 overflow-y-scroll h-[95%]"
                                             value="tab2"
                                         >
                                             {/* Descriptions */}
                                             <div className='flex flex-col gap-2'>
                                                 <Seperator text={'Home description'} />
-                                                <div className='grid grid-cols-2 gap-2'>
+                                                <div className='grid grid-cols-2 gap-2 whitespace-nowrap'>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
                                                         <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'No data available' : propertyDetails.description.heating}
+                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'N/A' : propertyDetails.description.heating}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'No data available' : propertyDetails.description.cooling}
+                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'N/A' : propertyDetails.description.cooling}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
                                                         <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
@@ -11386,20 +11405,20 @@ const PropertyCard = ({
                                                             if (propertyDetails.description.garage === null) {
                                                                 return 'No data available'
                                                             } else if (propertyDetails.description.garage === 1) {
-                                                                return `${propertyDetails.description.garage} Garage space`
+                                                                return `${propertyDetails.description.garage} space`
                                                             } else if (propertyDetails.description.garage > 1) {
-                                                                return `${propertyDetails.description.garage} Garage spaces`
+                                                                return `${propertyDetails.description.garage} spaces`
                                                             }
                                                         })()}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'No data available' : propertyDetails.description.pool}
+                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'N/A' : propertyDetails.description.pool}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'No data available' : propertyDetails.description['lot_sqft'].toLocaleString()}
+                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'N/A' : propertyDetails.description['lot_sqft'].toLocaleString()}
                                                     </p>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'No data available' : propertyDetails.description.stories}
+                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'N/A' : propertyDetails.description.stories}
                                                     </p>
                                                     {/* HOA */}
                                                     <div className='rounded bg-blackA2 px-2 font-light'>
@@ -11416,13 +11435,13 @@ const PropertyCard = ({
                                                     </div>
                                                 </div>
                                                 {/* Descriptive text */}
-                                                <p className='flex  gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                <p className='md:flex gap-2 rounded bg-blackA2 px-2 font-light'>
                                                     <span className='font-medium'>Description:</span> {propertyDetails.description.text}
                                                 </p>
                                                 {/* Pet policy */}
                                                 <div className={status === 'For rent' ? 'block' : 'hidden'}>
                                                     <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'No data available' : propertyDetails['pet_policy']}
+                                                        <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'N/A' : propertyDetails['pet_policy']}
                                                     </p>
                                                 </div>
                                                 {/* Flood an noise level section */}
@@ -11468,89 +11487,88 @@ const PropertyCard = ({
                                             </div>
 
                                             {/* Nearby schools */}
-                                            <div className=''>
+                                            <div className='border border-pink-500'>
                                                 <Seperator text={'Nearby schools'} />
-                                                {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                    <div className='flex flex-col gap-2' key={l}>
-                                                        <div className='flex items-center gap-2 font-light'>
-                                                            {/* <span className='font-medium'>Name:</span>{school.name} */}
-                                                            <AccordionDemo
-                                                                accordionTrigger={
-                                                                    <div className='flex justify-between w-full'>
-                                                                        <div className='flex items-center gap-2 mr-10'>
-                                                                            <GraduationCap />
-                                                                            <p className='whitespace-nowrap text-sm'>
-                                                                                {school.name}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className={`whitespace-nowrap flex items-center gap-2 w-fit rounded-full px-2 py-0.5 mr-2 
-                                                                            ${(() => {
-                                                                                if (school['parent_rating'] >= 4) {
-                                                                                    return 'bg-green-500/10'
-                                                                                } else if (school['parent_rating'] === 3) {
-                                                                                    return 'bg-yellow-500/10'
-                                                                                } else if (school['parent_rating'] === null) {
-                                                                                    return 'bg-blackA5/10'
-                                                                                } else if (school['parent_rating'] < 3) {
-                                                                                    return 'bg-red-500/10'
-                                                                                }
-                                                                            })()}`}
-                                                                        >
-                                                                            <Star />
-                                                                            <p className={`whitespace-nowrap text-xs 
+
+                                                    {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
+                                                        <div className='flex flex-col gap-2' key={l}>
+                                                            <div className='flex items-center gap-2 font-light'>
+                                                                {/* <span className='font-medium'>Name:</span>{school.name} */}
+                                                                <AccordionDemo
+                                                                    accordionTrigger={
+                                                                        <div className='flex justify-between w-full'>
+                                                                            <div className='flex items-center gap-2 md:mr-10 md:w-full'>
+                                                                                <GraduationCap />
+                                                                                <p className='whitespace-nowrap text-sm'>
+                                                                                    {school.name}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`whitespace-nowrap flex items-center gap-2 md:w-fit rounded-full px-2 py-0.5 mr-2
                                                                                 ${(() => {
                                                                                     if (school['parent_rating'] >= 4) {
-                                                                                        return 'text-green-500'
+                                                                                        return 'bg-green-500/10'
                                                                                     } else if (school['parent_rating'] === 3) {
-                                                                                        return 'text-yellow-500'
+                                                                                        return 'bg-yellow-500/10'
                                                                                     } else if (school['parent_rating'] === null) {
-                                                                                        return 'text-blackA5'
+                                                                                        return 'bg-blackA5/10'
                                                                                     } else if (school['parent_rating'] < 3) {
-                                                                                        return 'text-red-500'
+                                                                                        return 'bg-red-500/10'
                                                                                     }
                                                                                 })()}`}
                                                                             >
-                                                                                {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
+                                                                                <Star />
+                                                                                <p className={`whitespace-nowrap text-xs
+                                                                                    ${(() => {
+                                                                                        if (school['parent_rating'] >= 4) {
+                                                                                            return 'text-green-500'
+                                                                                        } else if (school['parent_rating'] === 3) {
+                                                                                            return 'text-yellow-500'
+                                                                                        } else if (school['parent_rating'] === null) {
+                                                                                            return 'text-blackA5'
+                                                                                        } else if (school['parent_rating'] < 3) {
+                                                                                            return 'text-red-500'
+                                                                                        }
+                                                                                    })()}`}
+                                                                                >
+                                                                                    {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    accordionContent={
+                                                                        <div className='flex flex-col gap-2'>
+                                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                            </p>
+                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                                            </p>
+                                                                            <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Levels: </span>
+                                                                                {school['education_levels'].map((level: any, l: any) => (
+                                                                                    <div className='font-light' key={l}>
+                                                                                        {level}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </p>
+                                                                            <div className='rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                            </div>
+                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
                                                                             </p>
                                                                         </div>
-                                                                    </div>
-                                                                }
-                                                                accordionContent={
-                                                                    <div className='flex flex-col gap-2'>
-                                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
-                                                                        </p>
-                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Funding type:</span>{school['funding_type']}
-                                                                        </p>
-                                                                        <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Education levels: </span>
-                                                                            {school['education_levels'].map((level: any, l: any) => (
-                                                                                <div className='font-light' key={l}>
-                                                                                    {level}
-                                                                                </div>
-                                                                            ))}
-                                                                        </p>
-
-                                                                        <div className='rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
-                                                                        </div>
-
-                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
-                                                                        </p>
-                                                                    </div>
-                                                                }
-                                                            />
+                                                                    }
+                                                                />
+                                                            </div>
                                                         </div>
+                                                    ))}
 
-                                                    </div>
-                                                ))}
                                             </div>
                                         </Tabs.Content>
 
                                         <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
+                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none"
                                             value="tab3"
                                         >
                                             {/* History and Future prices */}
@@ -11559,14 +11577,14 @@ const PropertyCard = ({
                                                 defaultValue='tabHistory'
                                             >
                                                 <div className='flex items-center justify-between w-full px-2 mt-5'>
-                                                    <div className='mb-5 w-[70%]'>
-                                                        <h2 className='font-semibold text-3xl text-mint11 '>
-                                                            {isChartViewHistory ? 'Historic values' : isChartViewForecast ? 'Forecasted values' : ''}
+                                                    <div className='mb-5 w-[50%] md:w-[70%]'>
+                                                        <h2 className='font-semibold text-xl md:text-3xl text-mint11 '>
+                                                            {isChartViewHistory ? 'History' : isChartViewForecast ? 'Forecast' : ''}
                                                         </h2>
                                                         <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
                                                     </div>
 
-                                                    <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[30%] h-fit'>
+                                                    <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[50%] md:w-[30%] h-fit'>
                                                         <Tabs.Trigger
                                                             className="w-[50%]  rounded-tl rounded-bl data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
                                                             value="tabHistory"
@@ -11584,7 +11602,7 @@ const PropertyCard = ({
                                                     </Tabs.List>
                                                 </div>
                                                 <Tabs.Content
-                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none max-h-[495px]"
+                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none"
                                                     value="tabHistory"
                                                 >
                                                     {
@@ -11598,7 +11616,7 @@ const PropertyCard = ({
                                                     }
                                                 </Tabs.Content>
                                                 <Tabs.Content
-                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none  max-h-[495px]"
+                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none"
                                                     value="tabForecast"
                                                 >
                                                     {
@@ -11614,12 +11632,12 @@ const PropertyCard = ({
                                             </Tabs.Root>
                                         </Tabs.Content>
                                         <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow max-h-[495px] overflow-y-scroll p-2 rounded-b-md outline-none "
+                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll p-2 rounded-b-md outline-none "
                                             value="tab4"
                                         >
                                             <div className='flex items-center justify-between w-full p-2 mb-5'>
                                                 <div className=''>
-                                                    <h2 className='font-semibold text-3xl text-mint11'>
+                                                    <h2 className='font-semibold text-xl md:text-3xl text-mint11'>
                                                         Tax assessments
                                                     </h2>
                                                     <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
@@ -11645,7 +11663,7 @@ const PropertyCard = ({
                                                     })}
                                                 </div>
                                             </div>
-                                            <div className='max-h-[495px] w-full'>
+                                            <div className='w-full'>
                                                 {
                                                     propertyDetails['tax_history'].length > 0 && (
                                                         <Line
@@ -11665,6 +11683,7 @@ const PropertyCard = ({
                         </div>
 
                     </div>
+
 
                     {/* Similar homes section */}
                     <div>
