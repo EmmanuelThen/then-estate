@@ -1,10 +1,13 @@
 import React from 'react'
+import ProFormaCalculator from '../components/ProFormaCalculator'
 
 type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div>page</div>
+    <div>
+        <ProFormaCalculator />
+    </div>
   )
 }
 

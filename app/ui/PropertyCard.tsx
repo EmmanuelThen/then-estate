@@ -11609,6 +11609,7 @@ const PropertyCard = ({
                                                         propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                         (<Line
                                                             className='h-full w-full'
+                                                            height={250}
                                                             data={lineChartData}
                                                             options={lineChartOptions}
                                                         />
@@ -11623,6 +11624,7 @@ const PropertyCard = ({
                                                         propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                         (<Line
                                                             className='h-full w-full'
+                                                            height={250}
                                                             data={lineChartData}
                                                             options={lineChartOptions}
                                                         />
@@ -11668,6 +11670,7 @@ const PropertyCard = ({
                                                     propertyDetails['tax_history'].length > 0 && (
                                                         <Line
                                                             className='h-full w-full'
+                                                            height={240}
                                                             data={taxLineChartData}
                                                             options={taxLineChartOptions}
                                                         />
