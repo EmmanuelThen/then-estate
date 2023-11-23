@@ -88,7 +88,14 @@ const ProformaProvider = ({ children }: any) => {
         const annualNoiCalc = monthlyNoiCalc * 12;
         const capRateCalc = (annualNoiCalc / salePrice) * 100;
 
+        return capRateCalc;
     }
+
+    // const handleInputChange = (e) => {
+    //     // Remove non-numeric characters from the input value
+    //     const numericValue = e.target.value.replace(/[^0-9]/g, '');
+    //     setMonthlyRentInput(numericValue);
+    // };
 
     const contextValue = {
         monthlyRentInput,
