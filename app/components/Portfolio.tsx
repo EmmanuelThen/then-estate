@@ -74,6 +74,10 @@ const Portfolio = (props: Props) => {
         getDailyAndPercentageChange();
     }, [totalValue]);
 
+    useEffect(() => {
+        console.log(totalValue);
+    }, [totalValue]);
+
     return (
         <div className='flex justify-between w-full'>
             {/* Heading */}
@@ -218,17 +222,15 @@ const Portfolio = (props: Props) => {
                                                                             bgColor={'bg-red9 text-xs w-full'}
                                                                             onClick={() => {
                                                                                 const propertyIDToRemove = holding['property_id'];
-                                                                                const propertyPriceToRemove = holding['listing_price'];
+                                                                                const propertyValueToRemove = holding['listing_price'];
                                                                                 // Update portfolioHoldings state
                                                                                 setPortfolioHoldings((prevHoldings) =>
                                                                                     prevHoldings.filter((holding) => holding['property_id'] !== propertyIDToRemove)
                                                                                 );
                                                                                 // Update totalValue state
                                                                                 setTotalValue((prevTotalValue) =>
-                                                                                    prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyPriceToRemove))
+                                                                                    prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyValueToRemove))
                                                                                 );
-                                                                                const newTotalValue = totalValue.filter(item => parseFloat(item['listing_price']) !== parseFloat(propertyPriceToRemove));
-                                                                                console.log(newTotalValue);
                                                                             }}
                                                                         />
                                                                     </div>
@@ -281,7 +283,7 @@ const Portfolio = (props: Props) => {
                             <div className=''>
                                 <Seperator text={`Watchlist`} />
                             </div>
-                            <div className='flex flex-col gap-[20px] p-2 border border-blackA6 rounded'>
+                            <div className='flex flex-col gap-[20px] p-2 border border-blackA6 rounded '>
 
                                 {watchlist.length > 0 ? (
                                     watchlist.map((item, j) => (

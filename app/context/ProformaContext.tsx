@@ -2,25 +2,44 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface ProformaContextProps {
-    monthlyRentInput: number | string
-    salePriceInput: number | string
-    propTaxInput: number | string
-    propInsuranceInput: number | string
-    propUtilitiesInput: number | string
-    propManagementInput: number | string
-    propVacancyInput: number | string
-    propMaintenanceInput: number | string
-    grossRentOutput: number | string
-    propManagementOutput: number | string
-    propTaxOutput: number | string
-    propVacancyOutput: number | string
-    propMaintenanceOutput: number | string
-    propInsuranceOutput: number | string
-    propUtilitiesOutput: number | string
-    totalOpexOutput: number | string
-    monthlyNoiOutput: number | string
-    annualNoiOutput: number | string
-    capRateOutput: number | string
+    monthlyRentInput: any
+    salePriceInput: any
+    propTaxInput: any
+    propInsuranceInput: any
+    propUtilitiesInput: any
+    propManagementInput: any
+    propVacancyInput: any
+    propMaintenanceInput: any
+    grossRentOutput: any
+    propManagementOutput: any
+    propTaxOutput: any
+    propVacancyOutput: any
+    propMaintenanceOutput: any
+    propInsuranceOutput: any
+    propUtilitiesOutput: any
+    totalOpexOutput: any
+    monthlyNoiOutput: any
+    annualNoiOutput: any
+    capRateOutput: any
+    setMonthlyRentInput: any
+    setSalePriceInput: any
+    setPropTaxInput: any
+    setPropInsuranceInput: any
+    setPropUtilitiesInput: any
+    setPropManagementInput: any
+    setPropVacancyInput: any
+    setPropMaintenanceInput: any
+    setGrossRentOutput: any
+    setPropManagementOutput: any
+    setPropTaxOutput: any
+    setPropVacancyOutput: any
+    setPropMaintenanceOutput: any
+    setPropInsuranceOutput: any
+    setPropUtilitiesOutput: any
+    setTotalOpexOutput: any
+    setMonthlyNoiOutput: any
+    setAnnualNoiOutput: any
+    setCapRateOutput: any
 }
 
 const ProformaContext = createContext<ProformaContextProps | undefined>(undefined);
@@ -28,26 +47,26 @@ const ProformaContext = createContext<ProformaContextProps | undefined>(undefine
 
 const ProformaProvider = ({ children }: any) => {
     // Pro forma inputs
-    const [monthlyRentInput, setMonthlyRentInput] = useState('');
-    const [salePriceInput, setSalePriceInput] = useState('');
-    const [propTaxInput, setPropTaxInput] = useState('');
-    const [propInsuranceInput, setPropInsuranceInput] = useState('');
-    const [propUtilitiesInput, setPropUtilitiesInput] = useState('');
-    const [propManagementInput, setPropManagementInput] = useState('');
-    const [propVacancyInput, setPropVacancyInput] = useState('');
-    const [propMaintenanceInput, setPropMaintenanceInput] = useState('');
+    const [monthlyRentInput, setMonthlyRentInput] = useState(0);
+    const [salePriceInput, setSalePriceInput] = useState(0);
+    const [propTaxInput, setPropTaxInput] = useState(0);
+    const [propInsuranceInput, setPropInsuranceInput] = useState(0);
+    const [propUtilitiesInput, setPropUtilitiesInput] = useState(0);
+    const [propManagementInput, setPropManagementInput] = useState(0);
+    const [propVacancyInput, setPropVacancyInput] = useState(0);
+    const [propMaintenanceInput, setPropMaintenanceInput] = useState(0);
     // Pro forma outputs
-    const [grossRentOutput, setGrossRentOutput] = useState('');
-    const [propManagementOutput, setPropManagementOutput] = useState('');
-    const [propTaxOutput, setPropTaxOutput] = useState('');
-    const [propVacancyOutput, setPropVacancyOutput] = useState('');
-    const [propMaintenanceOutput, setPropMaintenanceOutput] = useState('');
-    const [propInsuranceOutput, setPropInsuranceOutput] = useState('');
-    const [propUtilitiesOutput, setPropUtilitiesOutput] = useState('');
-    const [totalOpexOutput, setTotalOpexOutput] = useState('');
-    const [monthlyNoiOutput, setMonthlyNoiOutput] = useState('');
-    const [annualNoiOutput, setAnnualNoiOutput] = useState('');
-    const [capRateOutput, setCapRateOutputv] = useState('');
+    // const [grossRentOutput, setGrossRentOutput] = useState('');
+    // const [propManagementOutput, setPropManagementOutput] = useState('');
+    // const [propTaxOutput, setPropTaxOutput] = useState('');
+    // const [propVacancyOutput, setPropVacancyOutput] = useState('');
+    // const [propMaintenanceOutput, setPropMaintenanceOutput] = useState('');
+    // const [propInsuranceOutput, setPropInsuranceOutput] = useState('');
+    // const [propUtilitiesOutput, setPropUtilitiesOutput] = useState('');
+    const [totalOpexOutput, setTotalOpexOutput] = useState(0);
+    const [monthlyNoiOutput, setMonthlyNoiOutput] = useState(0);
+    const [annualNoiOutput, setAnnualNoiOutput] = useState(0);
+    const [capRateOutput, setCapRateOutput] = useState(0);
 
     // Pro forma caluclation
     const calculateProforma = () => {
@@ -88,7 +107,10 @@ const ProformaProvider = ({ children }: any) => {
         const annualNoiCalc = monthlyNoiCalc * 12;
         const capRateCalc = (annualNoiCalc / salePrice) * 100;
 
-        return capRateCalc;
+        setTotalOpexOutput(totalOpexCalc);
+        setMonthlyNoiOutput(monthlyNoiCalc);
+        setAnnualNoiOutput(annualNoiCalc);
+        setCapRateOutput(capRateCalc);
     }
 
     // const handleInputChange = (e) => {
@@ -106,17 +128,36 @@ const ProformaProvider = ({ children }: any) => {
         propManagementInput,
         propVacancyInput,
         propMaintenanceInput,
-        grossRentOutput,
-        propManagementOutput,
-        propTaxOutput,
-        propVacancyOutput,
-        propMaintenanceOutput,
-        propInsuranceOutput,
-        propUtilitiesOutput,
+        // grossRentOutput,
+        // propManagementOutput,
+        // propTaxOutput,
+        // propVacancyOutput,
+        // propMaintenanceOutput,
+        // propInsuranceOutput,
+        // propUtilitiesOutput,
         totalOpexOutput,
         monthlyNoiOutput,
         annualNoiOutput,
         capRateOutput,
+        setMonthlyRentInput,
+        setSalePriceInput,
+        setPropTaxInput,
+        setPropInsuranceInput,
+        setPropUtilitiesInput,
+        setPropManagementInput,
+        setPropVacancyInput,
+        setPropMaintenanceInput,
+        // setGrossRentOutput,
+        // setPropManagementOutput,
+        // setPropTaxOutput,
+        // setPropVacancyOutput,
+        // setPropMaintenanceOutput,
+        // setPropInsuranceOutput,
+        // setPropUtilitiesOutput,
+        setTotalOpexOutput,
+        setMonthlyNoiOutput,
+        setAnnualNoiOutput,
+        setCapRateOutput,
     }
 
     return (

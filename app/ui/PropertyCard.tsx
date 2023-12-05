@@ -11260,7 +11260,7 @@ const PropertyCard = ({
                             <div className='border border-green-500 h-[800px]'>
                                 {propertyDetails.mortgage && (
                                     <Tabs.Root
-                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] h-[800px]"
+                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] max-h-[800px] overflow-y-scroll"
                                         defaultValue="tab1"
                                     >
                                         {/* Navbar */}
@@ -11608,8 +11608,8 @@ const PropertyCard = ({
                                                     {
                                                         propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                         (<Line
-                                                            className='h-full w-full'
-                                                            height={250}
+                                                            className=' w-full'
+                                                            height={undefined}
                                                             data={lineChartData}
                                                             options={lineChartOptions}
                                                         />
@@ -11623,8 +11623,8 @@ const PropertyCard = ({
                                                     {
                                                         propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
                                                         (<Line
-                                                            className='h-full w-full'
-                                                            height={250}
+                                                            className=' w-full'
+                                                            height={undefined}
                                                             data={lineChartData}
                                                             options={lineChartOptions}
                                                         />
@@ -11669,8 +11669,8 @@ const PropertyCard = ({
                                                 {
                                                     propertyDetails['tax_history'].length > 0 && (
                                                         <Line
-                                                            className='h-full w-full'
-                                                            height={240}
+                                                            className=' w-full'
+                                                            height={undefined}
                                                             data={taxLineChartData}
                                                             options={taxLineChartOptions}
                                                         />

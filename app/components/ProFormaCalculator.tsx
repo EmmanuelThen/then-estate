@@ -1,8 +1,9 @@
 'use client'
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import Seperator from '../ui/Seperator';
 import { useProformaContext } from '../context/ProFormaContext';
+import Button from '../ui/Button';
 
 
 type Props = {}
@@ -10,6 +11,7 @@ type Props = {}
 const ProFormaCalculator = (props: Props) => {
     const { monthlyRentInput,
         salePriceInput,
+        setSalePriceInput,
         propTaxInput,
         propInsuranceInput,
         propUtilitiesInput,
@@ -29,6 +31,8 @@ const ProFormaCalculator = (props: Props) => {
         capRateOutput } = useProformaContext();
 
 
+
+
     return (
         <div className='flex flex-col gap-2 w-full px-2 py-20'>
             <header>
@@ -37,7 +41,7 @@ const ProFormaCalculator = (props: Props) => {
                 </h1>
             </header>
             <Tabs.Root
-                className="flex flex-col w-[300px] shadow-[0_2px_10px] shadow-blackA2"
+                className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2"
                 defaultValue="tab1"
             >
                 <Tabs.List className="shrink-0 flex border-b border-sky12" aria-label="Calculators">
@@ -55,7 +59,7 @@ const ProFormaCalculator = (props: Props) => {
                     </Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content
-                    className="grow p-5  rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+                    className="grow p-5 rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
                     value="tab1"
                 >
                     <div className="main-input-table">
@@ -75,7 +79,9 @@ const ProFormaCalculator = (props: Props) => {
                                         <input
                                             className='rounded p-2 bg-blackA2'
                                             type="number"
+                                            pattern='/[^0-9]/g'
                                             value={salePriceInput}
+                                            onChange={(e) => setSalePriceInput(e.target.value)}
                                             min="0"
                                             placeholder="Enter Sale Price"
                                         />
@@ -95,7 +101,7 @@ const ProFormaCalculator = (props: Props) => {
                             <tbody className='text-sm'>
                                 <tr>
                                     <td>
-                                        <label className="font-light" for="prop-dp">Downpayment (%) </label>
+                                        <label className="font-light" >Downpayment (%) </label>
                                         <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
                                             type="number"
                                             pattern='/[^0-9]/g'
@@ -106,7 +112,7 @@ const ProFormaCalculator = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label className="font-light" for="prop-int">Interest Rate (%) </label>
+                                        <label className="font-light" >Interest Rate (%) </label>
                                         <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
                                             type="number"
                                             pattern='/[^0-9]/g'
@@ -117,7 +123,7 @@ const ProFormaCalculator = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label className="font-light" for="prop-loan">Loan Term (Years) </label>
+                                        <label className="font-light" >Loan Term (Years) </label>
                                         <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
                                             type="number"
                                             pattern='/[^0-9]/g'
@@ -128,7 +134,7 @@ const ProFormaCalculator = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label className="font-light" for="prop-closing">Closing Cost </label>
+                                        <label className="font-light" >Closing Cost </label>
                                         <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
                                             type="number"
                                             pattern='/[^0-9]/g'
@@ -145,9 +151,9 @@ const ProFormaCalculator = (props: Props) => {
 
                         <table className="table table-sm table-dark table-striped ">
                             <thead>
-                                    <th className="fw-normal" id="exp-header">
-                                        <Seperator text={`Total rent/mo.`} />
-                                    </th>
+                                <th className="fw-normal" id="exp-header">
+                                    <Seperator text={`Total rent/mo.`} />
+                                </th>
                             </thead>
                             <tbody>
                                 <tr>
@@ -168,45 +174,49 @@ const ProFormaCalculator = (props: Props) => {
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <label for="prop-tax">Property Tax Per Year</label>
+                                            <label >Property Tax Per Year</label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-tax" min="0" placeholder="Enter Property Tax" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="prop-ins">Insurance Per Month</label>
+                                            <label >Insurance Per Month</label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-ins" min="0" placeholder="Enter Insurance" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="prop-utilities">Utilities Per Month</label>
+                                            <label >Utilities Per Month</label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-utilities" min="0" placeholder="Enter Utilities" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="prop-mngmt">Property Management (%) </label>
+                                            <label >Property Management (%) </label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-mngmt" min="0" placeholder="Enter Management" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="prop-vacancy">Vacancy (%)</label>
+                                            <label >Vacancy (%)</label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-vacancy" min="0" placeholder="Enter Vacancy" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label for="prop-maintenance">Maintenance (%)</label>
+                                            <label >Maintenance (%)</label>
                                             <input className='rounded p-2 bg-blackA2' type="number" id="prop-maintenance" min="0" placeholder="Enter Maintenance" />
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
 
+                    </div>
+                    <Button
+                        bgColor='bg-mint11'
+                        text={`Calculate Pro Forma Analysis`}
+                    />
 
 
                 </Tabs.Content>
