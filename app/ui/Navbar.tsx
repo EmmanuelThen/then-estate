@@ -8,7 +8,7 @@ const Navbar = (props: Props) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <nav id='dark-mode' className="flex item-center max-h-[45px] fixed w-full shrink-0 border-b-[0.5px] z-[999] justify-between shadow-blackA9  shadow-[0px_2px_4px]" aria-label="Nav bar">
+        <nav id='dark-mode' className="flex item-center max-h-[45px] fixed w-full shrink-0 z-[999] justify-between shadow-blackA3  shadow-[0px_2px_4px]" aria-label="Nav bar">
             {/* Logo div */}
             <svg width="35" height="35" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" xlinkHref="http://www.w3.org/1999/xlink">
                 <rect width="500" height="500" fill="url(#pattern0)" />

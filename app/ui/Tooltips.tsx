@@ -11,7 +11,7 @@ const Tooltips = ({ button, tooltipContent }: Props) => {
         <Tooltip.Provider>
             <Tooltip.Root delayDuration={0}>
                 <Tooltip.Trigger asChild>
-                    <div className='hover:cursor-pointer w-fit rounded-full shadow-blackA9 shadow-[0px_4px_7px] bg-slate2 p-2 h-fit'>
+                    <div className='hover:cursor-pointer w-fit rounded-full shadow-blackA6 shadow-[0px_4px_7px] bg-blackA2 p-2 h-fit'>
                         {button}
                     </div>
                 </Tooltip.Trigger>

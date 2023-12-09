@@ -18,7 +18,8 @@ html {
   scroll-behavior: smooth;
 }
 
-body, #dark-mode {
+body,
+#dark-mode {
   color: rgb(var(--text-rgb));
   background: var(--background-rgb);
 }
@@ -27,15 +28,18 @@ body, #dark-mode {
   stroke: rgb(var(--text-rgb));
 }
 
-#scroll-container, #mtg-container {
+#scroll-container,
+#mtg-container {
   overflow-x: scroll;
   white-space: nowrap;
 }
 
 /*to hide scrollbar in firefox*/
 #mtg-container {
-  scrollbar-width: none; /* Hide scrollbar */
-  -ms-overflow-style: none; /* Hide scrollbar in IE10+ */
+  scrollbar-width: none;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;
+  /* Hide scrollbar in IE10+ */
 }
 
 /* to hide scrollbar in chrome/safari*/
@@ -61,6 +65,7 @@ body, #dark-mode {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(calc(-220px * 4));
   }
@@ -68,54 +73,87 @@ body, #dark-mode {
 
 .grid-container {
   display: grid;
-  grid-template-columns:  repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
 }
 
 .property-badge-grid {
   display: grid;
-  grid-template-columns:  repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
 /* Navbar animation */
 .scale-in-tr {
-	-webkit-animation: scale-in-tr 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: scale-in-tr 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: scale-in-tr 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-tr 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
- @-webkit-keyframes scale-in-tr {
+@-webkit-keyframes scale-in-tr {
   0% {
     -webkit-transform: scale(0);
-            transform: scale(0);
+    transform: scale(0);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
     opacity: 1;
   }
+
   100% {
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
     opacity: 1;
   }
 }
+
 @keyframes scale-in-tr {
   0% {
     -webkit-transform: scale(0);
-            transform: scale(0);
+    transform: scale(0);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
     opacity: 1;
   }
+
   100% {
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     -webkit-transform-origin: 100% 0%;
-            transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
     opacity: 1;
   }
 }
 
+.scale-in-center {
+  -webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
 
+@-webkit-keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
 
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
