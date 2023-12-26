@@ -10954,7 +10954,7 @@ const PropertyCard = ({
                         </button>
                     </Dialog.Close>
                     {/* Full container */}
-                    <div className='relative h-[600px]'>
+                    <div className='relative h-[600px] {border border-pink-500}'>
                         <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
                             <Sparkles />
                             <p className='text-xs font-semibold text-white'>New listing</p>
@@ -10971,7 +10971,7 @@ const PropertyCard = ({
                                 </button>
                             </div>
                             {propertyImages.length > 0 && (
-                                <div className='w-full h-full'>
+                                <div className='w-full h-[80%] md:h-full'>
                                     <Image
                                         key={propertyID}
                                         className={`${loading ? `opacity-70` : ``} w-full h-full object-contain`}
@@ -11013,10 +11013,10 @@ const PropertyCard = ({
                             </div>
                         </div>
                     </div>
-                    <div className='md:flex w-full h-full border border-green-500 p-2 mt-20'>
+                    <div className='lg:flex w-full h-full border border-green-500 p-2 mt-20'>
 
                         {/* Right side of pop up */}
-                        <div className='md:w-[40%] h-[800px] border border-blue-500 p-2'>
+                        <div className='lg:w-[40%] h-[800px] border border-blue-500 p-2'>
                             <div className="flex flex-col gap-2.5 w-full">
                                 <div className="text-sm md:text-md font-medium whitespace-nowrap">
                                     {streetAddress}
@@ -11167,9 +11167,9 @@ const PropertyCard = ({
                                     <form onSubmit={handleContactAgent} >
                                         <button className={
                                             agentEmail === 'No data available' ?
-                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
+                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
                                                 :
-                                                `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-md h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
+                                                `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
                                         }
                                         >
                                             {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
@@ -11246,25 +11246,25 @@ const PropertyCard = ({
                                     </ul>
 
                                     {/* Investmeny analysis section */}
-                                    <div className='mt-10'>
+                                    {/* <div className='mt-10'>
                                         <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
                                             {`Investalyze ${streetAddress}`}
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </article>
                             </div>
                         </div>
 
-                        <div className='flex flex-col gap-20 md:w-[60%] border border-red-500 h-[800px] mt-10 md:mt-0'>
+                        <div className='flex flex-col gap-20 lg:w-[60%] border border-red-500 mt-10 md:mt-0'>
                             {/* In depth details */}
-                            <div className='border border-green-500 h-[800px]'>
+                            <div className='border border-green-500 overflow-x-hidden'>
                                 {propertyDetails.mortgage && (
                                     <Tabs.Root
                                         className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] max-h-[800px] overflow-y-scroll"
                                         defaultValue="tab1"
                                     >
                                         {/* Navbar */}
-                                        <Tabs.List className="max-h-[35px] border-b items-center flex" aria-label="Nav bar">
+                                        <Tabs.List id='dark-mode' className="max-h-[35px] items-center flex shadow-blackA3 shadow-[0px_2px_4px]" aria-label="Navbar">
                                             <Tabs.Trigger
                                                 className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                                                 value="tab1"

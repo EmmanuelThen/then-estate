@@ -146,7 +146,7 @@ const Portfolio = (props: Props) => {
                             <div className=''>
                                 <Seperator text={`Portfolio`} />
                             </div>
-                            <div className='border border-blackA6 rounded p-2'>
+                            <div className='p-2'>
                                 {portfolioHoldings.length > 0 ? (
                                     uniqueStateCodes.map((stateCode, i) => {
                                         // To find all holdings with the current state code on accordion
@@ -161,7 +161,7 @@ const Portfolio = (props: Props) => {
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
                                             <div key={j}>
                                                 {/* Property badge container */}
-                                                <div className={`flex relative bg-mint11/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                                <div className={`flex relative bg-mint11 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                     <Image
                                                         className={`object-cover border border-mint11 rounded-full`}
                                                         alt='property-image'
@@ -236,6 +236,7 @@ const Portfolio = (props: Props) => {
                                                                     </div>
                                                                 </div>
                                                             }
+                                                            popUpBgColor={'bg-mint11/90'}
                                                         />
                                                     </button>
                                                 </div>
@@ -283,13 +284,13 @@ const Portfolio = (props: Props) => {
                             <div className=''>
                                 <Seperator text={`Watchlist`} />
                             </div>
-                            <div className='flex flex-col gap-[20px] p-2 border border-blackA6 rounded '>
+                            <div className='flex flex-col gap-[20px] p-2 '>
 
                                 {watchlist.length > 0 ? (
                                     watchlist.map((item, j) => (
                                         <>
                                             {/* Property badge container */}
-                                            <div className={`flex relative bg-sky12/80 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                            <div className={`flex relative bg-blackA6 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                 <Image
                                                     className={`object-cover border border-mint11 rounded-full`}
                                                     alt='property-image'
@@ -360,6 +361,7 @@ const Portfolio = (props: Props) => {
                                                                 </div>
                                                             </div>
                                                         }
+                                                        popUpBgColor={'bg-blackA9'}
                                                     />
                                                 </button>
                                             </div>

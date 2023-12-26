@@ -26,10 +26,6 @@ export default function Home() {
               text={`Get started`}
               bgColor='bg-sky12'
             />
-            <Button
-              text={`Pricing`}
-              bgColor='bg-mint11'
-            />
           </div>
           <div className='flex isolate justify-center mt-10'>
             <GradientBlur />

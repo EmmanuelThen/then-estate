@@ -27945,7 +27945,7 @@ const SearchBar = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
                     <input
-                        className="box-border w-full bg-blackA5 shadow-mint11 inline-flex h-[35px] appearance-none items-center justify-center font-light rounded-md px-[40px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black] selection:color-white selection:bg-blackA9"
+                        className="w-full bg-blackA2 inline-flex h-[35px] appearance-none items-center justify-center font-light rounded-full px-[40px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black] transition duration-150 ease-in-out"
                         type="text"
                         required
                         placeholder='Enter address, city, or ZIP code'

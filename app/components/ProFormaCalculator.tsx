@@ -5,6 +5,7 @@ import Seperator from '../ui/Seperator';
 import { useProformaContext } from '../context/ProFormaContext';
 import Button from '../ui/Button';
 import LoaderRing from '../ui/LoaderRing';
+import ActionButton from '../ui/ActionButton';
 
 
 type Props = {}
@@ -12,6 +13,7 @@ type Props = {}
 const ProFormaCalculator = (props: Props) => {
     const [rates, setRates] = useState([]);
     const [calculateMortgage, setCalculateMortgage] = useState([])
+    const [monthlyPaymentDetails, setMonthlyPaymentDetails] = useState([])
     const [loading, setLoading] = useState(false);
 
     const { monthlyRentInput,
@@ -38,11 +40,18 @@ const ProFormaCalculator = (props: Props) => {
     const usdFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     });
 
-    const checkRatesApiCall = {
+    function formatType(type) {
+        // Replace underscores with spaces and capitalize each word
+        const formattedType = type.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+
+        return formattedType;
+    }
+
+    const checkRatesApiCall: any = {
         "data": {
             "loan_analysis": {
                 "__typename": "LoanAnalysis",
@@ -156,7 +165,7 @@ const ProFormaCalculator = (props: Props) => {
         }
     }
 
-    const calculateMortgageApiCall = {
+    const calculateMortgageApiCall: any = {
         "data": {
             "loan_mortgage": {
                 "__typename": "LoanMortgage",
@@ -216,8 +225,9 @@ const ProFormaCalculator = (props: Props) => {
                 // const response = await fetch(url, options);
                 // const result = await response.text();
                 // console.log(result);
-                setRates(checkRatesApiCall.data['loan_analysis'].market['mortgage_data']['average_rates'])
-                setCalculateMortgage(calculateMortgageApiCall.data['loan_mortgage'])
+                setRates(checkRatesApiCall.data['loan_analysis'].market['mortgage_data']['average_rates']);
+                setCalculateMortgage(calculateMortgageApiCall.data['loan_mortgage']);
+                setMonthlyPaymentDetails(calculateMortgageApiCall.data['loan_mortgage']['monthly_payment_details']);
             } catch (error) {
                 console.error(error);
             }
@@ -237,38 +247,38 @@ const ProFormaCalculator = (props: Props) => {
             >
                 <Tabs.List className="shrink-0 flex border-b border-sky12" aria-label="Calculators">
                     <Tabs.Trigger
-                        className="whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mint11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none cursor-default"
+                        className="whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                         value="tab1"
                     >
                         Check rates
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mint11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none cursor-default"
+                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                         value="tab2"
                     >
                         Mortgage
                     </Tabs.Trigger>
-                    <Tabs.Trigger
-                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mint11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none cursor-default"
+                    {/* <Tabs.Trigger
+                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                         value="tab3"
                     >
                         Affordability
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mint11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none cursor-default"
+                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                         value="tab4"
                     >
                         Check equity rates
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mint11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none cursor-default"
+                        className=" px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                         value="tab5"
                     >
                         Pro forma analysis
-                    </Tabs.Trigger>
+                    </Tabs.Trigger> */}
                 </Tabs.List>
                 <Tabs.Content
-                    className="grow p-5 rounded-b-md outline-none focus:shadow-[0_0_0_2px] "
+                    className="grow p-5 rounded-b-md outline-none  "
                     value="tab1"
                 >
                     <header>
@@ -278,13 +288,14 @@ const ProFormaCalculator = (props: Props) => {
                     </header>
                     <div className='flex items-center gap-3 mt-5 text-sm'>
                         <input
-                            className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                            className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                             type="number"
                             placeholder='Enter ZIP code'
                         />
-                        <Button
+                        <ActionButton
                             text={'Check rates'}
-                            bgColor={'bg-sky12'}
+                            bgColor={'bg-mint11'}
+                            onClick={undefined}
                         />
                     </div>
                     <div className='property-badge-grid mt-10'>
@@ -305,22 +316,22 @@ const ProFormaCalculator = (props: Props) => {
                     </div>
                 </Tabs.Content>
                 <Tabs.Content
-                    className="grow p-5 rounded-b-md outline-none focus:shadow-[0_0_0_2px] "
+                    className="grow p-5 rounded-b-md outline-none  "
                     value="tab2"
                 >
                     <header>
-                        <h1 className='flex justify-start font-light tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl'>
-                            Calculate mortgage payment
+                        <h1 className='flex justify-start font-light tracking-[-0.03em] md:leading-[1.10] bg-clip-text md:text-center text-3xl'>
+                            Calculate mortgage
                         </h1>
                     </header>
-                    <div className='flex gap-3'>
+                    <div className='md:flex gap-5'>
                         {/* Mortgage calulator inputs */}
-                        <div className='flex flex-col gap-3 mt-5 text-sm w-[30%]'>
+                        <div className='flex flex-col gap-3 mt-5 text-sm md:w-[30%]'>
                             <label className='font-medium' htmlFor='price'>
                                 Price
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='price'
                                 type="number"
                                 placeholder='Enter price'
@@ -329,7 +340,7 @@ const ProFormaCalculator = (props: Props) => {
                                 Down payment
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='down-payment'
                                 type="number"
                                 placeholder='Enter down payment'
@@ -338,7 +349,7 @@ const ProFormaCalculator = (props: Props) => {
                                 Term (years)
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='term'
                                 type="number"
                                 placeholder='Enter loan term'
@@ -347,7 +358,7 @@ const ProFormaCalculator = (props: Props) => {
                                 Interest rate (%)
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='int-rate'
                                 type="number"
                                 placeholder='Enter interest rate'
@@ -356,7 +367,7 @@ const ProFormaCalculator = (props: Props) => {
                                 HOA fee
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='hoa'
                                 type="number"
                                 placeholder='Enter HOA fee'
@@ -365,7 +376,7 @@ const ProFormaCalculator = (props: Props) => {
                                 Property tax rate
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='property-tax-rate'
                                 type="number"
                                 placeholder='Enter property tax rate'
@@ -374,18 +385,19 @@ const ProFormaCalculator = (props: Props) => {
                                 Home insurance
                             </label>
                             <input
-                                className='rounded p-2 bg-blackA2 font-light h-[35px]'
+                                className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='home-insurance'
                                 type="number"
                                 placeholder='Enter home insurance'
                             />
-                            <Button
-                                text={'Check rates'}
-                                bgColor={'bg-sky12'}
+                            <ActionButton
+                                text={'Calculate mortgage'}
+                                bgColor={'bg-mint11'}
+                                onClick={undefined}
                             />
                         </div>
-                        {/* Results when check rates button is clicked */}
-                        <div className='w-[70%]'>
+                        {/* Results when calculate button is clicked */}
+                        <div className='mt-10 md:mt-0 md:w-[70%]'>
                             {loading ? (
                                 <div className='flex items-center justify-center'>
                                     <LoaderRing />
@@ -395,41 +407,53 @@ const ProFormaCalculator = (props: Props) => {
                                     <div className='property-badge-grid'>
                                         {/* Loan amount */}
                                         <div className='rounded bg-blackA2 p-2' >
-                                            <label className='font-medium text-2xl text-mint11'>
-                                                Loan amount
+                                            <label className='font-medium text-2xl'>
+                                                Loan Amount
                                             </label>
                                             <p className='font-light'>
                                                 {usdFormatter.format(calculateMortgage['loan_amount'])}
                                             </p>
                                         </div>
-                                        {/* Rate */}
+                                        {/* Total payment */}
                                         <div className='rounded bg-blackA2 p-2' >
-                                            <label className='font-medium text-2xl text-mint11'>
-                                                Rate
+                                            <label className='font-medium text-2xl'>
+                                                Total Payment
                                             </label>
                                             <p className='font-light'>
-                                                {calculateMortgage.rate}
+                                                {usdFormatter.format(calculateMortgage['total_payment'] / 100)}
                                             </p>
                                         </div>
-                                        
                                         {/* Monthly payment */}
                                         <div className='rounded bg-blackA2 p-2' >
-                                            <label className='font-medium text-2xl text-mint11'>
-                                                Monthly payment
+                                            <label className='font-medium text-2xl'>
+                                                Monthly Payment
                                             </label>
                                             <p className='font-light'>
-                                                {usdFormatter.format(calculateMortgage['monthly_payment'])}
+                                                {usdFormatter.format(calculateMortgage['monthly_payment'] / 100)}
                                             </p>
                                         </div>
                                     </div>
-                                 <Seperator text={'Monthly payment details'}/>
+                                    <Seperator text={'Monthly payment breakdown'} />
+                                    {/* Monthly payment breakdown */}
+                                    <div className='flex flex-col gap-3 mt-5'>
+                                        {monthlyPaymentDetails.map((details, i) => (
+                                            <div className='rounded bg-blackA2 p-2' key={i}>
+                                                <label className='font-medium text-2xl'>
+                                                    {formatType(details.type)}
+                                                </label>
+                                                <p className='font-light'>
+                                                    {usdFormatter.format(details.amount / 100)}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </>
                             )}
                         </div>
                     </div>
                 </Tabs.Content>
                 <Tabs.Content
-                    className="grow p-5 rounded-b-md outline-none focus:shadow-[0_0_0_2px] "
+                    className="grow p-5 rounded-b-md outline-none  "
                     value="tab5"
                 >
                     <div className="main-input-table">
@@ -447,7 +471,7 @@ const ProFormaCalculator = (props: Props) => {
                                     <td>
                                         <label className="font-light">Sale price</label>
                                         <input
-                                            className='rounded p-2 bg-blackA2'
+                                            className='rounded p-2 bg-blackA2 hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                             type="number"
                                             pattern='/[^0-9]/g'
                                             value={salePriceInput}
@@ -472,7 +496,7 @@ const ProFormaCalculator = (props: Props) => {
                                 <tr>
                                     <td>
                                         <label className="font-light" >Downpayment (%) </label>
-                                        <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
+                                        <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                             type="number"
                                             pattern='/[^0-9]/g'
                                             min="0"
@@ -483,7 +507,7 @@ const ProFormaCalculator = (props: Props) => {
                                 <tr>
                                     <td>
                                         <label className="font-light" >Interest Rate (%) </label>
-                                        <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
+                                        <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                             type="number"
                                             pattern='/[^0-9]/g'
                                             min="0"
@@ -494,7 +518,7 @@ const ProFormaCalculator = (props: Props) => {
                                 <tr>
                                     <td>
                                         <label className="font-light" >Loan Term (Years) </label>
-                                        <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
+                                        <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                             type="number"
                                             pattern='/[^0-9]/g'
                                             min="0"
@@ -505,7 +529,7 @@ const ProFormaCalculator = (props: Props) => {
                                 <tr>
                                     <td>
                                         <label className="font-light" >Closing Cost </label>
-                                        <input className='rounded p-2 bg-blackA2 focus:shadow-[0_0_0_2px] focus:shadow-mint11'
+                                        <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                             type="number"
                                             pattern='/[^0-9]/g'
                                             min="0"
@@ -527,7 +551,7 @@ const ProFormaCalculator = (props: Props) => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input className='rounded p-2 bg-blackA2' id="monthly-rent" type="number" min="0" placeholder="Enter monthly rent" /></td>
+                                    <td><input className='rounded p-2 bg-blackA2 hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out' id="monthly-rent" type="number" min="0" placeholder="Enter monthly rent" /></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -591,7 +615,7 @@ const ProFormaCalculator = (props: Props) => {
 
                 </Tabs.Content>
                 <Tabs.Content
-                    className="grow p-5  rounded-b-md outline-none focus:shadow-[0_0_0_2px] "
+                    className="grow p-5  rounded-b-md outline-none  "
                     value="tab2"
                 >
 

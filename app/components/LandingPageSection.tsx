@@ -1,6 +1,7 @@
 import React from 'react'
 import ListItem from './ListItem'
 import Button from '../ui/Button'
+import Image from 'next/image'
 
 type Props = {
     description: any
@@ -34,9 +35,12 @@ const LandingPageSection = ({ description, title }: Props) => {
                 </div>
                 {/* Feature Image */}
                 <div className='md:w-[60%] px-20 flex justify-center'>
-                    <div className='bg-slate4 rounded flex justify-center items-center  w-full h-full shadow-mint11 shadow-[0px_8px_15px]'>
-                        Feature Image
-                    </div>
+                    <Image
+                        alt='fallback'
+                        src='/app/images/PropertySearch.png'
+                        width={900}
+                        height={900}
+                    />
                 </div>
             </div>
         </div>

@@ -68,7 +68,7 @@ const Navbar = (props: Props) => {
                 </span>
             </Link>
             {/* Log in/Sign up */}
-            <div className='hidden md:flex items-center gap-2 h-[45px] mr-2'>
+            {/* <div className='hidden md:flex items-center gap-2 h-[45px] mr-2'>
                 <Link
                     className='rounded border border-mint11 bg-mint11 z-50 inline-flex items-center justify-center leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out text-white text-sm py-1 px-2'
                     href='/'
@@ -81,7 +81,7 @@ const Navbar = (props: Props) => {
                 >
                     Log in
                 </Link>
-            </div>
+            </div> */}
             <h1 className='flex items-center font-semibold text-mint11 md:hidden'>ThenEstate</h1>
             <button
                 className='flex items-center md:hidden px-2 transition duration-150 ease-in-out'
