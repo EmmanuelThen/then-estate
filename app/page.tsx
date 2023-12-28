@@ -24,7 +24,11 @@ export default function Home() {
           <div className='flex flex-col justify-center md:flex-row gap-3 mt-5 md:mt-10 mx-20 md:mx-0'>
             <Button
               text={`Get started`}
-              bgColor='bg-sky12'
+              bgColor='bg-mint11 text-white'
+            />
+            <Button
+              text={`View all features`}
+              bgColor='border border-mint11 text-mint11'
             />
           </div>
           <div className='flex isolate justify-center mt-10'>

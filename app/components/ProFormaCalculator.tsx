@@ -414,6 +414,15 @@ const ProFormaCalculator = (props: Props) => {
                                                 {usdFormatter.format(calculateMortgage['loan_amount'])}
                                             </p>
                                         </div>
+                                        {/* Interest paid */}
+                                        <div className='rounded bg-blackA2 p-2' >
+                                            <label className='font-medium text-2xl'>
+                                                Interest Paid
+                                            </label>
+                                            <p className='font-light'>
+                                                {usdFormatter.format(((calculateMortgage['total_payment'] / 100)) - ((calculateMortgage['loan_amount'])))}
+                                            </p>
+                                        </div>
                                         {/* Total payment */}
                                         <div className='rounded bg-blackA2 p-2' >
                                             <label className='font-medium text-2xl'>

@@ -28081,6 +28081,7 @@ const SearchBar = () => {
                         cityStateZip={`${properties.location.address.city} ${properties.location.address['state_code'].toUpperCase()} ${properties.location.address['postal_code']}`}
                         state={properties.location.address.state}
                         stateCode={properties.location.address['state_code']}
+                        zip={properties.location.address['postal_code']}
                         price={properties['list_price']} // Change back to formatted version if needed
                         status={
                             (() => {

@@ -14,6 +14,8 @@ import Popup from '../ui/Popup';
 import Warning from './svg/Warning';
 import TrendingDownArrow from './svg/TrendingDownArrow';
 import WatchlistEmpty from './svg/WatchlistEmpty';
+import * as Tabs from '@radix-ui/react-tabs';
+
 
 type Props = {}
 
@@ -103,7 +105,7 @@ const Portfolio = (props: Props) => {
                         }
                     </h2>
                     {/* Percentage change and dollar amount change */}
-                    <div className='flex items-center gap-2'>
+                    <div className={`${dailyChanges === 0 ? 'hidden' : 'flex items-center gap-2'}`}>
                         {dailyChanges && (
                             <div className='flex items-center gap-2'>
                                 {dailyChanges > 0 ? (
@@ -141,11 +143,29 @@ const Portfolio = (props: Props) => {
                     {/* <div className='md:w-[50%]'>
                         <Seperator text={`Portfolio`} />
                     </div> */}
-                    <div className='md:flex gap-5 w-full'>
-                        <div className='md:w-[50%] '>
-                            <div className=''>
-                                <Seperator text={`Portfolio`} />
-                            </div>
+                    <Tabs.Root
+                        className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2 mt-5"
+                        defaultValue="tab1"
+                    >
+                        <Tabs.List className="shrink-0 flex shadow-blackA3 shadow-[0px_2px_4px]" aria-label="portfolio-tabs">
+                            <Tabs.Trigger
+                                className="border-r-[1px] border-blackA3 whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
+                                value="tab1"
+                            >
+                                Portfolio
+                            </Tabs.Trigger>
+                            <Tabs.Trigger
+                                className="whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
+                                value="tab2"
+                            >
+                                Watchlist
+                            </Tabs.Trigger>
+                        </Tabs.List>
+
+                        <Tabs.Content
+                            className="grow p-5 rounded-b-md outline-none  "
+                            value="tab1"
+                        >
                             <div className='p-2'>
                                 {portfolioHoldings.length > 0 ? (
                                     uniqueStateCodes.map((stateCode, i) => {
@@ -159,34 +179,62 @@ const Portfolio = (props: Props) => {
                                         );
                                         // to render the property badge for each holding with the same state code, so they are all grouped together under the same accordion
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
-                                            <div key={j}>
+                                            <div className='p-5 mx-20' key={j}>
                                                 {/* Property badge container */}
-                                                <div className={`flex relative bg-mint11 rounded-full text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                                <div id='dark-mode' className={`flex relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
                                                     <Image
-                                                        className={`object-cover border border-mint11 rounded-full`}
+                                                        className={`object-cover rounded`}
                                                         alt='property-image'
                                                         src={holding.image}
-                                                        width={50}
-                                                        height={50}
+                                                        width={300}
+                                                        height={300}
                                                     />
-                                                    <div className='p-2 text-white whitespace-nowrap w-full'>
-                                                        <div className=''>
-                                                            <p className='font-bold'>
+                                                    <div className='flex flex-col gap-2 p-2 whitespace-nowrap w-full'>
+                                                        <div className='leading-[8px]'>
+                                                            <p className='text-lg font-medium'>
                                                                 {holding.address}
                                                             </p>
+                                                            <p className=''>
+                                                                {holding.state}, {holding['state_code']} {holding.zip}
+                                                            </p>
                                                         </div>
-                                                        <div className='flex gap-2'>
-                                                            <p className='font-light'>
+                                                        <div className='flex gap-2 text-slate10 mt-2'>
+                                                            <p className='capitalize border-r pr-1 border-blackA5'>
+                                                                {holding.type}
+                                                            </p>
+                                                            <p className='border-r pr-1 border-blackA5'>
                                                                 {holding.beds}
                                                             </p>
-                                                            <div className='h-full w-[1px] bg-white' />
-                                                            <p className='font-light'>
+
+                                                            <p className='border-r pr-1 border-blackA5'>
                                                                 {holding.baths}
                                                             </p>
-                                                            <div className='h-full w-[1px] bg-white' />
-                                                            <p className='font-light'>
+
+                                                            <p className='border-r pr-1 border-blackA5'>
                                                                 {holding.sqft.toLocaleString()}
                                                             </p>
+                                                        </div>
+                                                        <div className=''>
+                                                            <div className='flex gap-1'>
+                                                                <p className=''>
+                                                                    Last sold price:
+                                                                </p>
+                                                                <span className='font-medium'>
+                                                                    {holding['last_sold_price']}
+                                                                </span>
+                                                            </div>
+                                                            <div className='flex gap-1'>
+                                                                <p className=''>
+                                                                    Current price:
+                                                                </p>
+                                                                <p className='font-medium'>
+                                                                    {usdFormatter.format(holding['listing_price'])}
+                                                                </p>
+                                                                <div className={holding['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
+                                                                    <Warning />
+                                                                    <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <button className='flex items-center justify-center border border-blackA5 rounded-full min-w-[50px] transition duration-150 ease-in-out'>
@@ -247,7 +295,7 @@ const Portfolio = (props: Props) => {
                                                 key={i}
                                                 accordionTrigger={accordionTrigger}
                                                 accordionContent={
-                                                    <div className='property-badge-grid'>
+                                                    <div className=''>
                                                         {accordionContent}
                                                     </div>
                                                 }
@@ -277,13 +325,12 @@ const Portfolio = (props: Props) => {
                                     </div>
                                 )}
                             </div>
-                        </div>
 
-                        {/* Watchlist */}
-                        <aside className=' md:w-[50%]'>
-                            <div className=''>
-                                <Seperator text={`Watchlist`} />
-                            </div>
+                        </Tabs.Content>
+                        <Tabs.Content
+                            className="grow p-5 rounded-b-md outline-none  "
+                            value="tab2"
+                        >
                             <div className='flex flex-col gap-[20px] p-2 '>
 
                                 {watchlist.length > 0 ? (
@@ -391,8 +438,9 @@ const Portfolio = (props: Props) => {
                                     </div>
                                 )}
                             </div>
-                        </aside>
-                    </div>
+                        </Tabs.Content>
+
+                    </Tabs.Root>
                 </div>
             </div>
         </div>

@@ -90,6 +90,7 @@ type Props = {
     popUpHeight: any
     state: any
     stateCode: any
+    zip: any
 }
 
 const PropertyCard = ({
@@ -126,7 +127,8 @@ const PropertyCard = ({
     listingID,
     agent_identification,
     popUpWidth,
-    popUpHeight
+    popUpHeight,
+    zip
 }: Props) => {
     const [loading, setLoading] = useState<any>(false);
     const [imageIndex, setImageIndex] = useState<any>(0);
@@ -151,6 +153,8 @@ const PropertyCard = ({
             address: streetAddress,
             state: state,
             state_code: stateCode,
+            zip: zip,
+            type: type,
             listing_price: price,
             image: imageSrc,
             beds: beds,
@@ -11167,9 +11171,9 @@ const PropertyCard = ({
                                     <form onSubmit={handleContactAgent} >
                                         <button className={
                                             agentEmail === 'No data available' ?
-                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white  text-sm'
+                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white text-sm'
                                                 :
-                                                `bg-mint9/80 border border-mint11 text-mint11 hover:bg-mint6/80 z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out  text-sm`
+                                                ` border border-mint11 bg-mint11/80 text-white hover:bg-mint11/70 z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out text-sm`
                                         }
                                         >
                                             {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
@@ -11180,6 +11184,9 @@ const PropertyCard = ({
                             </div>
                             {/* Under photo section */}
                             <div className='flex flex-col gap-5 mt-10'>
+                                <Seperator
+                                    text={`Property details`}
+                                />
                                 <article className='text-sm'>
                                     {/* Details */}
                                     <ul className='flex flex-col gap-2 text-sm mb-5'>
@@ -11490,79 +11497,79 @@ const PropertyCard = ({
                                             <div className='border border-pink-500'>
                                                 <Seperator text={'Nearby schools'} />
 
-                                                    {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                        <div className='flex flex-col gap-2' key={l}>
-                                                            <div className='flex items-center gap-2 font-light'>
-                                                                {/* <span className='font-medium'>Name:</span>{school.name} */}
-                                                                <AccordionDemo
-                                                                    accordionTrigger={
-                                                                        <div className='flex justify-between w-full'>
-                                                                            <div className='flex items-center gap-2 md:mr-10 md:w-full'>
-                                                                                <GraduationCap />
-                                                                                <p className='whitespace-nowrap text-sm'>
-                                                                                    {school.name}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div className={`whitespace-nowrap flex items-center gap-2 md:w-fit rounded-full px-2 py-0.5 mr-2
+                                                {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
+                                                    <div className='flex flex-col gap-2' key={l}>
+                                                        <div className='flex items-center gap-2 font-light'>
+                                                            {/* <span className='font-medium'>Name:</span>{school.name} */}
+                                                            <AccordionDemo
+                                                                accordionTrigger={
+                                                                    <div className='flex justify-between w-full'>
+                                                                        <div className='flex items-center gap-2 md:mr-10 md:w-full'>
+                                                                            <GraduationCap />
+                                                                            <p className='whitespace-nowrap text-sm'>
+                                                                                {school.name}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className={`whitespace-nowrap flex items-center gap-2 md:w-fit rounded-full px-2 py-0.5 mr-2
                                                                                 ${(() => {
+                                                                                if (school['parent_rating'] >= 4) {
+                                                                                    return 'bg-green-500/10'
+                                                                                } else if (school['parent_rating'] === 3) {
+                                                                                    return 'bg-yellow-500/10'
+                                                                                } else if (school['parent_rating'] === null) {
+                                                                                    return 'bg-blackA5/10'
+                                                                                } else if (school['parent_rating'] < 3) {
+                                                                                    return 'bg-red-500/10'
+                                                                                }
+                                                                            })()}`}
+                                                                        >
+                                                                            <Star />
+                                                                            <p className={`whitespace-nowrap text-xs
+                                                                                    ${(() => {
                                                                                     if (school['parent_rating'] >= 4) {
-                                                                                        return 'bg-green-500/10'
+                                                                                        return 'text-green-500'
                                                                                     } else if (school['parent_rating'] === 3) {
-                                                                                        return 'bg-yellow-500/10'
+                                                                                        return 'text-yellow-500'
                                                                                     } else if (school['parent_rating'] === null) {
-                                                                                        return 'bg-blackA5/10'
+                                                                                        return 'text-blackA5'
                                                                                     } else if (school['parent_rating'] < 3) {
-                                                                                        return 'bg-red-500/10'
+                                                                                        return 'text-red-500'
                                                                                     }
                                                                                 })()}`}
                                                                             >
-                                                                                <Star />
-                                                                                <p className={`whitespace-nowrap text-xs
-                                                                                    ${(() => {
-                                                                                        if (school['parent_rating'] >= 4) {
-                                                                                            return 'text-green-500'
-                                                                                        } else if (school['parent_rating'] === 3) {
-                                                                                            return 'text-yellow-500'
-                                                                                        } else if (school['parent_rating'] === null) {
-                                                                                            return 'text-blackA5'
-                                                                                        } else if (school['parent_rating'] < 3) {
-                                                                                            return 'text-red-500'
-                                                                                        }
-                                                                                    })()}`}
-                                                                                >
-                                                                                    {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                    accordionContent={
-                                                                        <div className='flex flex-col gap-2'>
-                                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
-                                                                            </p>
-                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
-                                                                            </p>
-                                                                            <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Levels: </span>
-                                                                                {school['education_levels'].map((level: any, l: any) => (
-                                                                                    <div className='font-light' key={l}>
-                                                                                        {level}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </p>
-                                                                            <div className='rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
-                                                                            </div>
-                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                                <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                                {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
                                                                             </p>
                                                                         </div>
-                                                                    }
-                                                                />
-                                                            </div>
+                                                                    </div>
+                                                                }
+                                                                accordionContent={
+                                                                    <div className='flex flex-col gap-2'>
+                                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                        </p>
+                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                                        </p>
+                                                                        <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Levels: </span>
+                                                                            {school['education_levels'].map((level: any, l: any) => (
+                                                                                <div className='font-light' key={l}>
+                                                                                    {level}
+                                                                                </div>
+                                                                            ))}
+                                                                        </p>
+                                                                        <div className='rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                        </div>
+                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                            <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                        </p>
+                                                                    </div>
+                                                                }
+                                                            />
                                                         </div>
-                                                    ))}
+                                                    </div>
+                                                ))}
 
                                             </div>
                                         </Tabs.Content>
