@@ -44,7 +44,7 @@ const AccordionTrigger = React.forwardRef(({ children, className, ...props }: an
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={classNames(
-        'hover:cursor-pointer transition duration-150 ease-in-out  shadow-mauve6 hover:bg-blackA3 data-[state=open]:bg-blackA3 group flex h-[45px] flex-1 cursor-default items-center justify-between  px-5 text-[15px] leading-none shadow-blackA9 shadow-[0_4px_7px] outline-none',
+        'hover:cursor-pointer transition duration-150 ease-in-out  shadow-mauve6 hover:bg-green-500/70 data-[state=open]:bg-green-500 group flex h-[45px] flex-1 cursor-default items-center justify-between  px-5 text-[15px] leading-none shadow-blackA9 shadow-[0_4px_7px] outline-none',
         className
       )}
       {...props}
@@ -52,7 +52,7 @@ const AccordionTrigger = React.forwardRef(({ children, className, ...props }: an
     >
       {children}
       <ChevronDownIcon
-        className="text-mint11 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
+        className=" ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
         aria-hidden
       />
     </Accordion.Trigger>

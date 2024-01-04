@@ -8,7 +8,7 @@ const Toggle = ({ label, onCheckedChange, checked }: any) => (
         {label}
       </label>
       <Switch.Root
-        className="w-[42px] h-[25px] bg-blackA6 rounded-full relative shadow-[0_2px_10px] shadow-blackA4 data-[state=checked]:bg-mint11 outline-none cursor-default hover:cursor-pointer"
+        className="w-[42px] h-[25px] bg-blackA6 rounded-full relative shadow-[0_2px_10px] shadow-blackA4 data-[state=checked]:bg-green-500 outline-none cursor-default hover:cursor-pointer"
         id="airplane-mode"
         style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
         onCheckedChange={onCheckedChange}

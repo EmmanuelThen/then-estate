@@ -144,18 +144,18 @@ const Portfolio = (props: Props) => {
                         <Seperator text={`Portfolio`} />
                     </div> */}
                     <Tabs.Root
-                        className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2 mt-5"
+                        className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2 mt-5 border border-blackA5 rounded h-full"
                         defaultValue="tab1"
                     >
                         <Tabs.List className="shrink-0 flex shadow-blackA3 shadow-[0px_2px_4px]" aria-label="portfolio-tabs">
                             <Tabs.Trigger
-                                className="border-r-[1px] border-blackA3 whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
+                                className="border-r-[1px] border-blackA3 whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-green-500 data-[state=active]:text-green-500 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                                 value="tab1"
                             >
                                 Portfolio
                             </Tabs.Trigger>
                             <Tabs.Trigger
-                                className="whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
+                                className="whitespace-nowrap px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md hover:text-green-500 data-[state=active]:text-green-500 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative  outline-none hover:cursor-pointer"
                                 value="tab2"
                             >
                                 Watchlist
@@ -173,35 +173,36 @@ const Portfolio = (props: Props) => {
                                         const holdingsWithStateCode = portfolioHoldings.filter(holding => holding['state_code'] === stateCode);
                                         // To render the accordionTrigger only once if state code has already been added, so we dont have multiple accordions with the same state
                                         const accordionTrigger = (
-                                            <h1 key={i} className='text-mint11 font-medium'>
+                                            <h1 key={i} className=' font-medium'>
                                                 {holdingsWithStateCode[0].state}, {holdingsWithStateCode[0]['state_code']}
                                             </h1>
                                         );
                                         // to render the property badge for each holding with the same state code, so they are all grouped together under the same accordion
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
-                                            <div className='p-5 mx-20' key={j}>
+                                            <div className='p-2 md:p-5 w-full' key={j}>
                                                 {/* Property badge container */}
                                                 <div id='dark-mode' className={`flex relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
-                                                    <Image
-                                                        className={`object-cover rounded`}
-                                                        alt='property-image'
-                                                        src={holding.image}
-                                                        width={300}
-                                                        height={300}
-                                                    />
+                                                        <Image
+                                                            className={`object-cover rounded`}
+                                                            alt='property-image'
+                                                            src={holding.image}
+                                                            width={300}
+                                                            height={300}
+                                                        />
                                                     <div className='flex flex-col gap-2 p-2 whitespace-nowrap w-full'>
                                                         <div className='leading-[8px]'>
-                                                            <p className='text-lg font-medium'>
+                                                            <p className='text-sm md:text-lg font-medium'>
                                                                 {holding.address}
                                                             </p>
                                                             <p className=''>
-                                                                {holding.state}, {holding['state_code']} {holding.zip}
+                                                                {holding.city}, {holding['state_code']} {holding.zip}
                                                             </p>
                                                         </div>
-                                                        <div className='flex gap-2 text-slate10 mt-2'>
-                                                            <p className='capitalize border-r pr-1 border-blackA5'>
-                                                                {holding.type}
-                                                            </p>
+                                                        <p className='capitalize'>
+                                                            {holding.type}
+                                                        </p>
+                                                        <div className='flex gap-2 text-slate10'>
+
                                                             <p className='border-r pr-1 border-blackA5'>
                                                                 {holding.beds}
                                                             </p>
@@ -217,14 +218,6 @@ const Portfolio = (props: Props) => {
                                                         <div className=''>
                                                             <div className='flex gap-1'>
                                                                 <p className=''>
-                                                                    Last sold price:
-                                                                </p>
-                                                                <span className='font-medium'>
-                                                                    {holding['last_sold_price']}
-                                                                </span>
-                                                            </div>
-                                                            <div className='flex gap-1'>
-                                                                <p className=''>
                                                                     Current price:
                                                                 </p>
                                                                 <p className='font-medium'>
@@ -235,33 +228,28 @@ const Portfolio = (props: Props) => {
                                                                     <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
                                                                 </div>
                                                             </div>
+                                                            <div className='flex gap-1'>
+                                                                <p className=''>
+                                                                    Last sold price:
+                                                                </p>
+                                                                <span className='font-medium'>
+                                                                    {holding['last_sold_price']}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <button className='flex items-center justify-center border border-blackA5 rounded-full min-w-[50px] transition duration-150 ease-in-out'>
+                                                    <button className='transition duration-150 ease-in-out absolute right-0 p-2'>
                                                         <Popup
+                                                            icon={
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 hover:text-green-500">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                                                </svg>
+                                                            }
                                                             content={
-                                                                <div className='flex flex-col gap-2.5 text-xs text-white'>
-                                                                    {/* Price container */}
-                                                                    <div className='flex gap-1'>
-                                                                        <p className='font-medium'>
-                                                                            Current price:
-                                                                        </p>
-                                                                        <p className='font-light'>
-                                                                            {usdFormatter.format(holding['listing_price'])}
-                                                                        </p>
-                                                                        <div className={holding['price_reduction'] > 0 ? ' flex gap-1 items-center' : 'hidden'}>
-                                                                            <Warning />
-                                                                            <p className='text-[8px] text-red9 font-light'>- {usdFormatter.format(holding['price_reduction'])}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    {/* Last sold price */}
-                                                                    <div className='flex gap-1'>
-                                                                        <p className='font-medium'>
-                                                                            Last sold price:
-                                                                        </p>
-                                                                        <span className='font-light'>
-                                                                            {holding['last_sold_price']}
-                                                                        </span>
+                                                                <div className='flex flex-col gap-1 text-xs'>
+                                                                    {/* Actions */}
+                                                                    <div>
+
                                                                     </div>
                                                                     {/* Action buttons */}
                                                                     <div className='flex justify-center'>
@@ -284,7 +272,7 @@ const Portfolio = (props: Props) => {
                                                                     </div>
                                                                 </div>
                                                             }
-                                                            popUpBgColor={'bg-mint11/90'}
+                                                            popUpBgColor={''}
                                                         />
                                                     </button>
                                                 </div>
@@ -295,7 +283,7 @@ const Portfolio = (props: Props) => {
                                                 key={i}
                                                 accordionTrigger={accordionTrigger}
                                                 accordionContent={
-                                                    <div className=''>
+                                                    <div className='property-badge-grid'>
                                                         {accordionContent}
                                                     </div>
                                                 }

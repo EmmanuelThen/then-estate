@@ -21,6 +21,7 @@ interface PropertyInfo {
     state_code: string;
     zip: string;
     type: string;
+    city: string
     listing_price: number;
     image: string;
     beds: string;

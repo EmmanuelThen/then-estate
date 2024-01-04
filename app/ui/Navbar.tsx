@@ -20,29 +20,29 @@ const Navbar = (props: Props) => {
                     />
                 </div>
                 <Link
-                    className="hidden  px-5 h-[65px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hidden  px-5 h-[65px]  flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     href='/'
                 // value="tab1"
                 >
-                    <span className='hidden md:block hover:text-mint11 hover:cursor-pointer transition duration-150 ease-in-out'>
+                    <span className='hidden md:block hover:bg-green-500/70 rounded p-3 hover:cursor-pointer transition duration-150 ease-in-out'>
                         Home
                     </span>
                 </Link>
                 <Link
-                    className="hidden  px-5 h-[65px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hidden  px-5 h-[65px]  flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     href='/search'
                 // value="tab2"
                 >
-                    <span className='hidden md:block hover:text-mint11 hover:cursor-pointer transition duration-150 ease-in-out'>
+                    <span className='hidden md:block hover:bg-green-500/70 rounded p-3 hover:cursor-pointer transition duration-150 ease-in-out'>
                         Search
                     </span>
                 </Link>
                 <Link
-                    className="hidden  px-5 h-[65px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hidden  px-5 h-[65px]  flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     href='/portfolio'
                 // value="tab3"
                 >
-                    <span className='hidden md:block hover:text-mint11 hover:cursor-pointer transition duration-150 ease-in-out'>
+                    <span className='hidden md:block hover:bg-green-500/70 rounded p-3 hover:cursor-pointer transition duration-150 ease-in-out'>
                         Portfolio
                     </span>
                     <span className='md:hidden'>
@@ -52,11 +52,11 @@ const Navbar = (props: Props) => {
                     </span>
                 </Link>
                 <Link
-                    className="hidden  px-5 h-[65px] flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
+                    className="hidden  px-5 h-[65px]  flex-1 md:flex items-center justify-center text-xs md:text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md   data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
                     href='/calculators'
                 // value="tab4"
                 >
-                    <span className='hidden md:block hover:text-mint11 hover:cursor-pointer transition duration-150 ease-in-out'>
+                    <span className='hidden md:block hover:bg-green-500/70 rounded p-3 hover:cursor-pointer transition duration-150 ease-in-out'>
                         Tools
                     </span>
                     <span className='md:hidden'>

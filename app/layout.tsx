@@ -1,12 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Questrial } from 'next/font/google'
 import Footer from './ui/Footer'
 import Navbar from './ui/Navbar'
 import { PortfolioProvider } from './context/PortfolioContext'
 import { ProformaProvider } from './context/ProFormaContext'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Questrial({ subsets: ['latin'], weight: '400' })
 
 export const metadata: Metadata = {
   title: 'ThenEstate',
