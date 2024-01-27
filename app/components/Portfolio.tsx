@@ -15,6 +15,8 @@ import Warning from './svg/Warning';
 import TrendingDownArrow from './svg/TrendingDownArrow';
 import WatchlistEmpty from './svg/WatchlistEmpty';
 import * as Tabs from '@radix-ui/react-tabs';
+import Cancel from './svg/Cancel';
+import RemovePortfolio from './svg/RemovePortfolio';
 
 
 type Props = {}
@@ -166,6 +168,16 @@ const Portfolio = (props: Props) => {
                             className="grow p-5 rounded-b-md outline-none  "
                             value="tab1"
                         >
+                            <div className={portfolioHoldings.length > 0 ? 'flex items-center gap-2 p-2' : 'hidden'}>
+                                <h1 className='flex justify-start font-light tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-xl md:text-3xl'>
+                                    My portfolio
+                                </h1>
+                                <span className='rounded py-[2px] px-1 bg-green-500/30'>
+                                    <p className='text-xs text-green-500'>
+                                        {portfolioHoldings.length} <span>{portfolioHoldings.length > 1 ? 'Properties' : 'Property'}</span>
+                                    </p>
+                                </span>
+                            </div>
                             <div className='p-2'>
                                 {portfolioHoldings.length > 0 ? (
                                     uniqueStateCodes.map((stateCode, i) => {
@@ -173,30 +185,73 @@ const Portfolio = (props: Props) => {
                                         const holdingsWithStateCode = portfolioHoldings.filter(holding => holding['state_code'] === stateCode);
                                         // To render the accordionTrigger only once if state code has already been added, so we dont have multiple accordions with the same state
                                         const accordionTrigger = (
-                                            <h1 key={i} className=' font-medium'>
+                                            <h1 key={i} className='font-medium'>
                                                 {holdingsWithStateCode[0].state}, {holdingsWithStateCode[0]['state_code']}
                                             </h1>
                                         );
                                         // to render the property badge for each holding with the same state code, so they are all grouped together under the same accordion
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
-                                            <div className='p-2 md:p-5 w-full' key={j}>
+                                            <div className='p-2 md:py-5 md:px-20 w-full' key={j}>
                                                 {/* Property badge container */}
-                                                <div id='dark-mode' className={`flex relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden`}>
+                                                <div id='dark-mode' className={`flex flex-col md:flex-row relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden md:h-[200px]`}>
+                                                    <div className='md:min-w-[25%]'>
                                                         <Image
-                                                            className={`object-cover rounded`}
+                                                            className={`object-cover border-t-rounded w-full`}
                                                             alt='property-image'
                                                             src={holding.image}
-                                                            width={300}
-                                                            height={300}
+                                                            width={100}
+                                                            height={100}
+                                                            style={{ maxWidth: '100%', minHeight: '200px' }}
                                                         />
-                                                    <div className='flex flex-col gap-2 p-2 whitespace-nowrap w-full'>
-                                                        <div className='leading-[8px]'>
-                                                            <p className='text-sm md:text-lg font-medium'>
-                                                                {holding.address}
-                                                            </p>
-                                                            <p className=''>
-                                                                {holding.city}, {holding['state_code']} {holding.zip}
-                                                            </p>
+                                                    </div>
+                                                    <div className='flex flex-col gap-2 p-2 whitespace-nowrap md:w-[75%]'>
+                                                        <div className='flex justify-between leading-[8px]'>
+                                                            <div>
+                                                                <p className='text-sm md:text-lg font-medium'>
+                                                                    {holding.address}
+                                                                </p>
+                                                                <p className=''>
+                                                                    {holding.city}, {holding['state_code']} {holding.zip}
+                                                                </p>
+                                                            </div>
+                                                            <button className='transition duration-150 ease-in-out'>
+                                                                <Popup
+                                                                    icon={
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 hover:opacity-70">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                                                        </svg>
+                                                                    }
+                                                                    content={
+                                                                        <div className='flex flex-col gap-1 text-xs'>
+                                                                            {/* Actions */}
+                                                                            <div>
+                                                                                {/* Remove from portfolio */}
+                                                                                <span className='flex items-center gap-2 p-1 rounded hover:bg-blackA3 hover:cursor-pointer'>
+                                                                                    <RemovePortfolio />
+                                                                                    <button
+                                                                                        className=''
+                                                                                        onClick={() => {
+                                                                                            const propertyIDToRemove = holding['property_id'];
+                                                                                            const propertyValueToRemove = holding['listing_price'];
+                                                                                            // Update portfolioHoldings state
+                                                                                            setPortfolioHoldings((prevHoldings) =>
+                                                                                                prevHoldings.filter((holding) => holding['property_id'] !== propertyIDToRemove)
+                                                                                            );
+                                                                                            // Update totalValue state
+                                                                                            setTotalValue((prevTotalValue) =>
+                                                                                                prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyValueToRemove))
+                                                                                            );
+                                                                                        }}
+                                                                                    >
+                                                                                        Remove from portfolio
+                                                                                    </button>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    popUpBgColor={''}
+                                                                />
+                                                            </button>
                                                         </div>
                                                         <p className='capitalize'>
                                                             {holding.type}
@@ -238,43 +293,7 @@ const Portfolio = (props: Props) => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button className='transition duration-150 ease-in-out absolute right-0 p-2'>
-                                                        <Popup
-                                                            icon={
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 hover:text-green-500">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                                                </svg>
-                                                            }
-                                                            content={
-                                                                <div className='flex flex-col gap-1 text-xs'>
-                                                                    {/* Actions */}
-                                                                    <div>
 
-                                                                    </div>
-                                                                    {/* Action buttons */}
-                                                                    <div className='flex justify-center'>
-                                                                        <ActionButton
-                                                                            text={`Remove`}
-                                                                            bgColor={'bg-red9 text-xs w-full'}
-                                                                            onClick={() => {
-                                                                                const propertyIDToRemove = holding['property_id'];
-                                                                                const propertyValueToRemove = holding['listing_price'];
-                                                                                // Update portfolioHoldings state
-                                                                                setPortfolioHoldings((prevHoldings) =>
-                                                                                    prevHoldings.filter((holding) => holding['property_id'] !== propertyIDToRemove)
-                                                                                );
-                                                                                // Update totalValue state
-                                                                                setTotalValue((prevTotalValue) =>
-                                                                                    prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyValueToRemove))
-                                                                                );
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                            popUpBgColor={''}
-                                                        />
-                                                    </button>
                                                 </div>
                                             </div>
                                         ));
@@ -283,7 +302,7 @@ const Portfolio = (props: Props) => {
                                                 key={i}
                                                 accordionTrigger={accordionTrigger}
                                                 accordionContent={
-                                                    <div className='property-badge-grid'>
+                                                    <div className='overflow-y-scroll'>
                                                         {accordionContent}
                                                     </div>
                                                 }
