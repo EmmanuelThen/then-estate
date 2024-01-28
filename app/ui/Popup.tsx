@@ -27,7 +27,7 @@ const Popup = ({ content, popUpBgColor, icon }: any) => (
                 >
                     <Cross2Icon />
                 </Popover.Close> */}
-                <Popover.Arrow id='dark-mode' />
+                <Popover.Arrow />
             </Popover.Content>
         </Popover.Portal>
     </Popover.Root>

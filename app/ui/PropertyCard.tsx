@@ -167,7 +167,7 @@ const PropertyCard = ({
             last_sold_price: lastSoldPrice,
         });
         // To sum up all prices to display the total value of your portfolio
-        addToTotalValue((price));
+        addToTotalValue(price);
         setLoading(false);
     }
 

@@ -30,7 +30,7 @@ const Portfolio = (props: Props) => {
 
     // For high quality images, jpg were giving low quality
     const primaryPhotoCustomLoader = () => {
-        return portfolioHoldings.image?.replace('.jpg', `-w${30}_h${30}_x2.webp?w=${30}&q=75`);
+        return portfolioHoldings.image?.replace('.jpg', `-w${250}_h${250}_x2.webp?w=${250}&q=75`);
     };
 
     // To format total portfolio value
@@ -80,7 +80,8 @@ const Portfolio = (props: Props) => {
 
     useEffect(() => {
         console.log(totalValue);
-    }, [totalValue]);
+        console.log(portfolioHoldings)
+    }, [totalValue, portfolioHoldings]);
 
     return (
         <div className='flex justify-between w-full'>
@@ -193,15 +194,16 @@ const Portfolio = (props: Props) => {
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
                                             <div className='p-2 md:py-5 md:px-20 w-full' key={j}>
                                                 {/* Property badge container */}
-                                                <div id='dark-mode' className={`flex flex-col md:flex-row relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden md:h-[200px]`}>
+                                                <div id='dark-mode' className={`flex flex-col md:flex-row relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden md:h-[250px]`}>
                                                     <div className='md:min-w-[25%]'>
                                                         <Image
                                                             className={`object-cover border-t-rounded w-full`}
                                                             alt='property-image'
                                                             src={holding.image}
+                                                            // loader={primaryPhotoCustomLoader}
                                                             width={100}
                                                             height={100}
-                                                            style={{ maxWidth: '100%', minHeight: '200px' }}
+                                                            style={{ maxWidth: '100%', minHeight: '250px' }}
                                                         />
                                                     </div>
                                                     <div className='flex flex-col gap-2 p-2 whitespace-nowrap md:w-[75%]'>
@@ -214,7 +216,7 @@ const Portfolio = (props: Props) => {
                                                                     {holding.city}, {holding['state_code']} {holding.zip}
                                                                 </p>
                                                             </div>
-                                                            <button className='transition duration-150 ease-in-out'>
+                                                            <div className='transition duration-150 ease-in-out'>
                                                                 <Popup
                                                                     icon={
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 hover:opacity-70">
@@ -233,14 +235,18 @@ const Portfolio = (props: Props) => {
                                                                                         onClick={() => {
                                                                                             const propertyIDToRemove = holding['property_id'];
                                                                                             const propertyValueToRemove = holding['listing_price'];
+
+                                                                                            console.log('propertyIDToRemove:', propertyIDToRemove);
+                                                                                            console.log('propertyValueToRemove:', propertyValueToRemove);
+
                                                                                             // Update portfolioHoldings state
                                                                                             setPortfolioHoldings((prevHoldings) =>
                                                                                                 prevHoldings.filter((holding) => holding['property_id'] !== propertyIDToRemove)
                                                                                             );
                                                                                             // Update totalValue state
                                                                                             setTotalValue((prevTotalValue) =>
-                                                                                                prevTotalValue.filter((holding) => parseFloat(holding['listing_price']) !== parseFloat(propertyValueToRemove))
-                                                                                            );
+                                                                                                prevTotalValue.filter((holding) => parseFloat(holding.listing_price) !== parseFloat(propertyValueToRemove))
+                                                                                            );   
                                                                                         }}
                                                                                     >
                                                                                         Remove from portfolio
@@ -251,7 +257,7 @@ const Portfolio = (props: Props) => {
                                                                     }
                                                                     popUpBgColor={''}
                                                                 />
-                                                            </button>
+                                                            </div>
                                                         </div>
                                                         <p className='capitalize'>
                                                             {holding.type}

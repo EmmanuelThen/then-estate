@@ -11,10 +11,19 @@ import ActionButton from '../ui/ActionButton';
 type Props = {}
 
 const ProFormaCalculator = (props: Props) => {
+    // for testing
     const [rates, setRates] = useState([]);
     const [calculateMortgage, setCalculateMortgage] = useState([])
     const [monthlyPaymentDetails, setMonthlyPaymentDetails] = useState([])
+    // These 3 are for testing ^^^^^
     const [loading, setLoading] = useState(false);
+    const [homeInsurance, setHomeInsurance] = useState('')
+    const [propertyTaxRate, setPropertyTaxRate] = useState('')
+    const [downPayment, setDownPayment] = useState('')
+    const [price, setPrice] = useState('')
+    const [term, setTerm] = useState('')
+    const [rate, setRate] = useState('')
+    const [hoaFees, setHoaFees] = useState('')
 
     const { monthlyRentInput,
         salePriceInput,
@@ -43,6 +52,17 @@ const ProFormaCalculator = (props: Props) => {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
+
+    const handleOnlyNumbersForInputs = (e) => {
+        const inputValue = e.target.value;
+
+        // Check if the input contains only numbers
+        if (/^\d*$/.test(inputValue)) {
+            setPrice(inputValue);
+        } else {
+            // Handle invalid input (optional)
+        }
+    }
 
     function formatType(type) {
         // Replace underscores with spaces and capitalize each word
@@ -210,6 +230,26 @@ const ProFormaCalculator = (props: Props) => {
         }
     }
 
+    const calculateMortgageApiReal = async () => {
+        const url = `https://realty-in-us.p.rapidapi.com/mortgage/v2/calculate?home_insurance=${homeInsurance}&property_tax_rate=${propertyTaxRate}&down_payment=${downPayment}&price=${price}&term=${term}&rate=${rate}&hoa_fees=${hoaFees}&apply_veterans_benefits=false`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': 'bfe3b112a2mshd066685ec635a3dp135ceejsnaecff3296ecb',
+                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            console.log(result);
+            setCalculateMortgage(result.data['loan_mortgage']);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         const getRates = async () => {
             // const url = 'https://realty-in-us.p.rapidapi.com/mortgage/v2/check-rates?postal_code=28269';
@@ -315,6 +355,7 @@ const ProFormaCalculator = (props: Props) => {
                         ))}
                     </div>
                 </Tabs.Content>
+                {/* Mortgage calculator */}
                 <Tabs.Content
                     className="grow p-5 rounded-b-md outline-none  "
                     value="tab2"
@@ -333,7 +374,18 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='price'
-                                type="number"
+                                value={price}
+                                onChange={(e) => {
+                                    const inputValue = e.target.value;
+
+                                    if (/^\d*$/.test(inputValue)) {
+                                        setPrice(inputValue);
+                                    } else {
+                                        //
+                                    }
+                                }}
+                                type="text"
+                                pattern="\d*"
                                 placeholder='Enter price'
                             />
                             <label className='font-medium' htmlFor='down-payment'>
@@ -342,6 +394,8 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='down-payment'
+                                value={downPayment}
+                                onChange={(e) => setDownPayment(e.target.value)}
                                 type="number"
                                 placeholder='Enter down payment'
                             />
@@ -351,6 +405,8 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='term'
+                                value={term}
+                                onChange={(e) => setTerm(e.target.value)}
                                 type="number"
                                 placeholder='Enter loan term'
                             />
@@ -360,6 +416,8 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='int-rate'
+                                value={rate}
+                                onChange={(e) => setRate(e.target.value)}
                                 type="number"
                                 placeholder='Enter interest rate'
                             />
@@ -369,6 +427,8 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='hoa'
+                                value={hoaFees}
+                                onChange={(e) => setHoaFees(e.target.value)}
                                 type="number"
                                 placeholder='Enter HOA fee'
                             />
@@ -378,6 +438,8 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='property-tax-rate'
+                                value={propertyTaxRate}
+                                onChange={(e) => setPropertyTaxRate(e.target.value)}
                                 type="number"
                                 placeholder='Enter property tax rate'
                             />
@@ -387,13 +449,15 @@ const ProFormaCalculator = (props: Props) => {
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
                                 id='home-insurance'
+                                value={homeInsurance}
+                                onChange={(e) => setHomeInsurance(e.target.value)}
                                 type="number"
                                 placeholder='Enter home insurance'
                             />
                             <ActionButton
                                 text={'Calculate mortgage'}
                                 bgColor={'bg-mint11'}
-                                onClick={undefined}
+                                onClick={calculateMortgageApiReal}
                             />
                         </div>
                         {/* Results when calculate button is clicked */}
