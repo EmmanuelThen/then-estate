@@ -194,7 +194,7 @@ const Portfolio = (props: Props) => {
                                         const accordionContent = holdingsWithStateCode.map((holding, j) => (
                                             <div className='p-2 md:py-5 md:px-20 w-full' key={j}>
                                                 {/* Property badge container */}
-                                                <div id='dark-mode' className={`flex flex-col md:flex-row relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden md:h-[250px]`}>
+                                                <div id='dark-mode' className={`flex flex-col md:flex-row relative rounded text-xs shadow-blackA9 shadow-[0px_4px_7px] overflow-hidden md:h-[200px]`}>
                                                     <div className='md:min-w-[25%]'>
                                                         <Image
                                                             className={`object-cover border-t-rounded w-full`}
@@ -203,7 +203,7 @@ const Portfolio = (props: Props) => {
                                                             // loader={primaryPhotoCustomLoader}
                                                             width={100}
                                                             height={100}
-                                                            style={{ maxWidth: '100%', minHeight: '250px' }}
+                                                            style={{ maxWidth: '100%', minHeight: '200px' }}
                                                         />
                                                     </div>
                                                     <div className='flex flex-col gap-2 p-2 whitespace-nowrap md:w-[75%]'>
