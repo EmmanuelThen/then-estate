@@ -27,7 +27,7 @@ const Popup = ({ content, popUpBgColor, icon }: any) => (
                 >
                     <Cross2Icon />
                 </Popover.Close> */}
-                <Popover.Arrow />
+                <Popover.Arrow className='fill-blackA3' />
             </Popover.Content>
         </Popover.Portal>
     </Popover.Root>

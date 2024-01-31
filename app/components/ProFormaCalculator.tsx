@@ -13,38 +13,43 @@ type Props = {}
 const ProFormaCalculator = (props: Props) => {
     // for testing
     const [rates, setRates] = useState([]);
-    const [calculateMortgage, setCalculateMortgage] = useState([])
-    const [monthlyPaymentDetails, setMonthlyPaymentDetails] = useState([])
+    const [calculateMortgage, setCalculateMortgage] = useState([]);
+    const [monthlyPaymentDetails, setMonthlyPaymentDetails] = useState([]);
     // These 3 are for testing ^^^^^
     const [loading, setLoading] = useState(false);
-    const [homeInsurance, setHomeInsurance] = useState('')
-    const [propertyTaxRate, setPropertyTaxRate] = useState('')
-    const [downPayment, setDownPayment] = useState('')
-    const [price, setPrice] = useState('')
-    const [term, setTerm] = useState('')
-    const [rate, setRate] = useState('')
-    const [hoaFees, setHoaFees] = useState('')
+    const [homeInsurance, setHomeInsurance] = useState('');
+    const [propertyTaxRate, setPropertyTaxRate] = useState('');
+    const [downPayment, setDownPayment] = useState('');
+    const [price, setPrice] = useState('');
+    const [term, setTerm] = useState('');
+    const [rate, setRate] = useState('');
+    const [hoaFees, setHoaFees] = useState('');
+    // Zip code for check rates input
+    const [zipCode, setZipCode] = useState('');
 
-    const { monthlyRentInput,
-        salePriceInput,
-        setSalePriceInput,
-        propTaxInput,
-        propInsuranceInput,
-        propUtilitiesInput,
-        propManagementInput,
-        propVacancyInput,
-        propMaintenanceInput,
-        grossRentOutput,
-        propManagementOutput,
-        propTaxOutput,
-        propVacancyOutput,
-        propMaintenanceOutput,
-        propInsuranceOutput,
-        propUtilitiesOutput,
-        totalOpexOutput,
-        monthlyNoiOutput,
-        annualNoiOutput,
-        capRateOutput } = useProformaContext();
+
+    const apiKey = process.env.NEXT_PUBLIC_REAL_ESTATE_API_KEY as string
+
+    // const { monthlyRentInput,
+    //     salePriceInput,
+    //     setSalePriceInput,
+    //     propTaxInput,
+    //     propInsuranceInput,
+    //     propUtilitiesInput,
+    //     propManagementInput,
+    //     propVacancyInput,
+    //     propMaintenanceInput,
+    //     grossRentOutput,
+    //     propManagementOutput,
+    //     propTaxOutput,
+    //     propVacancyOutput,
+    //     propMaintenanceOutput,
+    //     propInsuranceOutput,
+    //     propUtilitiesOutput,
+    //     totalOpexOutput,
+    //     monthlyNoiOutput,
+    //     annualNoiOutput,
+    //     capRateOutput } = useProformaContext();
 
     const usdFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -225,7 +230,7 @@ const ProFormaCalculator = (props: Props) => {
         const options = {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'bfe3b112a2mshd066685ec635a3dp135ceejsnaecff3296ecb',
+                'X-RapidAPI-Key': apiKey,
                 'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
             }
         };
@@ -243,21 +248,32 @@ const ProFormaCalculator = (props: Props) => {
         }
     }
 
+    const getRates = async () => {
+        const url = `https://realty-in-us.p.rapidapi.com/mortgage/v2/check-rates?postal_code=${zipCode}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
+            }
+        };
+
+        try {
+            setLoading(true);
+            const response = await fetch(url, options);
+            const result = await response.json();
+            console.log(result);
+            setRates(result.data['loan_analysis'].market['mortgage_data']['average_rates']);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    //For testing
     useEffect(() => {
         const getRates = async () => {
-            // const url = 'https://realty-in-us.p.rapidapi.com/mortgage/v2/check-rates?postal_code=28269';
-            // const options = {
-            //     method: 'GET',
-            //     headers: {
-            //         'X-RapidAPI-Key': 'bfe3b112a2mshd066685ec635a3dp135ceejsnaecff3296ecb',
-            //         'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com'
-            //     }
-            // };
-
             try {
-                // const response = await fetch(url, options);
-                // const result = await response.text();
-                // console.log(result);
                 setRates(checkRatesApiCall.data['loan_analysis'].market['mortgage_data']['average_rates']);
                 setCalculateMortgage(calculateMortgageApiCall.data['loan_mortgage']);
                 setMonthlyPaymentDetails(calculateMortgageApiCall.data['loan_mortgage']['monthly_payment_details']);
@@ -267,6 +283,7 @@ const ProFormaCalculator = (props: Props) => {
         }
         getRates()
     }, [])
+
     return (
         <div className='flex flex-col gap-2 w-full px-2 py-20'>
             <header>
@@ -323,13 +340,25 @@ const ProFormaCalculator = (props: Props) => {
                         <div className='flex items-center gap-3 mt-5 text-sm'>
                             <input
                                 className='rounded-full p-3 bg-blackA2 font-light h-[35px] hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                type="number"
+                                value={zipCode}
+                                onChange={(e) => {
+                                    const inputValue = e.target.value;
+                                    // To make sure zipcode is minimum 5 digits
+                                    if (/^\d{0,5}$/.test(inputValue)) {
+                                        setZipCode(inputValue);
+                                    } else {
+
+                                    }
+                                }}
+                                type="text"
+                                pattern="\d*\.?\d*"
                                 placeholder='Enter ZIP code'
                             />
                             <ActionButton
                                 text={'Check rates'}
-                                bgColor={'bg-mint11'}
+                                bgColor={zipCode && zipCode.length >= 5 ? 'bg-mint11' : 'bg-slate10 cursor-not-allowed hover:opacity-100'}
                                 onClick={undefined}
+                                disabled={zipCode ? false : true}
                             />
                         </div>
                         <div className='property-badge-grid mt-10'>
@@ -566,160 +595,7 @@ const ProFormaCalculator = (props: Props) => {
                             </div>
                         </div>
                     </Tabs.Content>
-                    <Tabs.Content
-                        className="grow p-5 rounded-b-md outline-none  "
-                        value="tab5"
-                    >
-                        <div className="main-input-table">
-                            <table className="table table-sm table-dark table-striped ">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <Seperator text={`Sale price`} />
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className='text-sm'>
-                                    <tr>
-                                        <td>
-                                            <label className="font-light">Sale price</label>
-                                            <input
-                                                className='rounded p-2 bg-blackA2 hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                                type="number"
-                                                pattern='/[^0-9]/g'
-                                                value={salePriceInput}
-                                                onChange={(e) => setSalePriceInput(e.target.value)}
-                                                min="0"
-                                                placeholder="Enter Sale Price"
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr className='mt-3' />
-                        </div>
-                        <div className="main-input-exp">
-                            <table className="table table-sm table-dark table-striped">
-                                <thead>
-                                    <th className="fw-normal" id="exp-header">
-                                        <Seperator text={`Mortgage`} />
-                                    </th>
-                                </thead>
-                                <tbody className='text-sm'>
-                                    <tr>
-                                        <td>
-                                            <label className="font-light" >Downpayment (%) </label>
-                                            <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                                type="number"
-                                                pattern='/[^0-9]/g'
-                                                min="0"
-                                                placeholder="Enter Downpayment"
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label className="font-light" >Interest Rate (%) </label>
-                                            <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                                type="number"
-                                                pattern='/[^0-9]/g'
-                                                min="0"
-                                                placeholder="Enter Interest Rate"
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label className="font-light" >Loan Term (Years) </label>
-                                            <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                                type="number"
-                                                pattern='/[^0-9]/g'
-                                                min="0"
-                                                placeholder="Enter Loan Term"
-                                            />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label className="font-light" >Closing Cost </label>
-                                            <input className='rounded p-2 bg-blackA2  hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out'
-                                                type="number"
-                                                pattern='/[^0-9]/g'
-                                                min="0"
-                                                placeholder="Enter Closing Cost"
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="text-sm">
-                            <table className="table table-sm table-dark table-striped ">
-                                <thead>
-                                    <th className="fw-normal" id="exp-header">
-                                        <Seperator text={`Total rent/mo.`} />
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><input className='rounded p-2 bg-blackA2 hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]  transition duration-150 ease-in-out' id="monthly-rent" type="number" min="0" placeholder="Enter monthly rent" /></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <hr />
-                            <div className="main-input-exp">
-                                <table className="table table-sm table-dark table-striped ">
-                                    <thead>
-                                        <th className="fw-normal" id="exp-header">
-                                            <Seperator text={`Expenses`} />
-                                        </th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <label >Property Tax Per Year</label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-tax" min="0" placeholder="Enter Property Tax" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label >Insurance Per Month</label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-ins" min="0" placeholder="Enter Insurance" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label >Utilities Per Month</label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-utilities" min="0" placeholder="Enter Utilities" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label >Property Management (%) </label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-mngmt" min="0" placeholder="Enter Management" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label >Vacancy (%)</label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-vacancy" min="0" placeholder="Enter Vacancy" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label >Maintenance (%)</label>
-                                                <input className='rounded p-2 bg-blackA2' type="number" id="prop-maintenance" min="0" placeholder="Enter Maintenance" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <Button
-                            bgColor='bg-mint11'
-                            text={`Calculate Pro Forma Analysis`}
-                        />
-                    </Tabs.Content>
+                    
                     <Tabs.Content
                         className="grow p-5  rounded-b-md outline-none  "
                         value="tab2"

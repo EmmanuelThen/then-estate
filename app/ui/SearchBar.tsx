@@ -8,6 +8,10 @@ import LoaderRing from './LoaderRing';
 import Toggle from './Toggle';
 import SearchIcon from '../components/svg/SearchIcon';
 import List from '../components/svg/List';
+import Popup from './Popup';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+
+
 
 // getProperties Api call test
 let result: any = {
@@ -27754,6 +27758,28 @@ const SearchBar = () => {
     const [propertyImages, setPropertyImages] = useState<any>([])
     // For amount of properties listed
     const [limit, setLimit] = useState<any>(50);
+    const [propertyTypes, setPropertyTypes] = useState({
+        apartment: false,
+        condo_townhome: false,
+        condo_townhome_rowhome_coop: false,
+        condop: false,
+        condos: false,
+        coop: false,
+        duplex_triplex: false,
+        farm: false,
+        land: false,
+        mobile: false,
+        multi_family: false,
+        single_family: false,
+        townhomes: false,
+    });
+
+    const handleCheckboxChange = (type) => {
+        setPropertyTypes((prevTypes) => ({
+            ...prevTypes,
+            [type]: !prevTypes[type],
+        }));
+    };
 
     // regex patterns
     const usAddressRegex = /^[0-9]{1,5}\s[a-zA-Z0-9\s,'-]*,\s[a-zA-Z]+\s[0-9]{5}$/;
@@ -27928,31 +27954,122 @@ const SearchBar = () => {
 
     return (
         <div className='w-full h-full'>
-            <div className='flex flex-col items-center justify-center px-10 md:px-20 lg:px-[250px] xl:px-[500px] p-20'>
-                <div className='inline-block relative w-full'>
-                    <svg style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '10px',
-                        transform: 'translateY(-50%)',
-                    }}
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.2"
-                        stroke="currentColor"
-                        className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                    <input
-                        className="w-full bg-blackA2 inline-flex h-[35px] appearance-none items-center justify-center font-light rounded-full px-[40px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black] transition duration-150 ease-in-out"
-                        type="text"
-                        required
-                        placeholder='Enter address, city, or ZIP code'
-                        id='dark-mode'
-                        value={search}
-                        onChange={getAutoComplete}
-                    />
+            <div className='flex flex-col items-center justify-center px-10 p-20 w-full'>
+                <div className='inline-flex relative w-full'>
+                    <div className='relative w-full'>
+                        <svg style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '10px',
+                            transform: 'translateY(-50%)',
+                        }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.2"
+                            stroke="currentColor"
+                            className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <input
+                            className="w-full bg-blackA2 inline-flex h-[55px] appearance-none items-center justify-center font-light rounded-full rounded-r-none px-[40px] text-[15px] leading-none shadow-[0_0_0_1px_black] outline-none transition duration-150 ease-in-out"
+                            type="text"
+                            required
+                            placeholder='Enter address, city, or ZIP code'
+                            id='dark-mode'
+                            value={search}
+                            onChange={getAutoComplete}
+                        />
+                        {/* Property type dropdown */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            right: '10px',
+                            transform: 'translateY(-50%)',
+                        }}
+                            className='flex h-[35px]'
+                        >
+                            <div className='flex justify-center items-center border-r border-l border-blackA9'>
+                                <Popup
+                                    icon={
+                                        <span className='flex items-center gap-[5px] px-[15px] text-[13px] leading-none'>
+                                            <span>Type</span>
+                                            <ChevronDownIcon />
+                                        </span>
+                                    }
+                                    content={
+                                        <>
+                                            {Object.keys(propertyTypes).map((type) => (
+                                                <div className='' key={type}>
+                                                    <Toggle
+                                                        label={type}
+                                                        onCheckedChange={undefined}
+                                                        value={type}
+                                                        htmlFor={type}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                            </div>
+                            <div className='flex justify-center items-center '>
+                                <Popup
+                                    icon={
+                                        <span className='flex items-center gap-[5px] px-[15px] text-[13px] leading-none'>
+                                            <span>Status</span>
+                                            <ChevronDownIcon />
+                                        </span>
+                                    }
+                                    content={
+                                        <>
+                                            <Toggle
+                                                label={`For sale`}
+                                                onCheckedChange={() => handleToggleStatus('for_sale')}
+                                                // checked={searchStatus.includes('for_sale')}
+                                                value={`for_sale`}
+                                            />
+                                            <Toggle
+                                                label={`Ready to build`}
+                                                onCheckedChange={() => handleToggleStatus('ready_to_build')}
+                                                // checked={searchStatus.includes('ready_to_build')}
+                                                value={`ready_to_build`}
+                                            />
+                                            <Toggle
+                                                label={`For rent`}
+                                                onCheckedChange={() => handleToggleStatus('for_rent')}
+                                                // checked={searchStatus.includes('for_rent')}
+                                                value={`for_rent`}
+                                            />
+                                            <Toggle
+                                                label={`Sold`}
+                                                onCheckedChange={() => handleToggleStatus('sold')}
+                                                // checked={searchStatus.includes('sold')}
+                                                value={`sold`}
+                                            />
+                                            <Toggle
+                                                label={`Off market`}
+                                                onCheckedChange={() => handleToggleStatus('off_market')}
+                                                // checked={searchStatus.includes('off_market')}
+                                                value={`off_market`}
+                                            />
+                                            <Toggle
+                                                label={`Active`}
+                                                onCheckedChange={() => handleToggleStatus('active')}
+                                                // checked={searchStatus.includes('active')}
+                                                value={'active'}
+                                            />
+                                        </>
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='rounded-r-full bg-mint11 h-[55px]'>
+                        <button className='h-[55px] px-[15px] text-white text-sm rounded-r-full shadow-[0_0_0_1px_black] outline-none hover:opacity-80 transition duration-150 ease-in-out'>
+                            Search
+                        </button>
+                    </div>
                 </div>
 
                 <ul className={`${search.length > 0 ? '' : 'hidden'} flex flex-col border-t-0 rounded-t-md rounded-b bg-blackA5 h-fit shadow-md p-2 w-full`}>
@@ -27987,7 +28104,8 @@ const SearchBar = () => {
                     ))}
                 </ul>
                 {/* Toggles to filter property search */}
-                <div className='mt-10'>
+                {/* <div className='mt-10'>
+
                     <div className='grid grid-cols-2 gap-5'>
                         <Toggle
                             label={`For sale`}
@@ -28030,9 +28148,9 @@ const SearchBar = () => {
                             value={'active'}
 
                         />
-                    </div>
-                    {/* Search button */}
-                    <div className='flex justify-center mt-10'>
+                    </div> */}
+                {/* Search button */}
+                {/* <div className='flex justify-center mt-10'>
                         <ActionButton
                             text={isloading ?
                                 (<span className='flex items-center gap-2'> <LoaderRing /> Search properties</span>)
@@ -28041,28 +28159,31 @@ const SearchBar = () => {
                             }
                             bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-mint11'}`}
                             onClick={getPropertiesList}
+                            disabled={undefined}
                         />
-                    </div>
-                </div>
+                    </div> */}
+                {/* </div> */}
+
             </div>
 
             {/* Search count & dropdown filters */}
             {/* Commented out because page wont load since were not making api call to get search count anymore, were using test object */}
-            {/* <div className={`${propertiesList.length > 0 ? '' : 'hidden'} flex justify-between items-center p-5`}>
-                <div>
+            <div className={`${propertiesList.length > 0 ? '' : 'hidden'} flex justify-between items-center p-5`}>
+                {/* <div>
                     <h1 className='font-2xl text-slate10'>
                         <span className='font-medium'>Showing on page:</span> {(searchCount.count).toLocaleString()}
                     </h1>
                     <h1 className='font-2xl text-slate10'>
                         <span className='font-medium'>Results:</span> {(searchCount.total).toLocaleString()}
                     </h1>
-                </div>
+                </div> */}
                 <div>
                     <SelectDropdown
-                        searchStatus={searchStatus}
+                        placeholder={'Sort by'}
+                        selectItems={undefined}
                     />
                 </div>
-            </div> */}
+            </div>
             {/* Properties grid */}
             <div className='grid-container w-full p-5'>
                 {propertiesList.map((properties: any, i: any) => (
@@ -28138,6 +28259,7 @@ const SearchBar = () => {
                     }
                     bgColor={`${isloading ? 'bg-slate10 hover:cursor-not-allowed' : 'bg-blue9/30 border border-blue9 text-blue8 hover:bg-blue9/50'}`}
                     onClick={handleLoadMoreButton}
+                    disabled={undefined}
                 />
             </div>
         </div>

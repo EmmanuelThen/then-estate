@@ -10,62 +10,47 @@ import Bed from '../components/svg/Bed';
 
 type Props = {
   searchStatus: any
+  selectItems: any
+  placeholder: string
 }
 
-const SelectDropdown = ({ searchStatus }: Props) => (
+const SelectDropdown = ({ searchStatus, selectItems, placeholder }: Props) => (
   <Select.Root>
     <Select.Trigger
-      className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-blackA5  shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black  outline-none"
+      className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[45px] gap-[5px] hover:opacity-70 transition duration-150 ease-in-out  outline-none"
       aria-label="Food"
     >
-      <Select.Value placeholder="Sort by..." />
-      
+      <Select.Value placeholder={placeholder} />
+
       <Select.Icon className="text-mint11">
         <ChevronDownIcon />
       </Select.Icon>
     </Select.Trigger>
     <Select.Portal>
-      <Select.Content className="overflow-hidden bg-slate5 rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+      <Select.Content className=" overflow-y-scroll bg-red-500 h-fit rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] border border-green-500">
         <Select.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-mint11 cursor-default">
           <ChevronUpIcon />
         </Select.ScrollUpButton>
         <Select.Viewport className="p-[5px]">
-          <Select.Group>
+          <Select.Group className='flex flex-col gap-2'>
             <Select.Label className="px-[25px] text-xs leading-[25px] text-slate10">
               Sort by
             </Select.Label>
             <Select.Separator className="h-[1px] bg-slate4 m-[5px]" />
             <SelectItem value='list_price'>
               <div className='flex items-center gap-2'>
-                <TrendingUpArrow />
-                <p className='text-sm md:text-md '>Price (Low to High)</p>
+                {selectItems}
+                {/* <p className='text-sm md:text-md '>Price (Low to High)</p> */}
               </div>
             </SelectItem>
-            <SelectItem value='list_price_h_to_l'>
-              <div className='flex items-center gap-2'>
-                <TrendingDownArrow />
-                <p className='text-sm md:text-md '>Price (High to Low)</p>
-              </div>
-            </SelectItem>
-            <SelectItem value='list_date'>
-              <div className='flex items-center gap-2'>
-                <Sparkles />
-                <p className='text-sm md:text-md '>Newest</p>
-              </div>
-            </SelectItem>
-            <SelectItem value='beds'>
-              <div className='flex items-center gap-2'>
-                <Bed />
-                <p className='text-sm md:text-md '>Bedrooms</p>
-              </div>
-            </SelectItem>
+            
           </Select.Group>
 
 
         </Select.Viewport>
-        <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-mint11 cursor-default">
+        {/* <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-mint11 cursor-default">
           <ChevronDownIcon />
-        </Select.ScrollDownButton>
+        </Select.ScrollDownButton> */}
       </Select.Content>
     </Select.Portal>
   </Select.Root>
