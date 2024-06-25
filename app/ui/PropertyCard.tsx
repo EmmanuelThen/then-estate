@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { usePortfolioContext } from '../context/PortfolioContext';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Separator from '@radix-ui/react-separator';
-import * as Tabs from '@radix-ui/react-tabs'
-import Button from './Button';
+// import * as Tabs from '@radix-ui/react-tabs'
+
 import Tooltips from './Tooltips';
 import Xmark from '../components/svg/Xmark';
 import ChevronLeft from '../components/svg/ChevronLeft';
@@ -42,6 +42,31 @@ import {
 import Watchlist from '../components/svg/Watchlist';
 import LoaderRing from './LoaderRing';
 import Checkmark from '../components/svg/Checkmark';
+import Modals from '../components/ui/modals';
+import Chips from '../components/ui/chips';
+import NextToolTip from '../components/ui/tool-tip';
+import PrimaryButton from '../components/ui/primary-button';
+import Envelope from '../components/svg/Envelope';
+import NextTabs from '../components/ui/next-tabs';
+import { Tabs, Tab, Card, CardBody, CardFooter, Button } from "@nextui-org/react";
+import Carousels from '../components/ui/carousels';
+
+import type { CardProps } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
+
+
+
+
+import type { ProductViewItem } from "../components/ui/nextui-carousel";
+import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
+import ProductViewInfo from "../components/ui/nextui-carousel";
+
+
+
+
+
+
+
 
 ChartJS.register(
     CategoryScale,
@@ -146,7 +171,9 @@ const PropertyCard = ({
     //For similar homes
     const [similarHomesArray, setSimilarHomesArray] = useState<any>([])
     //PortfolioContext
-    const { addToPortfolio, addToWatchlist, addToTotalValue } = usePortfolioContext();
+    const { addToPortfolio, addToWatchlist, addToTotalValue, portfolioHoldings } = usePortfolioContext();
+    const [portfolioButtonClicked, setPortfolioButtonClicked] = useState(false);
+    const [watchlistButtonClicked, setWatchlistButtonClicked] = useState(false);
 
     const handleAddToPortfolio = () => {
         setLoading(true);
@@ -168,6 +195,8 @@ const PropertyCard = ({
         });
         // To sum up all prices to display the total value of your portfolio
         addToTotalValue(price);
+        setPortfolioButtonClicked(!portfolioButtonClicked)
+        console.log(portfolioHoldings)
         setLoading(false);
     }
 
@@ -186,6 +215,9 @@ const PropertyCard = ({
             price_reduction: priceReduction,
             last_sold_price: lastSoldPrice,
         });
+
+        setWatchlistButtonClicked(!watchlistButtonClicked)
+
     }
 
 
@@ -10418,7 +10450,7 @@ const PropertyCard = ({
             //change back to results instead of imagez after testing
             if (imagez.data['home_search'].results[0].photos.length > 0) {
                 setPropertyImages(imagez.data['home_search'].results[0].photos)
-                console.log(propertyImages)
+                console.log('property images:', propertyImages)
                 // console.log(propertyID)
             } else {
                 console.log('No property image list')
@@ -10598,7 +10630,7 @@ const PropertyCard = ({
     }
 
     // Tax assessment chart data
-    const taxLineChartData = {
+    const taxLineChartData: any = {
         labels: propertyDetails['tax_history'] &&
             // Every tax history year
             propertyDetails['tax_history'].map((taxHistory: any, m: any) => taxHistory.year).reverse(),
@@ -10649,7 +10681,7 @@ const PropertyCard = ({
         ],
     };
 
-    const taxLineChartOptions = {
+    const taxLineChartOptions: any = {
         responsive: true,
         plugins: {
             title: {
@@ -10717,7 +10749,7 @@ const PropertyCard = ({
 
 
     // Line chart data
-    const lineChartData = {
+    const lineChartData: any = {
         // X-axis
         labels: isChartViewHistory
             ? (propertyDetails.estimates['historical_values'][0].estimates).map((estimate: any) => new Date(estimate.date).toLocaleDateString('en-US', {
@@ -10754,7 +10786,7 @@ const PropertyCard = ({
 
 
     {/** Options for our line chart */ }
-    const lineChartOptions = {
+    const lineChartOptions: any = {
         responsive: true,
         plugins: {
             title: {
@@ -10818,937 +10850,653 @@ const PropertyCard = ({
 
 
 
-    return (
-        <Dialog.Root >
-            <div className='flex flex-col rounded shadow-blackA9 shadow-[0_4px_7px]'>
-                <div className={`h-[${height}px] w-[${width}px] transition duration-150 ease-in-out lg:hover:opacity-80 inline-flex  items-center justify-center font-medium leading-none {shadow-[0_2px_10px]} focus:outline-none`}>
-                    {/* Property cover image */}
-                    <div className={`h-[${height}px] w-[${width}px] relative `}>
-                        {/* New listing badge */}
-                        <div>
-                            <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
-                                <Sparkles />
-                                <p className='text-xs font-semibold text-white'>New listing</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div className={foreclosure ? 'absolute flex gap-1 rounded-full bg-red9/80 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
-                                <Cancel />
-                                <p className='text-xs font-semibold text-white'>Foreclosure</p>
-                            </div>
-                        </div>
-                        <Image
-                            className={`h-[${height}px] w-[${width}px] object-cover rounded-t `}
-                            alt='property-image'
-                            loader={primaryPhotoCustomLoader}
-                            src={imageSrc}
-                            width={width}
-                            height={height}
-                        />
-                        {/* Price */}
-                    </div>
-                </div>
-                {/* Property info and button div */}
-                <div className='flex justify-between p-4 w-full'>
-                    <div className=' w-[70%]'>
-                        <div className="flex flex-col gap-2 w-full ">
-                            <div className="text-sm md:text-md font-medium whitespace-nowrap">
-                                {streetAddress}
-                            </div>
-                            <div className="text-sm md:text-md text-slate10">
-                                {cityStateZip}
-                            </div>
+    // Propertycard popup new ui
 
-                            <div className='flex gap-1 text-lg md:text-xl font-bold text-mint11'>
-                                <p>{usdFormatter.format(price)}</p>
-                                <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
+    const item: ProductViewItem = {
+        id: "942837-003",
+        name: "Nike Air Max 270",
+        description:
+            "The Nike Air Max 270 delivers an even more adaptive fit than before. Stretch material in the upper moves with your foot, while the tri-star outsole pattern adjusts to your every step for a ride that delivers support and flexibility where you need it.",
+        // images: [
+        //     propertyImages ? propertyImages.map((item, i) => item.href) : []
+        // ],
+        price: 80.97,
+        rating: 4.8,
+        ratingCount: 669,
+        sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "48", "50"],
+        isPopular: true,
+        availableColors: [
+            { name: "Gray", hex: "#808080" },
+            { name: "White", hex: "#ffffff" },
+            { name: "Black", hex: "#222222" },
+        ],
+        details: [
+            {
+                title: "Size & Fit",
+                items: [
+                    "Fits small; we recommend ordering a half size up",
+                    "Mid-weight, non-stretchy fabric",
+                    "Designed for a mini length",
+                ],
+            },
+            {
+                title: "Shipping & Returns",
+                items: [
+                    "Free shipping & returns",
+                    "Free, no-hassle returns",
+                    "Complimentary gift packaging",
+                    "Ships within 24 hours!",
+                ],
+            },
+            {
+                title: "Designer Notes",
+                items: [
+                    "Fits small; we recommend ordering a half size up",
+                    "Mid-weight, non-stretchy fabric",
+                    "Designed for a mini length",
+                ],
+            },
+        ],
+    };
+
+    console.log(item.images)
+
+    return (
+        <div>
+
+            <Card className="w-full h-full max-w-[520px]">
+
+                <CardBody className="flex flex-row flex-wrap p-0 sm:flex-nowrap w-full">
+                    {/* Property cover image */}
+                    <Image
+                        className={`object-cover aspect-square rounded-t`}
+                        alt='property-image'
+                        loader={primaryPhotoCustomLoader}
+                        src={imageSrc}
+                        // fill={true}
+                        width={width}
+                        height={height}
+
+                    />
+                    <div className="w-full px-4 py-3">
+                        <div className='flex justify-between items-center w- full'>
+                            <Chips
+                                text={
+                                    newListing ?
+                                        (
+                                            <div className='flex items-center gap-1'>
+                                                <Sparkles />
+                                                <p className='text-xs font-semibold '>New listing</p>
+                                            </div>
+                                        ) :
+                                        foreclosure ?
+                                            (
+                                                <div className='flex items-center gap-1'>
+                                                    <Cancel />
+                                                    <p className='text-xs font-semibold '>Foreclosure</p>
+                                                </div>
+                                            ) :
+                                            ''
+                                }
+                                size={'sm'}
+                            />
+
+                            {/* Status badge */}
+                            <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
+                                <div className={
+                                    (() => {
+                                        switch (status) {
+                                            case 'For sale':
+                                                return 'rounded-full bg-green-500 w-2 h-2';
+                                            case 'Ready to build':
+                                                return 'rounded-full bg-yellow-500 w-2 h-2';
+                                            case 'For rent':
+                                                return 'rounded-full bg-purple-500 w-2 h-2';
+                                            case 'Sold':
+                                                return 'rounded-full bg-red-500 w-2 h-2';
+                                            case 'Off market':
+                                                return 'rounded-full bg-gray-500 w-2 h-2';
+                                            case 'N/A':
+                                                return 'rounded-full bg-black w-2 h-2';
+                                            case 'New community':
+                                                return 'rounded-full bg-sky-500 w-2 h-2';
+                                            default:
+                                                return '';
+                                        }
+                                    })()
+                                }
+                                />
+                                <p className='text-xs text-default-500'>{status}</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center text-large font-medium tracking-tighter">
+                            <div>
+                                <h3 className="text-sm md:text-md font-medium whitespace-nowrap text-default-500">
+                                    {streetAddress}
+                                </h3>
+                                <h3 className="text-sm md:text-md text-default-500">
+                                    {cityStateZip}
+                                </h3>
+                            </div>
+                            <div className='flex flex-col text-lg md:text-xl font-bold'>
+                                <p className='text-primary'>{usdFormatter.format(price)}</p>
+                                <div className={priceReduction > 0 ? 'flex gap-1 items-center' : 'hidden'}>
                                     <Warning />
                                     <p className='text-xs text-red9 font-light'>Price reduction</p>
                                 </div>
                             </div>
-                            <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[15px]" />
+                        </div>
+                        <div className="flex flex-col gap-3 text-xs text-default-400">
+                            {/* <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-[15px]" /> */}
                             <div className="flex h-5 items-center">
-                                <div className="text-sm md:text-md leading-5">{beds}</div>
+                                <div className=" leading-5">{beds}</div>
                                 <Separator.Root
-                                    className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+                                    className="bg-blue9 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
                                     decorative
                                     orientation="vertical"
                                 />
-                                <div className="text-sm md:text-md leading-5">{baths}</div>
+                                <div className=" leading-5">{baths}</div>
                                 <Separator.Root
-                                    className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+                                    className="bg-blue9 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
                                     decorative
                                     orientation="vertical"
                                 />
-                                <div className="text-sm md:text-md leading-5">{squareFeet}</div>
+                                <div className=" leading-5">{squareFeet}</div>
 
                             </div>
-                        </div>
-                    </div>
-                    <div className=''>
-                        {/* Status badge */}
-                        <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
-                            <div className={
-                                (() => {
-                                    switch (status) {
-                                        case 'For sale':
-                                            return 'rounded-full bg-green-500 w-2 h-2';
-                                        case 'Ready to build':
-                                            return 'rounded-full bg-yellow-500 w-2 h-2';
-                                        case 'For rent':
-                                            return 'rounded-full bg-purple-500 w-2 h-2';
-                                        case 'Sold':
-                                            return 'rounded-full bg-red-500 w-2 h-2';
-                                        case 'Off market':
-                                            return 'rounded-full bg-gray-500 w-2 h-2';
-                                        case 'N/A':
-                                            return 'rounded-full bg-black w-2 h-2';
-                                        case 'New community':
-                                            return 'rounded-full bg-sky-500 w-2 h-2';
-                                        default:
-                                            return '';
-                                    }
-                                })()
-                            }
-                            />
-                            <p className='text-xs'>{status}</p>
-                        </div>
-                    </div>
-
-                </div>
-                {/* Add to portfolio button and more info button */}
-                <div className='flex items-center justify-between w-full mb-4 px-4'>
-                    <div className='flex gap-5 w-[70%]'>
-                        <Tooltips
-                            button={
-                                <span onClick={handleAddToWatchlist}>
-                                    <Watchlist />
-                                </span>
-                            }
-                            tooltipContent={`Add to watchlist`}
-                        />
-                        <Tooltips
-                            button={
-                                <span onClick={handleAddToPortfolio}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-green-500 w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                                    </svg>
-                                </span>
-                            }
-                            tooltipContent={`Add to portfolio`}
-                        />
-                    </div>
-                    <Dialog.Trigger className='w-[30%] ' >
-                        <ActionButton
-                            text={`More info`}
-                            bgColor={'bg-mint11 w-full'}
-                            onClick={getPropertyImages}
-                        />
-                    </Dialog.Trigger>
-                </div>
-            </div>
-            {/* Popup content */}
-            <Dialog.Portal>
-                <Dialog.Overlay className="z-[999] bg-blackA5 backdrop-blur-md data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content id='dark-mode' className="overflow-y-scroll overflow-x-hidden z-[9999] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[98vh] w-[98vw] lg:max-w-[95%] translate-x-[-50%] translate-y-[-50%] rounded-md p-5 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                    <Dialog.Close asChild>
-                        <button
-                            className="transition duration-150 ease-in-out hover:scale-125 absolute top-[10px] right-[10px] inline-flex  appearance-none items-center justify-center rounded-full focus:outline-none bg-mint11 p-1 z-[9999]"
-                            aria-label="Close"
-                            onClick={() => setImageIndex(0)}
-                        >
-                            <Xmark />
-                        </button>
-                    </Dialog.Close>
-                    {/* Full container */}
-                    <div className='relative h-[600px] {border border-pink-500}'>
-                        <div className={newListing ? 'absolute flex gap-1 rounded-full bg-blueA8 w-fit top-2 left-2 px-2 py-0.5 shadow-blackA9 shadow-[0px_4px_7px]' : 'hidden'}>
-                            <Sparkles />
-                            <p className='text-xs font-semibold text-white'>New listing</p>
-                        </div>
-                        {/* All property images */}
-                        <div className={`flex flex-col md:flex-row w-full h-full`}>
-                            <div className='items-center justify-center px-5 hidden md:flex'>
-                                <button
-                                    onClick={showPreviousImage}
-                                    disabled={imageIndex === 0}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px] max-h-[50%]'
-                                >
-                                    <ChevronLeft />
-                                </button>
-                            </div>
-                            {propertyImages.length > 0 && (
-                                <div className='w-full h-[80%] md:h-full'>
-                                    <Image
-                                        key={propertyID}
-                                        className={`${loading ? `opacity-70` : ``} w-full h-full object-contain`}
-                                        alt={`Image ${imageIndex + 1}`}
-                                        loader={popUpPhotosCustomLoader}
-                                        src={propertyImages[imageIndex].href}
-                                        width={popUpWidth}
-                                        height={popUpHeight}
-                                    />
-                                    <caption className='flex justify-center text-sm text-slate10'>
-                                        {`Photo: ${imageIndex + 1} of ${propertyImages.length}`}
-                                    </caption>
-                                </div>
-                            )}
-                            <div className='items-center justify-center px-5 hidden md:flex'>
-                                <button
-                                    onClick={showNextImage}
-                                    disabled={imageIndex === propertyImages.length - 1}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px] max-h-[50%]'
-                                >
-                                    <ChevronRight />
-                                </button>
-                            </div>
-                            <div className='flex justify-between w-full px-2 mt-2 md:hidden'>
-                                <button
-                                    onClick={showPreviousImage}
-                                    disabled={imageIndex === 0}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                >
-                                    <ChevronLeft />
-                                </button>
-                                <button
-                                    onClick={showNextImage}
-                                    disabled={imageIndex === propertyImages.length - 1}
-                                    className='z-[9999] rounded-full p-2 bg-blackA9 hover:bg-blackA12 hover:cursor-pointer shadow-blackA9 shadow-[0px_4px_7px]'
-                                >
-                                    <ChevronRight />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='lg:flex w-full h-full border border-green-500 p-2 mt-20'>
-
-                        {/* Right side of pop up */}
-                        <div className='lg:w-[40%] h-[800px] border border-blue-500 p-2'>
-                            <div className="flex flex-col gap-2.5 w-full">
-                                <div className="text-sm md:text-md font-medium whitespace-nowrap">
-                                    {streetAddress}
-                                </div>
-                                <div className="text-sm md:text-md text-slate10">
-                                    {cityStateZip}
-                                </div>
-
-                                <div className='flex gap-1 text-lg md:text-xl font-semibold text-mint11'>
-                                    <p className='text-[36px]'>{usdFormatter.format(price)}</p>
-                                    <div className={priceReduction > 0 ? 'mb-5 flex gap-1 items-center' : 'hidden'}>
-                                        <Warning />
-                                        <p className='text-xs text-red9 font-light'>- {usdFormatter.format(priceReduction)}</p>
-                                    </div>
-                                </div>
-                                {/* Status badge */}
-                                <div className='flex gap-2'>
-                                    <div className='flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30'>
-                                        <div className={
-                                            (() => {
-                                                switch (status) {
-                                                    case 'For sale':
-                                                        return 'rounded-full bg-green-500 w-2 h-2';
-                                                    case 'Ready to build':
-                                                        return 'rounded-full bg-yellow-500 w-2 h-2';
-                                                    case 'For rent':
-                                                        return 'rounded-full bg-purple-500 w-2 h-2';
-                                                    case 'Sold':
-                                                        return 'rounded-full bg-red-500 w-2 h-2';
-                                                    case 'Off market':
-                                                        return 'rounded-full bg-gray-500 w-2 h-2';
-                                                    case 'N/A':
-                                                        return 'rounded-full bg-black w-2 h-2';
-                                                    case 'New community':
-                                                        return 'rounded-full bg-sky-500 w-2 h-2';
-                                                    default:
-                                                        return '';
-                                                }
-                                            })()
-                                        }
-                                        />
-                                        <p className='text-xs'>{status}</p>
-                                    </div>
-                                    <div className={propertyDetails['days_on_market'] === null ? `hidden` : `flex items-center gap-2 w-fit rounded-full px-2 py-0.5 bg-slate10/30`}>
-                                        {propertyDetails['days_on_market']}
-                                    </div>
-                                </div>
-                                <div>
-                                    <p className='text-xs text-mint11 capitalize'>{type}</p>
-                                </div>
-                                <div>
-                                    <p className='text-sm font-medium text-slate10'>{branding}</p>
-                                </div>
-                                <Separator.Root className="data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px " />
-                                <div className="flex h-5 items-center">
-                                    <div className="text-sm md:text-md leading-5">{beds}</div>
-                                    <Separator.Root
-                                        className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
-                                        decorative
-                                        orientation="vertical"
-                                    />
-                                    <div className="text-sm md:text-md leading-5">{baths}</div>
-                                    <Separator.Root
-                                        className="bg-mint11 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
-                                        decorative
-                                        orientation="vertical"
-                                    />
-                                    <div className="text-sm md:text-md leading-5">{squareFeet}</div>
-                                </div>
-                                {/* Price estimates */}
-                                <div>
-                                    {propertyDetails.estimates && status === 'For sale' && (
-                                        <div className='flex items-center gap-1 text-sm'>
-                                            <p className='font-medium'>
-                                                Thenstimate:
-                                            </p>
-                                            <p className='text-blue9 font-semibold'>
-                                                {usdFormatter.format(propertyDetails.estimates['current_values'][0]['estimate_low'])}
-                                            </p>
-                                            <span className='text-blue9'>-</span>
-                                            <p className='text-blue9 font-semibold'>
-                                                {usdFormatter.format(propertyDetails.estimates['current_values'][0]['estimate_high'])}
-                                            </p>
-                                            {/* estimate date */}
-                                            {/* <div className='flex items-center gap-1 text-[8px] mb-5'>
-                                                <Calendar />
-                                                <p className=''>
-                                                    <span>As of </span>
-                                                    {new Date(propertyDetails.estimates['current_values'][0].date).toLocaleString('en-US', {
-                                                        year: "numeric",
-                                                        month: "long",
-                                                        day: "numeric",
-                                                    })}
-                                                </p>
-                                            </div> */}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Open house dates */}
-                                <div className={openHouse === null ? 'hidden' : 'block'}>
-                                    <div className='flex gap-1 text-xs'>
-                                        <span className='text-xs font-medium text-green-500'>Open house:</span>
-                                        {openHouse === null ? '' :
-                                            openHouse.map((dates: any, i: any) => (
-                                                <p key={i}>
-                                                    {formatDate(dates['start_date'])} {dates['time_zone']} - {formatDate(dates['end_date'])} {dates['time_zone']}
-                                                </p>
-                                            ))}
-                                    </div>
-                                </div>
-                                {/* Add to portfolio & watchlist buttons */}
-                                <div className='flex gap-5 mt-2 z-[99999999]'>
-                                    <Tooltips
-                                        button={
-                                            <span onClick={handleAddToWatchlist}>
-                                                <Watchlist />
-                                            </span>
-                                        }
-                                        tooltipContent={`Add to watchlist`}
-                                    />
-                                    <Tooltips
-                                        button={
-                                            <span onClick={handleAddToPortfolio}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-mint11 w-5 h-5">
+                            {/* Add to portfolio button and more info button */}
+                            <div className='flex items-center justify-between w-full'>
+                                <div className='flex gap-2 mt-2'>
+                                    <NextToolTip
+                                        isDisabled={portfolioButtonClicked ? true : false}
+                                        className={portfolioButtonClicked ? "bg-transparent text-foreground border-default-200 cursor-not-allowed" : ""}
+                                        radius={'sm'}
+                                        tooltipContent={portfolioButtonClicked
+                                            ? <span className='text-black'>In your portfolio</span>
+                                            : <span className='text-white'>Add to portfolio</span>}
+                                        buttonSize={'sm'}
+                                        variant={portfolioButtonClicked ? "bordered" : "solid"}
+                                        buttontext={
+                                            portfolioButtonClicked ?
+                                                <Checkmark />
+                                                :
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-white w-4 h-4">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                                                 </svg>
-                                            </span>
                                         }
-                                        tooltipContent={`Add to portfolio`}
+                                        tooltipColor={portfolioButtonClicked ? 'default' : 'primary'}
+                                        buttonColor={'primary'}
+                                        onClick={handleAddToPortfolio}
                                     />
-                                </div>
-                                {/* Seller info */}
-                                <div className='mb-2'>
-                                    <Seperator
-                                        text={`Seller information`}
-                                    />
-                                </div>
-                                <div className='flex flex-col gap-2 text-sm rounded bg-blackA2 p-2'>
-                                    <p className='flex gap-1 capitalize'>
-                                        <span className='font-medium'>{advertiserType}:</span>
-                                        <span className='font-light'>{agent === null ? 'No data available' : agent}</span>
-                                    </p>
-                                    <p className='flex gap-1'>
-                                        <span className='font-medium'>Email:</span>
-                                        <span className='font-light'>{agentEmail}</span>
-                                    </p>
-                                    <form onSubmit={handleContactAgent} >
-                                        <button className={
-                                            agentEmail === 'No data available' ?
-                                                'bg-slate10 hover:cursor-not-allowed  z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide transition duration-150 ease-in-out text-white text-sm'
+                                    <NextToolTip
+                                        isDisabled={watchlistButtonClicked ? true : false}
+                                        className={watchlistButtonClicked ? "bg-transparent text-foreground border-default-200 cursor-not-allowed" : ""}
+                                        radius={'sm'}
+                                        tooltipContent={watchlistButtonClicked
+                                            ? <span className='text-black'>In your watchlist</span>
+                                            : <span className='text-white'>Add to watchlist</span>}
+                                        buttonSize={'sm'}
+                                        variant={watchlistButtonClicked ? "bordered" : "solid"}
+                                        buttontext={
+                                            watchlistButtonClicked ?
+                                                <Checkmark />
                                                 :
-                                                ` border border-mint11 bg-mint11/80 text-white hover:bg-mint11/70 z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none tracking-wide hover:bg-opacity-80 transition duration-150 ease-in-out text-sm`
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" className="text-white w-4 h-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
                                         }
-                                        >
-                                            {agentEmail === 'No data available' ? `Unable to contact ${advertiserType}` : `Contact ${agent}`}
-                                        </button>
-                                    </form>
+                                        tooltipColor={watchlistButtonClicked ? 'default' : 'secondary'}
+                                        buttonColor={'secondary'}
+                                        onClick={handleAddToWatchlist}
+                                    />
+
                                 </div>
-
-                            </div>
-                            {/* Under photo section */}
-                            <div className='flex flex-col gap-5 mt-10'>
-                                <Seperator
-                                    text={`Property details`}
-                                />
-                                <article className='text-sm'>
-                                    {/* Details */}
-                                    <ul className='flex flex-col gap-2 text-sm mb-5'>
-                                        <li className={newConstruction ? 'block' : 'hidden'}>
-                                            <p className='font-medium text-yellow-500'>
-                                                New construction
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bed />
-                                                <span className='font-medium'>Year built:</span>
-                                                <span className='font-light'>
-                                                    {propertyDetails.description && (
-                                                        propertyDetails.description['year_built']
-                                                    )}
-                                                </span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Calendar />
-                                                <span className='font-medium'>Date listed:</span>
-                                                <span className='font-light'>{listDate.toLocaleDateString("en-US", options)}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bath />
-                                                <span className='font-medium'>Full baths:</span>
-                                                <span className='font-light'>{fullBaths}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Bath />
-                                                <span className='font-medium'>Half baths:</span>
-                                                <span className='font-light'>{halfBaths}</span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Calendar />
-                                                <span className='font-medium'>Last sold date:</span>
-                                                <span className='font-light'>
-                                                    {lastSoldDate === 'No data available' ? 'No data available'
-                                                        :
-                                                        new Date(lastSoldDate).toLocaleString('en-US', {
-                                                            month: 'long',
-                                                            day: 'numeric',
-                                                            year: 'numeric'
-                                                        })
-                                                    }
-                                                </span>
-                                            </p>
-                                        </li>
-                                        <li className='rounded bg-blackA2 px-2'>
-                                            <p className='flex items-center gap-2'>
-                                                <Dollar />
-                                                <span className='font-medium'>Last sold price:</span>
-                                                <span className='font-light'>{lastSoldPrice}</span>
-                                            </p>
-                                        </li>
-                                    </ul>
-
-                                    {/* Investmeny analysis section */}
-                                    {/* <div className='mt-10'>
-                                        <button className='inline-flex w-full font-medium items-center justify-center rounded-md h-[65px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white animate-backgroundShine bg-[linear-gradient(110deg,#3b82f6,45%,#FFFFFFCC,55%,#3b82f6)] bg-[length:250%_100%]'>
-                                            {`Investalyze ${streetAddress}`}
-                                        </button>
-                                    </div> */}
-                                </article>
                             </div>
                         </div>
+                    </div>
+                </CardBody>
+                <CardFooter className="justify-between  overflow-hidden py-1 absolute right-0 bottom-1 w-[calc(100%_-_200px)] ml-1 z-10">
+                    <p className="text-tiny text-white/80 w-full">text</p>
+                    <div className="text-tiny text-white bg-black/20 rounded-full">
+                        <Modals
+                            buttontext={'More info'}
+                            onClickButton={getPropertyImages}
+                            modalTitle={
+                                <div className="max-w-8xl h-full w-full px-2 lg:px-24">
+                                    <ProductViewInfo
+                                        {...item}
+                                        images={
+                                            propertyImages ? propertyImages.map((item, i) => item.href) : []
+                                        }
+                                        loader={popUpPhotosCustomLoader}
+                                    />
+                                </div>
+                            }
 
-                        <div className='flex flex-col gap-20 lg:w-[60%] border border-red-500 mt-10 md:mt-0'>
-                            {/* In depth details */}
-                            <div className='border border-green-500 overflow-x-hidden'>
-                                {propertyDetails.mortgage && (
-                                    <Tabs.Root
-                                        className="border rounded border-blackA5 shadow-blackA9 shadow-[0px_4px_7px] max-h-[800px] overflow-y-scroll"
-                                        defaultValue="tab1"
-                                    >
-                                        {/* Navbar */}
-                                        <Tabs.List id='dark-mode' className="max-h-[35px] items-center flex shadow-blackA3 shadow-[0px_2px_4px]" aria-label="Navbar">
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab1"
-                                            >
-                                                Mortgage
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab2"
-                                            >
-                                                Details
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab3"
-                                                onClick={() => setIsChartViewHistory(true)}
-                                            >
-                                                Values
-                                            </Tabs.Trigger>
-                                            <Tabs.Trigger
-                                                className="whitespace-nowrap hover:cursor-pointer px-5 h-[35px] flex-1 flex items-center justify-center text-xs leading-none select-none first:rounded-tl-md last:rounded-tr-md transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-mint11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative outline-none cursor-default"
-                                                value="tab4"
-                                            >
-                                                Assessments
-                                            </Tabs.Trigger>
-                                        </Tabs.List>
-                                        {/* Mortgage Content */}
-                                        <Tabs.Content
-                                            className=" transition duration-150 ease-in-out  overflow-y-scroll p-2 h-[95%]"
-                                            value="tab1"
-                                        >
-                                            <div className='flex flex-col gap-2 text-sm'>
-                                                <Seperator text={'30 yr. mortgage details'} />
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium text-mint11'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
-                                                </p>
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
-                                                </p>
-                                                {/* Mortgage payment  */}
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Loan amount:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}
-                                                </p>
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Monthly payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
-                                                </p>
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
-                                                </p>
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Down payment (25%):</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
-                                                </p>
-                                                {/* Rates for estimate  */}
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Average rate:</span>{(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%
-                                                </p>
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Loan term:</span>{propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years
-                                                </p>
-                                                {/* Monthly payment details  */}
-                                            </div>
-
-                                            {/* Monthly ownership expense */}
-                                            <div className='flex flex-col gap-2 text-sm'>
-                                                <Seperator text={'Monthly ownership expenses'} />
-                                                {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light' key={i}>
-                                                        <span className='font-medium'>{details['display_name']}:</span>
-                                                        {usdFormatter.format(details.amount)}
-                                                    </p>
-                                                ))}
-                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2'>
-                                                    <span className='text-blue9'>Total:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
-                                                </p>
-                                            </div>
-
-                                            {/* Average rates for different mortgage products in general */}
-                                            <div className='flex flex-col gap-2 text-sm'>
-                                                <Seperator text={
-                                                    <div>
-                                                        Avg. rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
-                                                    </div>
-                                                }
-                                                />
-                                                {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
-                                                    <div className='flex rounded gap-2 bg-blackA2 px-2' key={j}>
-                                                        <p className='font-medium'>
-                                                            {(() => {
-                                                                if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
-                                                                    return '30yr. fixed:';
-                                                                } else if (rates['loan_type']['loan_id'] === 'twenty_year_fix') {
-                                                                    return '20yr. fixed:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'fifteen_year_fix') {
-                                                                    return '15yr. fixed:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'ten_year_fix') {
-                                                                    return '10yr. fixed:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_fha') {
-                                                                    return '30yr. FHA:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_va') {
-                                                                    return '30yr. VA:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'five_one_arm') {
-                                                                    return '5/1 ARM:'
-                                                                } else if (rates['loan_type']['loan_id'] === 'seven_one_arm') {
-                                                                    return '7/1 ARM:'
-                                                                }
-
-                                                            })()}
-                                                        </p>
-                                                        <p className='font-light'>{(rates.rate * 100).toFixed(2)}%</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </Tabs.Content>
-
-                                        <Tabs.Content
-                                            className="text-sm transition duration-150 ease-in-out p-2 overflow-y-scroll h-[95%]"
-                                            value="tab2"
-                                        >
-                                            {/* Descriptions */}
-                                            <div className='flex flex-col gap-2'>
-                                                <Seperator text={'Home description'} />
-                                                <div className='grid grid-cols-2 gap-2 whitespace-nowrap'>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'N/A' : propertyDetails.description.heating}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'N/A' : propertyDetails.description.cooling}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Garage:</span>
-                                                        {(() => {
-                                                            if (propertyDetails.description.garage === null) {
-                                                                return 'No data available'
-                                                            } else if (propertyDetails.description.garage === 1) {
-                                                                return `${propertyDetails.description.garage} space`
-                                                            } else if (propertyDetails.description.garage > 1) {
-                                                                return `${propertyDetails.description.garage} spaces`
-                                                            }
-                                                        })()}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'N/A' : propertyDetails.description.pool}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'N/A' : propertyDetails.description['lot_sqft'].toLocaleString()}
-                                                    </p>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'N/A' : propertyDetails.description.stories}
-                                                    </p>
-                                                    {/* HOA */}
-                                                    <div className='rounded bg-blackA2 px-2 font-light'>
-                                                        <p className='flex items-center gap-2 '>
-                                                            <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
-                                                        </p>
-                                                    </div>
-                                                    {/* Price per sqft */}
-                                                    <div>
-                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                            <span className='font-medium'>Price per sqft:</span>
-                                                            {usdFormatter.format(propertyDetails['price_per_sqft'])}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                {/* Descriptive text */}
-                                                <p className='md:flex gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                    <span className='font-medium'>Description:</span> {propertyDetails.description.text}
-                                                </p>
-                                                {/* Pet policy */}
-                                                <div className={status === 'For rent' ? 'block' : 'hidden'}>
-                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
-                                                        <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'N/A' : propertyDetails['pet_policy']}
-                                                    </p>
-                                                </div>
-                                                {/* Flood an noise level section */}
-                                                <div className=''>
-                                                    {propertyDetails.local && (
-                                                        <div>
-                                                            <div className='mb-2'>
-                                                                <Seperator
-                                                                    text={`Noise levels`}
-                                                                />
+                            modalBody={
+                                <>
+                                    {/* Full container */}
+                                    <div className="flex w-full flex-col">
+                                        {propertyDetails.mortgage && (
+                                            <Tabs color="primary" aria-label="Options">
+                                                <Tab className="text-white" key="mortgage" title="Mortgage">
+                                                    <Card>
+                                                        <CardBody className="text-black">
+                                                            <div className='flex flex-col gap-2 text-sm'>
+                                                                <Seperator text={'30 yr. mortgage details'} />
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium text-blue9'>Property tax rate:</span>{(propertyDetails.mortgage['property_tax_rate'] * 100).toFixed(2)}%
+                                                                </p>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Insurance rate:</span>{(propertyDetails.mortgage['insurance_rate'] * 100).toFixed(2)}%
+                                                                </p>
+                                                                {/* Mortgage payment  */}
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Loan amount:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['loan_amount'])}
+                                                                </p>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Monthly payment:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                                </p>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Total cost of mortgage:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['total_payment'])}
+                                                                </p>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Down payment (25%):</span>{usdFormatter.format(propertyDetails.mortgage.estimate['down_payment'])}
+                                                                </p>
+                                                                {/* Rates for estimate  */}
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Average rate:</span>{(propertyDetails.mortgage.estimate['average_rate'].rate * 100).toFixed(2)}%
+                                                                </p>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light'>
+                                                                    <span className='font-medium'>Loan term:</span>{propertyDetails.mortgage.estimate['average_rate']['loan_type'].term} years
+                                                                </p>
+                                                                {/* Monthly payment details  */}
                                                             </div>
-                                                            <ul className='flex flex-col gap-2 text-sm mb-5'>
-                                                                <li className='rounded bg-blackA2 px-2'>
-                                                                    <p className='flex items-center gap-2'>
-                                                                        <span className='font-medium'>Overall score:</span>
-                                                                        <span className='font-light'>{propertyDetails.local.noise.score}</span>
+
+                                                            {/* Monthly ownership expense */}
+                                                            <div className='flex flex-col gap-2 text-sm'>
+                                                                <Seperator text={'Monthly ownership expenses'} />
+                                                                {propertyDetails.mortgage.estimate['monthly_payment_details'].map((details: any, i: any) => (
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light' key={i}>
+                                                                        <span className='font-medium'>{details['display_name']}:</span>
+                                                                        {usdFormatter.format(details.amount)}
                                                                     </p>
-                                                                </li>
-                                                                {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
-                                                                    <ul key={i}>
-                                                                        <li className='rounded bg-blackA2 px-2'>
-                                                                            <p className='flex items-center gap-2'>
-                                                                                <span className='capitalize font-medium'>{category.type}:</span>
-                                                                                {/* Noise level ratings are color labeled */}
-                                                                                <span className={
-                                                                                    `${category.text === 'Low' ? 'text-green-500' :
-                                                                                        category.text === 'Medium' ? 'text-yellow-500' :
-                                                                                            category.text === 'High' ? 'text-red-500' :
-                                                                                                ''} font-light`
-                                                                                }>
-                                                                                    {category.text}
-                                                                                </span>
-
-
-                                                                            </p>
-                                                                        </li>
-                                                                    </ul>
                                                                 ))}
-                                                            </ul>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
+                                                                <p className='flex items-center gap-2 rounded bg-blackA2 px-2'>
+                                                                    <span className='text-blue9'>Total:</span>{usdFormatter.format(propertyDetails.mortgage.estimate['monthly_payment'])}
+                                                                </p>
+                                                            </div>
 
-                                            {/* Nearby schools */}
-                                            <div className='border border-pink-500'>
-                                                <Seperator text={'Nearby schools'} />
-
-                                                {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
-                                                    <div className='flex flex-col gap-2' key={l}>
-                                                        <div className='flex items-center gap-2 font-light'>
-                                                            {/* <span className='font-medium'>Name:</span>{school.name} */}
-                                                            <AccordionDemo
-                                                                accordionTrigger={
-                                                                    <div className='flex justify-between w-full'>
-                                                                        <div className='flex items-center gap-2 md:mr-10 md:w-full'>
-                                                                            <GraduationCap />
-                                                                            <p className='whitespace-nowrap text-sm'>
-                                                                                {school.name}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className={`whitespace-nowrap flex items-center gap-2 md:w-fit rounded-full px-2 py-0.5 mr-2
-                                                                                ${(() => {
-                                                                                if (school['parent_rating'] >= 4) {
-                                                                                    return 'bg-green-500/10'
-                                                                                } else if (school['parent_rating'] === 3) {
-                                                                                    return 'bg-yellow-500/10'
-                                                                                } else if (school['parent_rating'] === null) {
-                                                                                    return 'bg-blackA5/10'
-                                                                                } else if (school['parent_rating'] < 3) {
-                                                                                    return 'bg-red-500/10'
-                                                                                }
-                                                                            })()}`}
-                                                                        >
-                                                                            <Star />
-                                                                            <p className={`whitespace-nowrap text-xs
-                                                                                    ${(() => {
-                                                                                    if (school['parent_rating'] >= 4) {
-                                                                                        return 'text-green-500'
-                                                                                    } else if (school['parent_rating'] === 3) {
-                                                                                        return 'text-yellow-500'
-                                                                                    } else if (school['parent_rating'] === null) {
-                                                                                        return 'text-blackA5'
-                                                                                    } else if (school['parent_rating'] < 3) {
-                                                                                        return 'text-red-500'
-                                                                                    }
-                                                                                })()}`}
-                                                                            >
-                                                                                {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
-                                                                            </p>
-                                                                        </div>
+                                                            {/* Average rates for different mortgage products in general */}
+                                                            <div className='flex flex-col gap-2 text-sm'>
+                                                                <Seperator text={
+                                                                    <div>
+                                                                        Avg. rates for {propertyDetails.location.address.city}, {propertyDetails.location.address['state_code']}
                                                                     </div>
                                                                 }
-                                                                accordionContent={
-                                                                    <div className='flex flex-col gap-2'>
-                                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                />
+                                                                {propertyDetails.mortgage['average_rates'].map((rates: any, j: any) => (
+                                                                    <div className='flex rounded gap-2 bg-blackA2 px-2' key={j}>
+                                                                        <p className='font-medium'>
+                                                                            {(() => {
+                                                                                if (rates['loan_type']['loan_id'] === 'thirty_year_fix') {
+                                                                                    return '30yr. fixed:';
+                                                                                } else if (rates['loan_type']['loan_id'] === 'twenty_year_fix') {
+                                                                                    return '20yr. fixed:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'fifteen_year_fix') {
+                                                                                    return '15yr. fixed:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'ten_year_fix') {
+                                                                                    return '10yr. fixed:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_fha') {
+                                                                                    return '30yr. FHA:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'thirty_year_va') {
+                                                                                    return '30yr. VA:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'five_one_arm') {
+                                                                                    return '5/1 ARM:'
+                                                                                } else if (rates['loan_type']['loan_id'] === 'seven_one_arm') {
+                                                                                    return '7/1 ARM:'
+                                                                                }
+
+                                                                            })()}
                                                                         </p>
-                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Funding type:</span>{school['funding_type']}
-                                                                        </p>
-                                                                        <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Levels: </span>
-                                                                            {school['education_levels'].map((level: any, l: any) => (
-                                                                                <div className='font-light' key={l}>
-                                                                                    {level}
-                                                                                </div>
-                                                                            ))}
-                                                                        </p>
-                                                                        <div className='rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
-                                                                        </div>
-                                                                        <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
-                                                                            <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                        <p className='font-light'>{(rates.rate * 100).toFixed(2)}%</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Tab>
+                                                <Tab className="text-white" key="details" title="Details">
+                                                    <Card>
+                                                        <CardBody>
+                                                            {/* Descriptions */}
+                                                            <div className='flex flex-col gap-2'>
+                                                                <Seperator text={'Home description'} />
+                                                                <div className='grid grid-cols-2 gap-2 whitespace-nowrap text-black'>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Bathrooms:</span>{propertyDetails.description.baths}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Heating:</span>{propertyDetails.description.heating === null ? 'N/A' : propertyDetails.description.heating}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Cooling:</span>{propertyDetails.description.cooling === null ? 'N/A' : propertyDetails.description.cooling}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Bedrooms:</span> {propertyDetails.description.beds}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Garage:</span>
+                                                                        {(() => {
+                                                                            if (propertyDetails.description.garage === null) {
+                                                                                return 'No data available'
+                                                                            } else if (propertyDetails.description.garage === 1) {
+                                                                                return `${propertyDetails.description.garage} space`
+                                                                            } else if (propertyDetails.description.garage > 1) {
+                                                                                return `${propertyDetails.description.garage} spaces`
+                                                                            }
+                                                                        })()}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Pool:</span>{propertyDetails.description.pool === null ? 'N/A' : propertyDetails.description.pool}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Lot sqft:</span>{propertyDetails.description['lot_sqft'] === null ? 'N/A' : propertyDetails.description['lot_sqft'].toLocaleString()}
+                                                                    </p>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Stories:</span>{propertyDetails.description.stories === null ? 'N/A' : propertyDetails.description.stories}
+                                                                    </p>
+                                                                    {/* HOA */}
+                                                                    <div className='rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <p className='flex items-center gap-2 '>
+                                                                            <span className='font-medium'>HOA Fee:</span>{usdFormatter.format(propertyDetails.hoa.fee)}
                                                                         </p>
                                                                     </div>
+                                                                    {/* Price per sqft */}
+                                                                    <div>
+                                                                        <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2 text-black'>
+                                                                            <span className='font-medium'>Price per sqft:</span>
+                                                                            {usdFormatter.format(propertyDetails['price_per_sqft'])}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                {/* Descriptive text */}
+                                                                <p className='md:flex gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                    <span className='font-medium'>Description:</span> {propertyDetails.description.text}
+                                                                </p>
+                                                                {/* Pet policy */}
+                                                                <div className={status === 'For rent' ? 'block' : 'hidden'}>
+                                                                    <p className='flex items-center gap-2 rounded bg-blackA2 px-2 font-light text-black'>
+                                                                        <span className='font-medium'>Pet policy:</span>{propertyDetails['pet_policy'] === null ? 'N/A' : propertyDetails['pet_policy']}
+                                                                    </p>
+                                                                </div>
+                                                                {/* Flood an noise level section */}
+                                                                <div className='text-black'>
+                                                                    {propertyDetails.local && (
+                                                                        <div>
+                                                                            <div className='mb-2'>
+                                                                                <Seperator
+                                                                                    text={`Noise levels`}
+                                                                                />
+                                                                            </div>
+                                                                            <ul className='flex flex-col gap-2 text-sm mb-5'>
+                                                                                <li className='rounded bg-blackA2 px-2'>
+                                                                                    <p className='flex items-center gap-2'>
+                                                                                        <span className='font-medium'>Overall score:</span>
+                                                                                        <span className='font-light'>{propertyDetails.local.noise.score}</span>
+                                                                                    </p>
+                                                                                </li>
+                                                                                {propertyDetails.local.noise['noise_categories'].map((category: any, i: any) => (
+                                                                                    <ul key={i}>
+                                                                                        <li className='rounded bg-blackA2 px-2'>
+                                                                                            <p className='flex items-center gap-2'>
+                                                                                                <span className='capitalize font-medium'>{category.type}:</span>
+                                                                                                {/* Noise level ratings are color labeled */}
+                                                                                                <span className={
+                                                                                                    `${category.text === 'Low' ? 'text-green-500' :
+                                                                                                        category.text === 'Medium' ? 'text-yellow-500' :
+                                                                                                            category.text === 'High' ? 'text-red-500' :
+                                                                                                                ''} font-light`
+                                                                                                }>
+                                                                                                    {category.text}
+                                                                                                </span>
+
+
+                                                                                            </p>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                {/* Nearby schools */}
+                                                                <div className='text-black'>
+                                                                    <Seperator text={'Nearby schools'} />
+                                                                    {propertyDetails['nearby_schools'].schools.map((school: any, l: any) => (
+                                                                        <div className='flex flex-col gap-2' key={l}>
+                                                                            <div className='flex items-center gap-2 font-light'>
+                                                                                {/* <span className='font-medium'>Name:</span>{school.name} */}
+                                                                                <AccordionDemo
+                                                                                    accordionTrigger={
+                                                                                        <div className='flex justify-between w-full'>
+                                                                                            <div className='flex items-center gap-2 md:mr-10 md:w-full'>
+                                                                                                <GraduationCap />
+                                                                                                <p className='whitespace-nowrap text-sm'>
+                                                                                                    {school.name}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div className={`whitespace-nowrap flex items-center gap-2 md:w-fit rounded-lg px-2 py-0.5 mr-2
+                                                                                    ${(() => {
+                                                                                                    if (school['parent_rating'] >= 4) {
+                                                                                                        return 'bg-success'
+                                                                                                    } else if (school['parent_rating'] === 3) {
+                                                                                                        return 'bg-warning'
+                                                                                                    } else if (school['parent_rating'] === null) {
+                                                                                                        return 'bg-blackA5/50'
+                                                                                                    } else if (school['parent_rating'] < 3) {
+                                                                                                        return 'bg-red-500'
+                                                                                                    }
+                                                                                                })()}`}
+                                                                                            >
+                                                                                                <Star />
+                                                                                                <p className={`whitespace-nowrap text-xs
+                                                                                        ${(() => {
+                                                                                                        if (school['parent_rating'] >= 4) {
+                                                                                                            return 'text-white'
+                                                                                                        } else if (school['parent_rating'] === 3) {
+                                                                                                            return 'text-white'
+                                                                                                        } else if (school['parent_rating'] === null) {
+                                                                                                            return 'text-white'
+                                                                                                        } else if (school['parent_rating'] < 3) {
+                                                                                                            return 'text-white'
+                                                                                                        }
+                                                                                                    })()}`}
+                                                                                                >
+                                                                                                    {school['parent_rating'] === null ? 'N/A' : `${school['parent_rating']}/5`}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                    accordionContent={
+                                                                                        <div className='flex flex-col gap-2'>
+                                                                                            <p className='flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                                <span className='font-medium'>Distance:</span>{school['distance_in_miles']} mi.
+                                                                                            </p>
+                                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                                <span className='font-medium'>Funding type:</span>{school['funding_type']}
+                                                                                            </p>
+                                                                                            <p className=' capitalize flex gap-2 rounded bg-blackA2 px-2'>
+                                                                                                <span className='font-medium'>Levels: </span>
+                                                                                                {school['education_levels'].map((level: any, l: any) => (
+                                                                                                    <div className='font-light' key={l}>
+                                                                                                        {level}
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            </p>
+                                                                                            <div className='rounded bg-blackA2 px-2'>
+                                                                                                <span className='font-medium'>Grades:</span> {school.grades[0]} - {school.grades[(school.grades).length - 1]}
+                                                                                            </div>
+                                                                                            <p className='capitalize flex items-center gap-2 font-light rounded bg-blackA2 px-2'>
+                                                                                                <span className='font-medium'>Student count:</span>{(school['student_count']).toLocaleString()}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+
+                                                                </div>
+                                                            </div>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Tab>
+                                                <Tab className="text-white" key="values" title="Values" onClick={() => setIsChartViewHistory(true)}>
+                                                    <Card>
+                                                        <CardBody>
+                                                            <div className='mb-5 w-[50%] md:w-[70%]'>
+                                                                <h2 className='font-semibold text-xl md:text-3xl text-primary '>
+                                                                    {isChartViewHistory ? 'History' : isChartViewForecast ? 'Forecast' : ''}
+                                                                </h2>
+                                                                <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
+                                                            </div>
+                                                            <NextTabs
+                                                                tabOneTitle={'Historic'}
+                                                                tabOneClick={handleChartViewHistory}
+                                                                tabOneContent=
+                                                                {
+                                                                    propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                                    (<Line
+                                                                        className=' w-full'
+                                                                        height={undefined}
+                                                                        data={lineChartData}
+                                                                        options={lineChartOptions}
+                                                                    />
+                                                                    )
+                                                                }
+                                                                tabTwoTitle={'Forecasts'}
+                                                                tabTwoClick={handleChartViewForecast}
+                                                                tabTwoContent={
+                                                                    propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
+                                                                    (<Line
+                                                                        className=' w-full'
+                                                                        height={undefined}
+                                                                        data={lineChartData}
+                                                                        options={lineChartOptions}
+                                                                    />
+                                                                    )
                                                                 }
                                                             />
+                                                        </CardBody>
+                                                    </Card>
+                                                </Tab>
+                                                <Tab className="text-white" key="assessments" title="Assessments">
+                                                    <Card>
+                                                        <CardBody>
+                                                            <div className='flex items-center justify-between w-full p-2 mb-5'>
+                                                                <div className=''>
+                                                                    <h2 className='font-semibold text-xl md:text-3xl text-blue9'>
+                                                                        Tax assessments
+                                                                    </h2>
+                                                                    <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
+                                                                </div>
+                                                                <div className=''>
+                                                                    {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
+                                                                        const { assessment, year } = taxHistory;
+                                                                        if (assessment.building === null) {
+                                                                            return (
+                                                                                <div className='flex items-center gap-1 w-fit rounded-lg px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
+                                                                                    <Cancel />
+                                                                                    <span className='font-medium whitespace-nowrap'>{`No data for ${year}`}</span>
+                                                                                </div>
+                                                                            );
+                                                                        } else if (assessment.land === null) {
+                                                                            return (
+                                                                                <div className='flex items-center gap-1 w-fit rounded-lg px-2 py-0.5 bg-blue9/80 text-white text-[10px]' key={index}>
+                                                                                    <Cancel />
+                                                                                    <span className='font-medium'>{`No data for ${year}`}</span>
+                                                                                </div>
+                                                                            );
+                                                                        }
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                            <div className='w-full'>
+                                                                {
+                                                                    propertyDetails['tax_history'].length > 0 && (
+                                                                        <Line
+                                                                            className=' w-full'
+                                                                            height={undefined}
+                                                                            data={taxLineChartData}
+                                                                            options={taxLineChartOptions}
+                                                                        />
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Tab>
+                                            </Tabs>
+                                        )}
+                                    </div>
+
+                                    {/* Similar homes section */}
+                                    <div>
+                                        <div className='mb-2'>
+                                            <Seperator
+                                                text={`Similar homes for sale`}
+                                            />
+                                        </div>
+                                        <div className='grid md:grid-cols-3 lg:grid-cols-4 gap-3 w-full mt-5'>
+                                            {similarHomesArray.length > 1 &&
+                                                (similarHomesArray.map((home, i) => (
+                                                    <div
+                                                        className='text-[12px] rounded shadow-blackA9 shadow-[0px_4px_7px] hover:cursor-pointer hover:opacity-80'
+                                                        key={i}
+                                                    >
+                                                        <Image
+                                                            className='w-full h-[150px] rounded-tl rounded-tr object-cover'
+                                                            src={home['primary_photo'].href}
+                                                            alt={''}
+                                                            width={300}
+                                                            height={300}
+                                                        />
+                                                        <div className='flex flex-col gap-2 p-2'>
+                                                            <caption className='w-full font-medium'>
+                                                                {`${home.location.address.line}`}
+                                                            </caption>
+                                                            <div className='flex justify-between gap-2'>
+                                                                <p className='font-semibold text-blue9'>
+                                                                    {usdFormatter.format(home['list_price'])}
+                                                                </p>
+                                                                <div className='flex gap-2'>
+                                                                    <p className=''>
+                                                                        {home.description.beds} beds
+                                                                    </p>
+                                                                    <div className='h-full w-[1px] bg-blue9' />
+                                                                    <p className=''>
+                                                                        {home.description.baths} baths
+                                                                    </p>
+                                                                    <div className='h-full w-[1px] bg-blue9' />
+                                                                    <p className=''>
+                                                                        {(home.description.sqft).toLocaleString()} sqft.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                ))}
-
-                                            </div>
-                                        </Tabs.Content>
-
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow  overflow-y-scroll rounded-b-md outline-none"
-                                            value="tab3"
-                                        >
-                                            {/* History and Future prices */}
-                                            <Tabs.Root
-                                                className='w-full px-3'
-                                                defaultValue='tabHistory'
-                                            >
-                                                <div className='flex items-center justify-between w-full px-2 mt-5'>
-                                                    <div className='mb-5 w-[50%] md:w-[70%]'>
-                                                        <h2 className='font-semibold text-xl md:text-3xl text-mint11 '>
-                                                            {isChartViewHistory ? 'History' : isChartViewForecast ? 'Forecast' : ''}
-                                                        </h2>
-                                                        <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
-                                                    </div>
-
-                                                    <Tabs.List className='flex  bg-blackA3 rounded shadow-sm shadow-blackA9 w-[50%] md:w-[30%] h-fit'>
-                                                        <Tabs.Trigger
-                                                            className="w-[50%]  rounded-tl rounded-bl data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
-                                                            value="tabHistory"
-                                                            onClick={handleChartViewHistory}
-                                                        >
-                                                            History
-                                                        </Tabs.Trigger>
-                                                        <Tabs.Trigger
-                                                            className="w-[50%] rounded-tr rounded-br data-[state=active]:shadow-blackA9 data-[state=active]:shadow-sm hover:cursor-pointer px-5 h-[25px] flex-1 flex items-center justify-center text-xs leading-none select-none transition duration-150 ease-in-out hover:text-mint11 data-[state=active]:text-white data-[state=active]:bg-mint11 data-[state=active]:focus:relative outline-none cursor-default"
-                                                            value="tabForecast"
-                                                            onClick={handleChartViewForecast}
-                                                        >
-                                                            Forecasts
-                                                        </Tabs.Trigger>
-                                                    </Tabs.List>
-                                                </div>
-                                                <Tabs.Content
-                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none"
-                                                    value="tabHistory"
-                                                >
-                                                    {
-                                                        propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                        (<Line
-                                                            className=' w-full'
-                                                            height={undefined}
-                                                            data={lineChartData}
-                                                            options={lineChartOptions}
-                                                        />
-                                                        )
-                                                    }
-                                                </Tabs.Content>
-                                                <Tabs.Content
-                                                    className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll rounded-b-md outline-none"
-                                                    value="tabForecast"
-                                                >
-                                                    {
-                                                        propertyDetails.estimates['historical_values'][0].estimates.length > 0 &&
-                                                        (<Line
-                                                            className=' w-full'
-                                                            height={undefined}
-                                                            data={lineChartData}
-                                                            options={lineChartOptions}
-                                                        />
-                                                        )
-                                                    }
-                                                </Tabs.Content>
-                                            </Tabs.Root>
-                                        </Tabs.Content>
-                                        <Tabs.Content
-                                            className="transition duration-150 ease-in-out flex flex-col items-center justify-center grow overflow-y-scroll p-2 rounded-b-md outline-none "
-                                            value="tab4"
-                                        >
-                                            <div className='flex items-center justify-between w-full p-2 mb-5'>
-                                                <div className=''>
-                                                    <h2 className='font-semibold text-xl md:text-3xl text-mint11'>
-                                                        Tax assessments
-                                                    </h2>
-                                                    <p className='text-xs text-slate10 font-medium'>For {streetAddress}</p>
-                                                </div>
-                                                <div className=''>
-                                                    {propertyDetails['tax_history'].map((taxHistory: any, index: any) => {
-                                                        const { assessment, year } = taxHistory;
-                                                        if (assessment.building === null) {
-                                                            return (
-                                                                <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-red9/80 text-white text-[10px]' key={index}>
-                                                                    <Cancel />
-                                                                    <span className='font-medium whitespace-nowrap'>{`No data for ${year}`}</span>
-                                                                </div>
-                                                            );
-                                                        } else if (assessment.land === null) {
-                                                            return (
-                                                                <div className='flex items-center gap-1 w-fit rounded-full px-2 py-0.5 bg-blue9/80 text-white text-[10px]' key={index}>
-                                                                    <Cancel />
-                                                                    <span className='font-medium'>{`No data for ${year}`}</span>
-                                                                </div>
-                                                            );
-                                                        }
-                                                    })}
-                                                </div>
-                                            </div>
-                                            <div className='w-full'>
-                                                {
-                                                    propertyDetails['tax_history'].length > 0 && (
-                                                        <Line
-                                                            className=' w-full'
-                                                            height={undefined}
-                                                            data={taxLineChartData}
-                                                            options={taxLineChartOptions}
-                                                        />
-                                                    )
-                                                }
-                                            </div>
-                                        </Tabs.Content>
-                                    </Tabs.Root>
-                                )}
-                            </div>
-
-
-                        </div>
-
-                    </div>
-
-
-                    {/* Similar homes section */}
-                    <div>
-                        <div className='mb-2'>
-                            <Seperator
-                                text={`Similar homes for sale`}
-                            />
-                        </div>
-                        <div className='grid md:grid-cols-3 lg:grid-cols-4 gap-3 w-full mt-5'>
-                            {similarHomesArray.length > 1 &&
-                                (similarHomesArray.map((home, i) => (
-                                    <div
-                                        className='text-[12px] rounded shadow-blackA9 shadow-[0px_4px_7px] hover:cursor-pointer hover:opacity-80'
-                                        key={i}
-                                    >
-                                        <Image
-                                            className='w-full h-[150px] rounded-tl rounded-tr object-cover'
-                                            src={home['primary_photo'].href}
-                                            alt={''}
-                                            width={300}
-                                            height={300}
-                                        />
-                                        <div className='flex flex-col gap-2 p-2'>
-                                            <caption className='w-full font-medium'>
-                                                {`${home.location.address.line}`}
-                                            </caption>
-                                            <div className='flex justify-between gap-2'>
-                                                <p className='font-semibold text-mint11'>
-                                                    {usdFormatter.format(home['list_price'])}
-                                                </p>
-                                                <div className='flex gap-2'>
-                                                    <p className=''>
-                                                        {home.description.beds} beds
-                                                    </p>
-                                                    <div className='h-full w-[1px] bg-mint11' />
-                                                    <p className=''>
-                                                        {home.description.baths} baths
-                                                    </p>
-                                                    <div className='h-full w-[1px] bg-mint11' />
-                                                    <p className=''>
-                                                        {(home.description.sqft).toLocaleString()} sqft.
-                                                    </p>
-                                                </div>
-                                            </div>
+                                                )))}
                                         </div>
                                     </div>
-                                )))}
-                        </div>
+                                </>
+                            }
+                        />
                     </div>
-                </Dialog.Content>
-            </Dialog.Portal>
-        </Dialog.Root>
+                </CardFooter>
+            </Card>
+        </div>
     )
 }
 

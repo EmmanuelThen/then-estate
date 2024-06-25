@@ -1,12 +1,13 @@
+'use client'
 import React from 'react'
-import ProFormaCalculator from '../components/ProFormaCalculator'
+import Portfolio from '@/app/components/Portfolio'
 
 type Props = {}
 
 const page = (props: Props) => {
   return (
     <div className=''>
-        <ProFormaCalculator />
+        <Portfolio />
     </div>
   )
 }

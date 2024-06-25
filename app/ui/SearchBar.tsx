@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react';
-import Button from './Button';
+
 import ActionButton from './ActionButton';
 import PropertyCard from './PropertyCard';
 import SelectDropdown from './SelectDropdown';
@@ -9,7 +9,23 @@ import Toggle from './Toggle';
 import SearchIcon from '../components/svg/SearchIcon';
 import List from '../components/svg/List';
 import Popup from './Popup';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+// import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import TrendingMarkets from './TrendingMarkets';
+import Heading from '../components/Heading';
+import FilterTabs from '../components/ui/filter-tabs';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import clsx from 'clsx'
+import PrimaryButton from '../components/ui/primary-button';
+import Cards from '../components/ui/Cards';
+import Input from '../components/ui/input';
+import Inputs from '../components/ui/input';
+import Dropdowns from '../components/ui/dropdowns';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import StatusDropdown from '../components/ui/StatusDropdown';
+import Chips from '../components/ui/chips';
+
+
 
 
 
@@ -27744,35 +27760,57 @@ let result: any = {
     }
 }
 
+const states = [
+    { id: 1, state: 'Price (High to low)' },
+    { id: 2, state: 'Price (Low to high)' },
+    { id: 3, state: 'Trending' },
+    { id: 4, state: 'Bedrooms' },
+    { id: 5, state: 'last update date' },
+    { id: 6, state: 'Bathrooms' },
+    { id: 7, state: 'Connecticut' },
+]
 
 const SearchBar = () => {
     const [search, setSearch] = useState<any>('');
-    const [autoCompleteResults, setAutoCompleteResults] = useState<any>([])
-    const [searchMetric, setSearchMetric] = useState<any>('')
-    const [searchMetricValue, setSearchMetricValue] = useState<any>('')
-    const [isloading, setIsLoading] = useState<any>(false)
-    const [propertiesList, setPropertiesList] = useState<any>([])
-    const [searchStatus, setSearchStatus] = useState<any>([])
-    const [searchCount, setSearchCount] = useState<any>('')
-    const [propertyID, setPropertyID] = useState<any>('')
-    const [propertyImages, setPropertyImages] = useState<any>([])
+    const [autoCompleteResults, setAutoCompleteResults] = useState<any>([]);
+    const [searchMetric, setSearchMetric] = useState<any>('');
+
+    const [sortDirection, setSortDirection] = useState<any>('');
+    const [sortField, setSortField] = useState<any>('');
+
+    const [searchMetricValue, setSearchMetricValue] = useState<any>('');
+    const [isloading, setIsLoading] = useState<any>(false);
+    const [propertiesList, setPropertiesList] = useState<any>([]);
+    const [searchStatus, setSearchStatus] = useState<any>([]);
+    const [searchCount, setSearchCount] = useState<any>('');
+    const [propertyID, setPropertyID] = useState<any>('');
+    const [propertyImages, setPropertyImages] = useState<any>([]);
     // For amount of properties listed
     const [limit, setLimit] = useState<any>(50);
-    const [propertyTypes, setPropertyTypes] = useState({
-        apartment: false,
-        condo_townhome: false,
-        condo_townhome_rowhome_coop: false,
-        condop: false,
-        condos: false,
-        coop: false,
-        duplex_triplex: false,
-        farm: false,
-        land: false,
-        mobile: false,
-        multi_family: false,
-        single_family: false,
-        townhomes: false,
-    });
+    const [propertyTypes, setPropertyTypes] = useState([
+        'Apartment',
+        'Condos',
+        'Co-op',
+        'Duplex & Triplex',
+        'Farm',
+        'Land',
+        'Mobile',
+        'Multi family',
+        'Single family',
+        'Townhomes',
+    ]);
+
+    const [statusTypes, setStatusTypes] = useState([
+        'For sale',
+        'Ready to build',
+        'For rent',
+        'Sold',
+        'Off market',
+        'Active',
+    ]);
+
+    const [selected, setSelected] = useState(states[1]);
+
 
     const handleCheckboxChange = (type) => {
         setPropertyTypes((prevTypes) => ({
@@ -27880,8 +27918,6 @@ const SearchBar = () => {
 
 
     const getPropertiesList = async () => {
-        setIsLoading(true);
-
         console.log(searchMetric)
 
         const url = 'https://realty-in-us.p.rapidapi.com/properties/v3/list';
@@ -27898,8 +27934,8 @@ const SearchBar = () => {
                 [searchMetric]: search,
                 status: Array.from(uniqueSearchStatus),
                 sort: {
-                    direction: 'desc',
-                    field: 'list_date',
+                    direction: sortDirection,
+                    field: sortField,
                 },
             }),
         };
@@ -27910,6 +27946,7 @@ const SearchBar = () => {
 
             // console.log(result);
             //Change back to actual results after testing
+            setIsLoading(true);
             setPropertiesList(result.data['home_search'].results);
             setSearchCount(result.data['home_search'])
             setPropertyID(result.data['home_search'].results['property_id'])
@@ -27950,47 +27987,63 @@ const SearchBar = () => {
     //     getPropertyImages();
     // },[propertyID])
 
+    const trendingMarketsArray = [
+        { key: 1, market: 'New York, NY' },
+        { key: 2, market: 'Los Angeles, CA' },
+        { key: 3, market: 'Chicago, IL' },
+        { key: 4, market: 'Houston, TX' },
+        { key: 5, market: 'Phoenix, AZ' },
+        { key: 6, market: 'Philadelphia, PA' },
+        { key: 7, market: 'San Antonio, TX' },
+        { key: 8, market: 'San Diego, CA' },
+        { key: 9, market: 'Dallas, TX' },
+        { key: 10, market: 'San Jose, CA' }
+    ];
+
+
 
 
     return (
-        <div className='w-full h-full'>
-            <div className='flex flex-col items-center justify-center px-10 p-20 w-full'>
-                <div className='inline-flex relative w-full'>
-                    <div className='relative w-full'>
-                        <svg style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '10px',
-                            transform: 'translateY(-50%)',
-                        }}
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.2"
-                            stroke="currentColor"
-                            className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                        <input
-                            className="w-full bg-blackA2 inline-flex h-[55px] appearance-none items-center justify-center font-light rounded-full rounded-r-none px-[40px] text-[15px] leading-none shadow-[0_0_0_1px_black] outline-none transition duration-150 ease-in-out"
-                            type="text"
-                            required
-                            placeholder='Enter address, city, or ZIP code'
-                            id='dark-mode'
-                            value={search}
-                            onChange={getAutoComplete}
-                        />
+        <div className='w-full h-full p-5'>
+            <div className='flex flex-col items-center justify-center w-full'>
+                {/* Trending cities */}
+                <div className='w-full'>
+                    <h1 className='flex justify-start font-bold tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-primary'>
+                        Trending Markets
+                    </h1>
+                    <section className="mx-auto w-full max-w-sm lg:max-w-5xl px-6 py-10 lg:px-8">
+                        <TrendingMarkets shouldPauseOnHover gap="40px">
+                            {trendingMarketsArray.map(({ key, market }) => (
+                                <div key={key} className="flex items-center justify-center text-foreground">
+                                    <Chips text={market} size={'md'} />
+                                </div>
+                            ))}
+                        </TrendingMarkets>
+                    </section>
+
+                    {/* <Cards /> */}
+                </div>
+                {/* Searchbar container */}
+                <div className='inline-flex justify-center items-center relative w-full mt-16'>
+                    {/* Full searchbar */}
+                    <div className='relative w-full max-w-4xl mx-auto px-4 sm:px-6'>
+                        <Inputs />
                         {/* Property type dropdown */}
                         <div style={{
                             position: 'absolute',
                             top: '50%',
-                            right: '10px',
+                            right: '125px',
                             transform: 'translateY(-50%)',
                         }}
-                            className='flex h-[35px]'
+                            className='hidden md:flex h-[30px]'
                         >
-                            <div className='flex justify-center items-center border-r border-l border-blackA9'>
-                                <Popup
+                            <div className='hidden md:flex justify-center items-center border-r border-l border-blackA4'>
+                                <Dropdowns
+                                    title={'Type'}
+                                    onSelectionChange={() => handleToggleStatus('for_sale')}
+                                    items={propertyTypes}
+                                />
+                                {/* <Popup
                                     icon={
                                         <span className='flex items-center gap-[5px] px-[15px] text-[13px] leading-none'>
                                             <span>Type</span>
@@ -28011,10 +28064,17 @@ const SearchBar = () => {
                                             ))}
                                         </>
                                     }
-                                />
+                                /> */}
+
                             </div>
-                            <div className='flex justify-center items-center '>
-                                <Popup
+                            <div className='hidden md:flex justify-center items-center'>
+                                <Dropdowns
+                                    title={'Status'}
+                                    onSelectionChange={() => handleToggleStatus('for_sale')}
+                                    items={statusTypes}
+                                />
+
+                                {/* <Popup
                                     icon={
                                         <span className='flex items-center gap-[5px] px-[15px] text-[13px] leading-none'>
                                             <span>Status</span>
@@ -28061,15 +28121,38 @@ const SearchBar = () => {
                                             />
                                         </>
                                     }
-                                />
+                                /> */}
                             </div>
                         </div>
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            right: '28px',
+                            transform: 'translateY(-50%)',
+                        }}
+                        >
+                            <PrimaryButton
+                                color={'primary'}
+                                size={'lg'}
+                                radius={'sm'}
+                                variant={'solid'}
+                                text={
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.2"
+                                        stroke="currentColor"
+                                        className="w-4 h-4 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                    </svg>
+                                }
+                                onClick={getPropertiesList}
+                            />
+                        </div>
                     </div>
-                    <div className='rounded-r-full bg-mint11 h-[55px]'>
-                        <button className='h-[55px] px-[15px] text-white text-sm rounded-r-full shadow-[0_0_0_1px_black] outline-none hover:opacity-80 transition duration-150 ease-in-out'>
-                            Search
-                        </button>
-                    </div>
+
+
                 </div>
 
                 <ul className={`${search.length > 0 ? '' : 'hidden'} flex flex-col border-t-0 rounded-t-md rounded-b bg-blackA5 h-fit shadow-md p-2 w-full`}>
@@ -28103,6 +28186,20 @@ const SearchBar = () => {
                         </li>
                     ))}
                 </ul>
+                {/* Search filters for mobile screens */}
+                <div className='flex md:hidden p-5'>
+                    <Dropdowns
+                        title={'Type'}
+                        onSelectionChange={() => handleToggleStatus('for_sale')}
+                        items={propertyTypes}
+                    />
+                    <Dropdowns
+                        title={'Status'}
+                        onSelectionChange={() => handleToggleStatus('for_sale')}
+                        items={statusTypes}
+                    />
+                </div>
+
                 {/* Toggles to filter property search */}
                 {/* <div className='mt-10'>
 
@@ -28168,7 +28265,7 @@ const SearchBar = () => {
 
             {/* Search count & dropdown filters */}
             {/* Commented out because page wont load since were not making api call to get search count anymore, were using test object */}
-            <div className={`${propertiesList.length > 0 ? '' : 'hidden'} flex justify-between items-center p-5`}>
+            <div className={`${propertiesList.length > 0 ? '' : 'hidden'} flex justify-end items-center p-5 mt-10`}>
                 {/* <div>
                     <h1 className='font-2xl text-slate10'>
                         <span className='font-medium'>Showing on page:</span> {(searchCount.count).toLocaleString()}
@@ -28178,19 +28275,51 @@ const SearchBar = () => {
                     </h1>
                 </div> */}
                 <div>
-                    <SelectDropdown
-                        placeholder={'Sort by'}
-                        selectItems={undefined}
-                    />
+                    <div className="mx-auto w-52">
+                        <Listbox value={selected} onChange={setSelected}>
+                            <ListboxButton
+                                className={clsx(
+                                    'relative block w-full rounded-lg bg-blackA2 py-1.5 pr-8 pl-3 text-left text-sm/6',
+                                    'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                                )}
+                            >
+                                {selected.state}
+                                <ChevronDownIcon
+                                    className="group pointer-events-none absolute top-2.5 right-2.5 w-4 h-4 fill-blackA9"
+                                    aria-hidden="true"
+                                />
+                            </ListboxButton>
+                            <Transition leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+                                <ListboxOptions
+                                    anchor="bottom"
+                                    className="w-[var(--button-width)] rounded-xl border border-white/5 bg-slate5 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none my-1"
+                                >
+                                    {states.map((state) => (
+                                        <ListboxOption
+                                            key={state.state}
+                                            value={state}
+                                            className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+                                        >
+                                            <CheckIcon className="invisible w-4 h-4 fill-blackA9 group-data-[selected]:visible" />
+                                            <div className="text-sm/6">{state.state}</div>
+                                        </ListboxOption>
+                                    ))}
+                                </ListboxOptions>
+                            </Transition>
+                        </Listbox>
+                    </div>
+                    {/* <FilterTabs /> */}
+
                 </div>
+
             </div>
             {/* Properties grid */}
-            <div className='grid-container w-full p-5'>
+            <div className='grid-container w-full py-5 '>
                 {propertiesList.map((properties: any, i: any) => (
                     <PropertyCard
                         key={i}
-                        width={800}
-                        height={300}
+                        width={200}
+                        height={200}
                         popUpWidth={800}
                         popUpHeight={500}
                         imageSrc={properties['primary_photo'] === null ? '/fallback-img.svg' : properties['primary_photo'].href}

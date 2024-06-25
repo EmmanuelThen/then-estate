@@ -10,7 +10,7 @@ type Props = {
 const ActionButton = ({ text, bgColor, onClick, disabled }: Props) => {
   return (
     <button
-      className={`${bgColor} z-50 inline-flex font-medium items-center justify-center rounded-full h-[35px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white text-sm`}
+      className={`btn whitespace-nowrap z-50 ${bgColor} inline-flex font-medium items-center justify-center h-[35px] px-[15px] leading-none hover:opacity-80 transition duration-150 ease-in-out text-white text-sm`}
       onClick={onClick}
       disabled={disabled}
     >

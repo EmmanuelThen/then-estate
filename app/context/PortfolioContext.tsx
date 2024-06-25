@@ -15,6 +15,7 @@ interface PortfolioContextProps {
 }
 
 interface PropertyInfo {
+    // includes(propertyID: any): any;
     property_id: string;
     address: string;
     state: string;

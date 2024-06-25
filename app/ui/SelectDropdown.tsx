@@ -17,7 +17,7 @@ type Props = {
 const SelectDropdown = ({ searchStatus, selectItems, placeholder }: Props) => (
   <Select.Root>
     <Select.Trigger
-      className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[45px] gap-[5px] hover:opacity-70 transition duration-150 ease-in-out  outline-none"
+      className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[45px] gap-[5px] hover:opacity-70 transition duration-150 ease-in-out shadow-md bg-blackA3  outline-none"
       aria-label="Food"
     >
       <Select.Value placeholder={placeholder} />
@@ -27,7 +27,7 @@ const SelectDropdown = ({ searchStatus, selectItems, placeholder }: Props) => (
       </Select.Icon>
     </Select.Trigger>
     <Select.Portal>
-      <Select.Content className=" overflow-y-scroll bg-red-500 h-fit rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] border border-green-500">
+      <Select.Content className="overflow-y-scroll bg-white h-fit rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
         <Select.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-mint11 cursor-default">
           <ChevronUpIcon />
         </Select.ScrollUpButton>
@@ -37,13 +37,42 @@ const SelectDropdown = ({ searchStatus, selectItems, placeholder }: Props) => (
               Sort by
             </Select.Label>
             <Select.Separator className="h-[1px] bg-slate4 m-[5px]" />
-            <SelectItem value='list_price'>
+            <SelectItem value='last_update_date'>
               <div className='flex items-center gap-2'>
-                {selectItems}
-                {/* <p className='text-sm md:text-md '>Price (Low to High)</p> */}
+                <p className='text-sm md:text-md '>{selectItems}</p>
               </div>
             </SelectItem>
-            
+            <SelectItem value='list_price_HL'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Price (High to Low)</p>
+              </div>
+            </SelectItem>
+            <SelectItem value='list_price_LH'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Price (Low to High)</p>
+              </div>
+            </SelectItem>
+            <SelectItem value='bedrooms'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Bedrooms</p>
+              </div>
+            </SelectItem>
+            <SelectItem value='date_sold'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Date sold</p>
+              </div>
+            </SelectItem>
+            <SelectItem value='photo_count'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Photo count</p>
+              </div>
+            </SelectItem>
+            <SelectItem value='last_update_date'>
+              <div className='flex items-center gap-2'>
+                <p className='text-sm md:text-md '>Last update date</p>
+              </div>
+            </SelectItem>
+
           </Select.Group>
 
 

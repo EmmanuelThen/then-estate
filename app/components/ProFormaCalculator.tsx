@@ -285,13 +285,13 @@ const ProFormaCalculator = (props: Props) => {
     }, [])
 
     return (
-        <div className='flex flex-col gap-2 w-full px-2 py-20'>
+        <div className='flex flex-col gap-2 w-full'>
             <header>
-                <h1 className='flex justify-start font-light tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-mint11'>
+                <h1 className='flex justify-start font-bold tracking-[-0.03em] md:leading-[1.10] bg-clip-text text-center text-3xl text-primary'>
                     Tools & Calculators
                 </h1>
             </header>
-            <div className='py-10 md:p-10'>
+            <div className=''>
                 <Tabs.Root
                     className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2"
                     defaultValue="tab2"
